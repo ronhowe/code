@@ -1,0 +1,1 @@
+Write-Debug "Power-On Self-Test" -Debug
