@@ -1,0 +1,141 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "blocks": [
+    {
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "os",
+          "style": "plain",
+          "template": "{{ if .WSL }}WSL at {{ end }}{{.Icon}} ",
+          "background": "#000000",
+          "foreground": "#0178D4"
+        },
+        {
+          "type": "shell",
+          "style": "plain",
+          "properties": {
+            "mapped_shell_names": {
+              "pwsh": "core",
+              "powershell": "desktop"
+            }
+          },
+          "background": "#000000",
+          "foreground": "#0178D4"
+      },
+        {
+          "background": "#ff0000",
+          "foreground": "#000000",
+          "style": "plain",
+          "template": " r ",
+          "type": "text"
+        },
+        {
+          "background": "#FF7F00",
+          "foreground": "#000000",
+          "style": "plain",
+          "template": " o ",
+          "type": "text"
+        },
+        {
+          "background": "#FFFF00",
+          "foreground": "#000000",
+          "style": "plain",
+          "template": " n ",
+          "type": "text"
+        },
+        {
+          "background": "#00FF00",
+          "foreground": "#000000",
+          "style": "plain",
+          "template": " h ",
+          "type": "text"
+        },
+        {
+          "background": "#0000FF",
+          "foreground": "#000000",
+          "style": "plain",
+          "template": " o ",
+          "type": "text"
+        },
+        {
+          "background": "#4B0082",
+          "foreground": "#000000",
+          "style": "plain",
+          "template": " w ",
+          "type": "text"
+        },
+        {
+          "background": "#9400D3",
+          "foreground": "#000000",
+          "style": "plain",
+          "template": " e ",
+          "type": "text"
+        },
+        {
+          "background": "#242424",
+          "foreground": "#FFFFFF",
+          "properties": {
+            "time_format": "2006-01-02 15:04:05"
+          },
+          "style": "powerline",
+          "template": "<#fff> \uf64f </>{{ .CurrentDate | date .Format }}  ",
+          "type": "time"
+        },
+        {
+          "background": "#242424",
+          "foreground": "#33DD2D",
+          "powerline_symbol": "\ue0b0",
+          "properties": {
+            "folder_separator_icon": "/",
+            "style": "full"
+          },
+          "style": "powerline",
+          "template": "\ue5ff  {{ .Path }} ",
+          "type": "path"
+        },
+        {
+          "background": "#242424",
+          "foreground": "#3A86FF",
+          "powerline_symbol": "\ue0b0",
+          "properties": {
+            "fetch_stash_count": true,
+            "fetch_upstream_icon": true
+          },
+          "style": "powerline",
+          "template": " {{ .HEAD }} {{ .BranchStatus }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if and (.Staging.Changed) (.Working.Changed) }} |{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0}} \uf692 {{ .StashCount }}{{ end }}{{ if gt .WorktreeCount 0}} \uf1bb {{ .WorktreeCount }}{{ end }} ",
+          "type": "git"
+        },
+        {
+          "background": "#33DD2D",
+          "background_templates": [
+            "{{ if gt .Code 0 }}#f1184c{{ end }}"
+          ],
+          "foreground": "#242424",
+          "powerline_symbol": "\ue0b0",
+          "properties": {
+            "always_enabled": true
+          },
+          "style": "powerline",
+          "template": " {{ if gt .Code 0 }}\uf00d{{ else }}\uf42e{{ end }} ",
+          "type": "exit"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "foreground": "#ffffff",
+          "style": "plain",
+          "template": "\u279c ",
+          "type": "text"
+        }
+      ],
+      "type": "prompt"
+    }
+  ],
+  "version": 2
+}

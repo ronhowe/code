@@ -3,7 +3,7 @@ param (
 )
 
 $ErrorActionPreference = "Stop"
-Write-Debug "Running $($MyInvocation.MyCommand.Name)"
+Write-Output "Running $($MyInvocation.MyCommand.Name)"
 
 Import-PowerShellDataFile -Path "$PSScriptRoot\Dependencies.psd1" |
 Select-Object -ExpandProperty "Modules" |

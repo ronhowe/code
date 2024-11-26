@@ -1,51 +1,51 @@
 $ProgressPreference = "SilentlyContinue"
 
-Write-Host "https://github.com/ronhowe/code/powershell/blob/main/profile.ps1" -ForegroundColor Green
+Write-Output "https://github.com/ronhowe/code/powershell/blob/main/profile.ps1"
 
-Write-Host "PowerShell $($PSVersionTable.PSVersion.ToString())" -ForegroundColor Green
+Write-Output "PowerShell $($PSVersionTable.PSVersion.ToString())"
 
 Set-Location -Path $HOME
 
 #region imports
 
 if (Get-Module -Name "Az.Tools.Predictor" -ListAvailable) {
-    Write-Host "Importing Az.Tools.Predictor" -ForegroundColor Green
+    Write-Output "Importing Az.Tools.Predictor"
     Import-Module -Name "Az.Tools.Predictor"
 }
 else {
-    Write-Host "Skipping Az.Tools.Predictor" -ForegroundColor Gray
+    Write-Output "Skipping Az.Tools.Predictor"
 }
 
 if ((Get-Module -Name "ISESteroids" -ListAvailable) -and ($host.Name -eq "Windows PowerShell ISE Host")) {
-    Write-Host "Importing ISESteroids" -ForegroundColor Green
+    Write-Output "Importing ISESteroids"
     Import-Module -Name "ISESteroids"
 }
 else {
-    Write-Host "Skipping ISESteroids" -ForegroundColor Gray
+    Write-Output "Skipping ISESteroids"
 }
 
 if ((Get-Module -Name "posh-git" -ListAvailable) -and ($host.Name -ne "Visual Studio Code Host")) {
-    Write-Host "Importing posh-git" -ForegroundColor Green
+    Write-Output "Importing posh-git"
     Import-Module -Name "posh-git"
 }
 else {
-    Write-Host "Skipping posh-git" -ForegroundColor Gray
+    Write-Output "Skipping posh-git"
 }
 
 if (Get-Module -Name "Microsoft.PowerShell.SecretManagement" -ListAvailable) {
-    Write-Host "Importing Microsoft.PowerShell.SecretManagement" -ForegroundColor Green
+    Write-Output "Importing Microsoft.PowerShell.SecretManagement"
     Import-Module -Name "Microsoft.PowerShell.SecretManagement"
 }
 else {
-    Write-Host "Skipping Microsoft.PowerShell.SecretManagement" -ForegroundColor Gray
+    Write-Output "Skipping Microsoft.PowerShell.SecretManagement"
 }
 
 if (Get-Module -Name "Microsoft.PowerShell.SecretStore" -ListAvailable) {
-    Write-Host "Importing Microsoft.PowerShell.SecretStore" -ForegroundColor Green
+    Write-Output "Importing Microsoft.PowerShell.SecretStore"
     Import-Module -Name "Microsoft.PowerShell.SecretStore"
 }
 else {
-    Write-Host "Skipping Microsoft.PowerShell.SecretStore" -ForegroundColor Gray
+    Write-Output "Skipping Microsoft.PowerShell.SecretStore"
 }
 
 #endregion imports

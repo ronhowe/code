@@ -1,0 +1,8 @@
+// {
+//     "Email": "user@domain.com",
+//     "Name": "default",
+//     "Organization": "default",
+//     "SecretServerCloudEndpoint": "https://<instance>.secretservercloud.com/",
+//     "SecretServerCloudUsername": "user@domain.com",
+//     "TenantId": "00000000-0000-0000-0000-000000000000"
+// }
