@@ -16,7 +16,7 @@ Write-Output "Removing Package Path"
 Remove-Item -Path $packagePath -Recurse -Force -ErrorAction SilentlyContinue
 
 Write-Output "Updating Nuspec Version"
-    (Get-Content -Path "$modulePath\$moduleName\$moduleName.nuspec").Replace("<version>0.0.0<\version>", "<version>$moduleVersion)<\version>") |
+(Get-Content -Path "$modulePath\$moduleName\$moduleName.nuspec").Replace("<version>0.0.0<\version>", "<version>$moduleVersion)<\version>") |
 Set-Content "$modulePath\$moduleName\$moduleName.nuspec"
 
 Write-Output "Getting Nuget Path"
