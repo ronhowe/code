@@ -1,6 +1,6 @@
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops&tabs=yaml-editor
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/dotnet-core-cli-v2?view=azure-pipelines
-name: $(BuildDefinitionName)
+name: MyPipeline
 trigger:
   branches:
     include:
@@ -18,38 +18,32 @@ pool:
 variables:
   buildConfiguration: 'Release'
 stages:
-  - stage: MyPostStage
+  - stage: MyStage
     jobs:
-      - job: MyPostJob
+      - job: MyJob
         steps:
-          - script: echo "Power-On Self-Test"
-            displayName: 'POST'
-  - stage: MyDotNetRestoreBuildTestStage
-    jobs:
-      - job: MyDotNetRestoreBuildTestJob
-        steps:
+          - script: 'echo "Power-On Self-Test (POST)"'
+            displayName: 'Power-On Self-Test (POST)'
           - task: UseDotNet@2
-            displayName: 'Install .NET 9 SDK'
+            displayName: 'Install .NET SDK'
             inputs:
-              version: 9.x
+              version: '9.x'
               performMultiLevelLookup: true
               includePreviewVersions: true
-              # version: '9.x.x'
-              # packageType: 'sdk'
           - task: DotNetCoreCLI@2
+            displayName: 'Run .NET Restore'
             inputs:
               command: 'restore'
               projects: 'dotnet/**/*.sln'
-            displayName: 'Run dotnet restore'
           - task: DotNetCoreCLI@2
+            displayName: 'Run .NET Build'
             inputs:
               command: 'build'
               projects: 'dotnet/**/*.sln'
               arguments: '--configuration $(buildConfiguration)'
-            displayName: 'Run dotnet build'
           - task: DotNetCoreCLI@2
+            displayName: 'Run .NET Test'
             inputs:
               command: test
               projects: 'dotnet/**/*Tests/*.csproj'
               arguments: '--configuration $(buildConfiguration)'
-            displayName: 'Run dotnet test'
