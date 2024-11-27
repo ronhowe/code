@@ -14,12 +14,6 @@ namespace MyClassLibrary.Tests;
 public sealed class MyServiceTests : TestBase
 {
     [TestMethod]
-    public void POST()
-    {
-        Log.ForContext("SourceContext", _sourceContext).Debug("Power-On Self-Test");
-    }
-
-    [TestMethod]
     public void MyMethodLogsEntryMessage()
     {
         var mockLogger = new Mock<ILogger<MyService>>();
