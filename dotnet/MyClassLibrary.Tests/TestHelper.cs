@@ -48,9 +48,9 @@ internal static class TestHelper
     //    return mockHealthCheck.Object;
     //}
 
-    internal static ILogger<MyClass> CreateMockLogger()
+    internal static ILogger<MyService> CreateMockLogger()
     {
-        var mockLogger = new Mock<ILogger<MyClass>>();
+        var mockLogger = new Mock<ILogger<MyService>>();
 
         return mockLogger.Object;
     }
@@ -89,9 +89,9 @@ internal static class TestHelper
         return logger;
     }
 
-    internal static MyClass CreateMyClassWithMockDependencies()
+    internal static MyService CreateMyClassWithMockDependencies()
     {
-        var service = new MyClass(
+        var service = new MyService(
             CreateMockLogger()
         );
 

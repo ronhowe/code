@@ -6,18 +6,18 @@ using Microsoft.Extensions.Logging;
 
 namespace MyClassLibrary;
 
-public class MyClass(ILogger<MyClass> logger) : IMyInterface
+public class MyService(ILogger<MyService> logger) : IMyService
 {
     public bool MyMethod(bool input)
     {
-        logger.LogDebug("Entering {name}", nameof(MyClass));
+        logger.LogDebug("Entering {name}", nameof(MyService));
 
         logger.LogDebug("Logging Input Parameter(s) and Value(s)");
         logger.LogDebug("$input = {input}", input);
 
         bool result = input; // very important business logic =)
 
-        logger.LogDebug("Exiting {name}", nameof(MyClass));
+        logger.LogDebug("Exiting {name}", nameof(MyService));
 
         return result;
     }

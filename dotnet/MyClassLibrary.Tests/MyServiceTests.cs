@@ -10,7 +10,7 @@ using Serilog;
 namespace MyClassLibrary.Tests;
 
 [TestClass]
-public sealed class MyClassTests : TestBase
+public sealed class MyServiceTests : TestBase
 {
     [TestMethod]
     public void POST()
@@ -21,37 +21,37 @@ public sealed class MyClassTests : TestBase
     [TestMethod]
     public void MyMethodLogsEntryMessage()
     {
-        var mockLogger = new Mock<ILogger<MyClass>>();
+        var mockLogger = new Mock<ILogger<MyService>>();
 
-        var myClass = new MyClass(
+        var myClass = new MyService(
             mockLogger.Object
         );
 
         myClass.MyMethod(false);
 
-        mockLogger.VerifyLogDebug($"Entering {nameof(MyClass)}");
+        mockLogger.VerifyLogDebug($"Entering {nameof(MyService)}");
     }
 
     [TestMethod]
     public void MyMethodLogsExitMessage()
     {
-        var mockLogger = new Mock<ILogger<MyClass>>();
+        var mockLogger = new Mock<ILogger<MyService>>();
 
-        var myClass = new MyClass(
+        var myClass = new MyService(
             mockLogger.Object
         );
 
         myClass.MyMethod(false);
 
-        mockLogger.VerifyLogDebug($"Exiting {nameof(MyClass)}");
+        mockLogger.VerifyLogDebug($"Exiting {nameof(MyService)}");
     }
 
     [TestMethod]
     public void MyMethodLogsInputParameters()
     {
-        var mockLogger = new Mock<ILogger<MyClass>>();
+        var mockLogger = new Mock<ILogger<MyService>>();
 
-        var myClass = new MyClass(
+        var myClass = new MyService(
             mockLogger.Object
         );
 

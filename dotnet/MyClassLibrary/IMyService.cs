@@ -4,7 +4,7 @@ https://github.com/ronhowe/code
 
 namespace MyClassLibrary;
 
-public interface IMyInterface
+public interface IMyService
 {
     public bool MyMethod(bool input);
 }
