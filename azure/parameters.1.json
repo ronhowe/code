@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "westus"
+        },
+        "appName": {
+            "value": "app-ronhowe-1"
+        },
+        "planName": {
+            "value": "asp-ronhowe-1"
+        },
+        "configStoreName": {
+            "value": "appcs-ronhowe-1"
+        },
+        "workspaceName": {
+            "value": "log-ronhowe-1"
+        },
+        "appInsightsName": {
+            "value": "appi-ronhowe-1"
+        },
+        "storageAccountName": {
+            "value": "stronhowe1"
+        },
+        "vaultName": {
+            "value": "kv-ronhowe-1"
+        }
+    }
+}
