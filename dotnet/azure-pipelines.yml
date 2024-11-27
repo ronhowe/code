@@ -1,6 +1,5 @@
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops&tabs=yaml-editor
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/dotnet-core-cli-v2?view=azure-pipelines
-
 name: $(BuildDefinitionName)
 trigger:
   branches:
@@ -9,43 +8,48 @@ trigger:
     exclude:
       - dev
   paths:
-    # include:
-    #  - dotnet/*
+    include:
+      - azure-pipelines.yml
+      - dotnet/*
     exclude:
       - README.md
 pool:
   vmImage: 'ubuntu-latest'
 variables:
   buildConfiguration: 'Release'
-steps:
-  # - bash: |
-  #   echo "##[group]Power-On Self-Test"
-  #   echo "##[warning]MyWarning"
-  #   echo "##[error]MyError"
-  #   echo "##[section]MySection"
-  #   echo "##[debug]MyDebug"
-  #   echo "##[command]MyCommand"
-  #   echo "##[endgroup]"
-  - task: UseDotNet@2
-    displayName: 'Install .NET 9 SDK'
-    inputs:
-      version: 9.x
-      performMultiLevelLookup: true
-      includePreviewVersions: true
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: 'restore'
-      projects: 'dotnet/**/*.sln'
-    displayName: 'dotnet restore'
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: 'build'
-      projects: 'dotnet/**/*.sln'
-      arguments: '--configuration $(buildConfiguration)'
-    displayName: 'dotnet build $(buildConfiguration)'
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: test
-      projects: 'dotnet/**/*Tests/*.csproj'
-      arguments: '--configuration $(buildConfiguration)'
-    displayName: 'dotnet test'
+stages:
+  - stage: MyPostStage
+    jobs:
+      - job: MyPostJob
+        steps:
+          - script: echo "Power-On Self-Test"
+            displayName: 'POST'
+  - stage: MyDotNetRestoreBuildTestStage
+    jobs:
+      - job: MyDotNetRestoreBuildTestJob
+        steps:
+          - task: UseDotNet@2
+            displayName: 'Install .NET 9 SDK'
+            inputs:
+              version: 9.x
+              performMultiLevelLookup: true
+              includePreviewVersions: true
+              # version: '9.x.x'
+              # packageType: 'sdk'
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'restore'
+              projects: 'dotnet/**/*.sln'
+            displayName: 'Run dotnet restore'
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'build'
+              projects: 'dotnet/**/*.sln'
+              arguments: '--configuration $(buildConfiguration)'
+            displayName: 'Run dotnet build'
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: test
+              projects: 'dotnet/**/*Tests/*.csproj'
+              arguments: '--configuration $(buildConfiguration)'
+            displayName: 'Run dotnet test'
