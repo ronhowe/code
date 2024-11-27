@@ -1,3 +1,11 @@
+<###############################################################################
+https://github.com/ronhowe
+###############################################################################>
+
+# '. $HOME\repos\ronhowe\code\powershell\profile.ps1' | Set-Content -Path $profile -Force
+# Get-Content -Path $profile
+# . $profile
+
 $ProgressPreference = "SilentlyContinue"
 
 Write-Output "https://github.com/ronhowe/code/powershell/blob/main/profile.ps1"
