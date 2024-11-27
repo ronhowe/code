@@ -22,10 +22,7 @@ public sealed class MyServiceTests : TestBase
     public void MyMethodLogsEntryMessage()
     {
         var mockLogger = new Mock<ILogger<MyService>>();
-
-        var myClass = new MyService(
-            mockLogger.Object
-        );
+        var myClass = new MyService(mockLogger.Object);
 
         myClass.MyMethod(false);
 
@@ -36,10 +33,7 @@ public sealed class MyServiceTests : TestBase
     public void MyMethodLogsExitMessage()
     {
         var mockLogger = new Mock<ILogger<MyService>>();
-
-        var myClass = new MyService(
-            mockLogger.Object
-        );
+        var myClass = new MyService(mockLogger.Object);
 
         myClass.MyMethod(false);
 
@@ -50,10 +44,7 @@ public sealed class MyServiceTests : TestBase
     public void MyMethodLogsInputParameters()
     {
         var mockLogger = new Mock<ILogger<MyService>>();
-
-        var myClass = new MyService(
-            mockLogger.Object
-        );
+        var myClass = new MyService(mockLogger.Object);
 
         myClass.MyMethod(false);
 

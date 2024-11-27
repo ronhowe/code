@@ -1,1 +1,5 @@
-﻿[assembly: Parallelize(Scope = ExecutionScope.MethodLevel)]
+﻿/*******************************************************************************
+https://github.com/ronhowe
+*******************************************************************************/
+
+[assembly: Parallelize(Scope = ExecutionScope.MethodLevel)]
