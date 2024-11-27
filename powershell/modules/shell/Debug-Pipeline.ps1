@@ -1,6 +1,9 @@
+<###############################################################################
+https://github.com/ronhowe
+###############################################################################>
+
 #requires -PSEdition "Core"
 #requires -Module "Pester"
-Write-Output "Importing Configuration"
 
 Write-Output "Importing Configuration"
 . "$PSScriptRoot\Import-Configuration.ps1" -Debug -Verbose
