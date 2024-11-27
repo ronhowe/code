@@ -1,6 +1,6 @@
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops&tabs=yaml-editor
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/dotnet-core-cli-v2?view=azure-pipelines
-name: MyPipeline
+name: MyDotNetPipeline
 trigger:
   branches:
     include:
