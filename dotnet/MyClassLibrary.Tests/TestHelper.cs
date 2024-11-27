@@ -4,6 +4,7 @@ https://github.com/ronhowe
 
 using Microsoft.Extensions.Logging;
 using Moq;
+using System.Diagnostics;
 
 namespace MyClassLibrary.Tests;
 
@@ -89,7 +90,7 @@ internal static class TestHelper
         return logger;
     }
 
-    internal static MyService CreateMyClassWithMockDependencies()
+    internal static MyService CreateMyServiceWithMockDependencies()
     {
         var service = new MyService(
             CreateMockLogger()

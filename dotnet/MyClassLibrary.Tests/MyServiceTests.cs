@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Serilog;
+using System.Diagnostics;
 
 namespace MyClassLibrary.Tests;
 
@@ -22,9 +23,9 @@ public sealed class MyServiceTests : TestBase
     public void MyMethodLogsEntryMessage()
     {
         var mockLogger = new Mock<ILogger<MyService>>();
-        var myClass = new MyService(mockLogger.Object);
+        var myService = new MyService(mockLogger.Object);
 
-        myClass.MyMethod(false);
+        myService.MyMethod(false);
 
         mockLogger.VerifyLogDebug($"Entering {nameof(MyService)}");
     }
@@ -33,9 +34,9 @@ public sealed class MyServiceTests : TestBase
     public void MyMethodLogsExitMessage()
     {
         var mockLogger = new Mock<ILogger<MyService>>();
-        var myClass = new MyService(mockLogger.Object);
+        var myService = new MyService(mockLogger.Object);
 
-        myClass.MyMethod(false);
+        myService.MyMethod(false);
 
         mockLogger.VerifyLogDebug($"Exiting {nameof(MyService)}");
     }
@@ -44,9 +45,9 @@ public sealed class MyServiceTests : TestBase
     public void MyMethodLogsInputParameters()
     {
         var mockLogger = new Mock<ILogger<MyService>>();
-        var myClass = new MyService(mockLogger.Object);
+        var myService = new MyService(mockLogger.Object);
 
-        myClass.MyMethod(false);
+        myService.MyMethod(false);
 
         mockLogger.VerifyLogDebug($"$input = {Boolean.FalseString}");
     }
@@ -54,16 +55,16 @@ public sealed class MyServiceTests : TestBase
     [TestMethod]
     public void MyMethodReturnsFalseFromFalseInput()
     {
-        var myClass = TestHelper.CreateMyClassWithMockDependencies();
+        var myService = TestHelper.CreateMyServiceWithMockDependencies();
 
-        myClass.MyMethod(false).Should().BeFalse();
+        myService.MyMethod(false).Should().BeFalse();
     }
 
     [TestMethod]
     public void MyMethodReturnsTrueFromTrueInput()
     {
-        var myClass = TestHelper.CreateMyClassWithMockDependencies();
+        var myService = TestHelper.CreateMyServiceWithMockDependencies();
 
-        myClass.MyMethod(true).Should().BeTrue();
+        myService.MyMethod(true).Should().BeTrue();
     }
 }
