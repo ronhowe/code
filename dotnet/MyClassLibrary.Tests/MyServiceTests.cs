@@ -5,8 +5,6 @@ https://github.com/ronhowe
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Serilog;
-using System.Diagnostics;
 
 namespace MyClassLibrary.Tests;
 

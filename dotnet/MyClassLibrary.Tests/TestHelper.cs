@@ -4,7 +4,6 @@ https://github.com/ronhowe
 
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Diagnostics;
 
 namespace MyClassLibrary.Tests;
 
