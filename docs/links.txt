@@ -1,0 +1,14 @@
+# Azure (azure)
+
+# DevOps (devops)
+
+https://learn.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops&tabs=yaml-editor
+https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/powershell-v2?view=azure-pipelines
+
+# Docs (docs)
+
+# .NET (dotnet)
+
+# PowerShell (powershell)
+
+# SQL (sql)
