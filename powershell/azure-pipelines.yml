@@ -53,7 +53,7 @@ stages:
               script: |
                 $filePath = 'powershell/modules/shell/Module.psd1'
                 $content = Get-Content -Path $filePath -Raw
-                $newVersion = "$major.$minor.$patch"
+                $newVersion = "$(major).$(minor).$(patch)"
                 $updatedContent = $content -replace '0\.0\.0', $newVersion
                 Set-Content -Path $filePath -Value $updatedContent
                 Get-Content -Path $filePath -Raw
@@ -64,23 +64,23 @@ stages:
               pwsh: true
               targetType: 'filePath'
               filePath: 'powershell/modules/shell/Start-Build.ps1'
-          - task: 'PowerShell@2'
-            name: 'startPackage'
-            displayName: 'Start Package'
-            inputs:
-              pwsh: true
-              targetType: 'filePath'
-              filePath: 'powershell/modules/shell/Start-Package.ps1'
-          - task: 'PublishBuildArtifacts@1'
-            name: 'publishArtifacts'
-            displayName: 'Publish Artifacts'
-            inputs:
-              ArtifactName: 'module'
-              PathtoPublish: 'powershell/modules/shell/Output'
-          - task: 'NuGetCommand@2'
-            name: 'publishPackage'
-            displayName: 'Publish Package'
-            inputs:
-              command: 'push'
-              packagesToPush: 'powershell/modules/shell/Output/Packages/*.nupkg'
-              publishVstsFeed: "$(module_name)/$(module_name)"
+          # - task: 'PowerShell@2'
+          #   name: 'startPackage'
+          #   displayName: 'Start Package'
+          #   inputs:
+          #     pwsh: true
+          #     targetType: 'filePath'
+          #     filePath: 'powershell/modules/shell/Start-Package.ps1'
+          # - task: 'PublishBuildArtifacts@1'
+          #   name: 'publishArtifacts'
+          #   displayName: 'Publish Artifacts'
+          #   inputs:
+          #     ArtifactName: 'module'
+          #     PathtoPublish: 'powershell/modules/shell/Output'
+          # - task: 'NuGetCommand@2'
+          #   name: 'publishPackage'
+          #   displayName: 'Publish Package'
+          #   inputs:
+          #     command: 'push'
+          #     packagesToPush: 'powershell/modules/shell/Output/Packages/*.nupkg'
+          #     publishVstsFeed: "$(module_name)/$(module_name)"

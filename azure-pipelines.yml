@@ -1,0 +1,42 @@
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops&tabs=yaml-editor
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/powershell-v2?view=azure-pipelines
+name: 'MyPowerShellPipeline'
+trigger:
+  branches:
+    include:
+      - 'main'
+    exclude:
+      - 'dev'
+  paths:
+    include:
+      - 'azure-pipelines.yml'
+      - 'powershell/*'
+    exclude:
+      - 'README.md'
+pool:
+  vmImage: 'ubuntu-latest'
+variables:
+  module_name: 'Shell'
+  major: 0
+  minor: 0
+  patch: $(Build.BuildId)
+stages:
+  - stage: 'MyStage'
+    jobs:
+      - job: 'MyJob'
+        steps:
+          - script: 'echo "Power-On Self-Test (POST)"'
+            displayName: 'Power-On Self-Test (POST)'
+          - task: 'PowerShell@2'
+            displayName: 'Power-On Self-Test (POST) - WARNING'
+            inputs:
+              targetType: 'inline'
+              script: |
+                Write-Host "##vso[task.LogIssue type=warning;]This is the warning"
+          - task: PowerShell@2
+            displayName: 'VersionTest'
+            inputs:
+              targetType: 'inline'
+              script: |
+                $moduleVersion = "$(major).$(minor).$(patch)"
+                Write-Host $moduleVersion
