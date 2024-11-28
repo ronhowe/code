@@ -27,8 +27,8 @@ $parameters = @{
         "$PSScriptRoot\..\..\dependencies\Dependencies.Tests.ps1",
         "$PSScriptRoot\..\..\dependencies\Install-Dependencies.ps1",
         "$PSScriptRoot\..\..\dependencies\Invoke-Dependencies.Tests.ps1",
-        "$PSScriptRoot\LICENSE*",
-        "$PSScriptRoot\README.md"
+        "$PSScriptRoot\LICENSE*"
+        # "$PSScriptRoot\README.md"
     )
     OutputDirectory            = $modulePath
     SourcePath                 = "$sourcePath\$moduleName.psd1"
