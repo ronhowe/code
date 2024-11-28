@@ -12,6 +12,6 @@ public sealed class MyTest
     [TestMethod]
     public void POST()
     {
-        Debug.WriteLine("Power-On Self-Test");
+        Trace.WriteLine("Power-On Self-Test");
     }
 }

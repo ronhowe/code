@@ -5,9 +5,10 @@ https://github.com/ronhowe
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
-using MyClassLibrary;
+using Serilog;
+using System.Diagnostics;
 
-namespace MyClassLibraryTests;
+namespace MyClassLibrary.Tests;
 
 [TestClass]
 public sealed class MyServiceTests : TestBase

@@ -4,9 +4,9 @@ https://github.com/ronhowe
 
 using Microsoft.Extensions.Logging;
 using Moq;
-using MyClassLibrary;
+using System.Diagnostics;
 
-namespace MyClassLibraryTests;
+namespace MyClassLibrary.Tests;
 
 internal static class TestHelper
 {
