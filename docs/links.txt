@@ -7,6 +7,8 @@ https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/powersh
 
 # Docs (docs)
 
+https://semver.org/
+
 # .NET (dotnet)
 
 # PowerShell (powershell)
