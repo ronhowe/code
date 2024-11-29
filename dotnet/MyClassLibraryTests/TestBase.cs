@@ -5,7 +5,7 @@ https://github.com/ronhowe
 using Serilog;
 using Serilog.Events;
 
-namespace MyClassLibrary.Tests;
+namespace MyClassLibraryTests;
 
 [TestClass]
 public class TestBase
