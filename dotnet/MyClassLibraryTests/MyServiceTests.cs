@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using MyClassLibrary;
+using System.Diagnostics;
 
 namespace MyClassLibraryTests;
 
@@ -59,5 +60,11 @@ public sealed class MyServiceTests : TestBase
         var myService = TestHelper.CreateMyServiceWithMockDependencies();
 
         myService.MyMethod(true).Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void PowerOnSelfTest()
+    {
+        Trace.WriteLine("Power-On Self-Test");
     }
 }
