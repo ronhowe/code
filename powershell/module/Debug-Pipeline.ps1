@@ -9,10 +9,10 @@ Write-Output "Importing Configuration"
 . "$PSScriptRoot\Import-Configuration.ps1" -Debug -Verbose
 
 Write-Output "Installing Dependencies"
-& "$PSScriptRoot\..\..\dependencies\Install-Dependencies.ps1" -Debug -Verbose
+& "$PSScriptRoot\..\dependencies\Install-Dependencies.ps1" -Debug -Verbose
 
 Write-Output "Testing Dependencies"
-Invoke-Pester -Path "$PSScriptRoot\..\..\dependencies\Invoke-Dependencies.Tests.ps1" -Output Detailed -PassThru |
+Invoke-Pester -Path "$PSScriptRoot\..\dependencies\Invoke-Dependencies.Tests.ps1" -Output Detailed -PassThru |
 New-Variable -Name "result" -Force
 if ($result.FailedCount -gt 0) {
     Write-Error "Dependencies Tests Failed"
@@ -25,7 +25,7 @@ Write-Output "Starting Build"
 & "$PSScriptRoot\Start-Build.ps1" -Debug -Verbose
 
 Write-Output "Testing Module"
-Invoke-Pester -Path "$PSScriptRoot\Invoke-Tests.ps1" -Output Detailed -PassThru |
+Invoke-Pester -Path "$PSScriptRoot\Test-Module.ps1" -Output Detailed -PassThru |
 New-Variable -Name "result" -Force
 if ($result.FailedCount -gt 0) {
     Write-Error "Module Tests Failed"

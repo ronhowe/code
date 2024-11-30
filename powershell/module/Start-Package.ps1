@@ -2,6 +2,8 @@
 https://github.com/ronhowe
 ###############################################################################>
 
+#requires -PSEdition "Core"
+
 [CmdletBinding()]
 param (
 )

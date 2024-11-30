@@ -10,7 +10,7 @@
 *.userosscache
 *.sln.docstates
 
-powershell/modules/shell/Output/*
+powershell/module/Output/*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

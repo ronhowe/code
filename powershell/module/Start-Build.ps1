@@ -23,10 +23,10 @@ $parameters = @{
     CopyPaths                  = @(
         "$sourcePath\$moduleName.json",
         "$sourcePath\$moduleName.nuspec",
-        "$PSScriptRoot\..\..\dependencies\Dependencies.psd1",
-        "$PSScriptRoot\..\..\dependencies\Dependencies.Tests.ps1",
-        "$PSScriptRoot\..\..\dependencies\Install-Dependencies.ps1",
-        "$PSScriptRoot\..\..\dependencies\Invoke-Dependencies.Tests.ps1",
+        "$PSScriptRoot\..\dependencies\Dependencies.psd1",
+        "$PSScriptRoot\..\dependencies\Dependencies.Tests.ps1",
+        "$PSScriptRoot\..\dependencies\Install-Dependencies.ps1",
+        "$PSScriptRoot\..\dependencies\Invoke-Dependencies.Tests.ps1",
         "$PSScriptRoot\LICENSE*"
         # "$PSScriptRoot\README.md"
     )
