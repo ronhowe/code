@@ -19,7 +19,7 @@ powershell/module/Output/*
 mono_crash.*
 
 # Build results
-[Dd]ebug/
+dotnet/[Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
