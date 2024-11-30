@@ -62,7 +62,7 @@ else {
 #region Get-UpgradeStatus (aka upgrade)
 
 function Get-UpgradeStatus {
-    Write-Warning "TODO - $HOME\repos\ronhowe\powershell\tools\Get-DevOpsTools.ps1"
+    . "$HOME\repos\ronhowe\code\powershell\prototypes\tools\Get-DevOpsTools.ps1"
     . "$HOME\repos\ronhowe\code\powershell\dependencies\Invoke-Dependencies.Tests.ps1"
     dotnet list .\repos\ronhowe\dotnet\dotnet.sln package --outdated
     winget upgrade
