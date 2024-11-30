@@ -2,6 +2,8 @@
 https://github.com/ronhowe
 ###############################################################################>
 
+#requires -PSEdition "Core"
+
 param(
     [string]
     $Why = "Power-On Self-Test"
@@ -21,3 +23,6 @@ Write-Output (Get-Date -AsUTC).Date
 
 Write-Output "WHY"
 Write-Output $Why
+
+Write-Output "HOW"
+Write-Output $PSCommandPath # $($MyInvocation.MyCommand.Name)
