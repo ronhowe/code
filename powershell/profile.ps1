@@ -64,7 +64,7 @@ else {
 function Get-UpgradeStatus {
     . "$HOME\repos\ronhowe\code\powershell\prototypes\tools\Get-DevOpsTools.ps1"
     . "$HOME\repos\ronhowe\code\powershell\dependencies\Invoke-Dependencies.Tests.ps1"
-    dotnet list .\repos\ronhowe\dotnet\dotnet.sln package --outdated
+    dotnet list .\repos\ronhowe\code\dotnet\MySolution.sln package --outdated
     winget upgrade
 }
 
