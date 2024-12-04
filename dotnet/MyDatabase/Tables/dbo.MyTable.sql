@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[MyTable]
+(
+    [Id] INT NOT NULL PRIMARY KEY
+    ,[Value] BIT NOT NULL
+    ,[Inserted] DATETIME NOT NULL DEFAULT GETUTCDATE()
+);
