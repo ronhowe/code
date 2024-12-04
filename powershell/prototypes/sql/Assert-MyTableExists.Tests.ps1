@@ -5,18 +5,18 @@ https://github.com/ronhowe
 #requires -Module "Pester"
 #requires -Module "SqlServer"
 
+BeforeAll {
+    . $PSCommandPath.Replace(".Tests.ps1", ".ps1")
+}
 Describe "Database Integration Tests" {
     Context "[localhost].[MyDatabase]" {
         It "[dbo].[MyTable] Exists" {
-            $parameters = @{
-                ServerInstance = "localhost"
-                Database       = "MyDatabase"
-                Encrypt        = "Optional"
-                InputFile      = "$HOME\repos\ronhowe\code\sql\MySolution\Assert-MyTableExists.sql"
-                QueryTimeout   = 100
-            }
-            $result = Invoke-SqlCmd @parameters
+            # arrange
 
+            # act
+            $result = Assert-MyTableExists
+
+            # assert
             $result.Result |
             Should -Be 1
         }
