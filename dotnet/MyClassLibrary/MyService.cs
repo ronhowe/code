@@ -2,6 +2,7 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
+using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 
@@ -19,15 +20,17 @@ public class MyService(ILogger<MyService> logger) : IMyService
         logger.LogDebug("Running Query");
         try
         {
-            using SqlConnection connection = new("Application Name=MyClassLibraryTests;Server=localhost;Database=MyDatabase;Trusted_Connection=True;Encrypt=Optional;");
+            using SqlConnection connection = new("Application Name=MyClassLibraryTests;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;");
             connection.Open();
             using SqlCommand command = new("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);", connection);
             command.Parameters.AddWithValue("@Value", input);
             command.ExecuteNonQuery();
         }
-        catch (Exception ex)
+        catch (Microsoft.Data.SqlClient.SqlException ex)
         {
-            logger.LogError(ex, "{Message}", ex.Message);
+            logger.LogCritical(ex, "{Message}", ex.Message);
+            // TODO - Throw "StorageUnavailableCustomException"?
+            throw ex;
         }
         finally
         {
