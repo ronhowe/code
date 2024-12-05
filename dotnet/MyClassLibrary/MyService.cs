@@ -2,6 +2,7 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 
 namespace MyClassLibrary;
@@ -15,7 +16,15 @@ public class MyService(ILogger<MyService> logger) : IMyService
         logger.LogDebug("Logging Input Parameter(s) and Value(s)");
         logger.LogDebug("$input = {input}", input);
 
-        bool result = input; // very important business logic =)
+        using (SqlConnection connection = new("Application Name=MyClassLibraryTests;Server=localhost;Database=MyDatabase;Trusted_Connection=True;Encrypt=Optional;"))
+        {
+            connection.Open();
+            using SqlCommand command = new("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);", connection);
+            command.Parameters.AddWithValue("@Value", input);
+            //command.ExecuteNonQuery();
+        }
+
+        bool result = input;
 
         logger.LogDebug("Exiting {name}", nameof(MyService));
 
