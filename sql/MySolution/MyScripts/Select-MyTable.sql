@@ -1,4 +1,10 @@
-SELECT TOP (50)
+SELECT
+    COUNT(*) AS [CountOfMyTable]
+FROM
+    [dbo].[MyTable]
+;
+
+SELECT TOP (10)
     [Id]
     ,[Value]
     ,[Inserted]

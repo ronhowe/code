@@ -5,6 +5,7 @@ https://github.com/ronhowe
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using Moq;
 using MyClassLibrary;
 using Serilog;
@@ -100,13 +101,17 @@ public sealed class MyServiceTests
 
     private static void ConfigureServices(IServiceCollection services)
     {
-        services
-            .AddLogging(configure =>
+        services.AddLogging(configure =>
+        {
+            configure.ClearProviders();
+            configure.SetMinimumLevel(LogLevel.Debug);
+            configure.AddDebug();
+            configure.AddSimpleConsole(options =>
             {
-                configure.AddSimpleConsole();
-                configure.SetMinimumLevel(LogLevel.Debug);
-            })
-            .AddTransient<MyService>();
+                options.ColorBehavior = LoggerColorBehavior.Disabled;
+            });
+        })
+        .AddTransient<MyService>();
     }
 
     [TestMethod]

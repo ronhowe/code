@@ -16,13 +16,25 @@ public class MyService(ILogger<MyService> logger) : IMyService
         logger.LogDebug("Logging Input Parameter(s) and Value(s)");
         logger.LogDebug("$input = {input}", input);
 
-        using (SqlConnection connection = new("Application Name=MyClassLibraryTests;Server=localhost;Database=MyDatabase;Trusted_Connection=True;Encrypt=Optional;"))
+        logger.LogDebug("Running Query");
+        try
         {
+            using SqlConnection connection = new("Application Name=MyClassLibraryTests;Server=localhost;Database=MyDatabase;Trusted_Connection=True;Encrypt=Optional;");
             connection.Open();
             using SqlCommand command = new("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);", connection);
             command.Parameters.AddWithValue("@Value", input);
-            //command.ExecuteNonQuery();
+            command.ExecuteNonQuery();
         }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "{Message}", ex.Message);
+        }
+        finally
+        {
+            logger.LogDebug("Query Complete");
+        }
+
+        logger.LogDebug("Returning Result");
 
         bool result = input;
 
