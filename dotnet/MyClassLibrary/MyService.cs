@@ -24,16 +24,14 @@ public class MyService(ILogger<MyService> logger) : IMyService
             using SqlCommand command = new("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);", connection);
             command.Parameters.AddWithValue("@Value", input);
             command.ExecuteNonQuery();
+
+            logger.LogDebug("Query Succeeded");
         }
         catch (Microsoft.Data.SqlClient.SqlException ex)
         {
             logger.LogCritical(ex, "{Message}", ex.Message);
-            // TODO - Throw "StorageUnavailableCustomException" instead?
-            throw;
-        }
-        finally
-        {
-            logger.LogDebug("Query Complete");
+
+            logger.LogDebug("Query Failed");
         }
 
         logger.LogDebug("Returning Result");
