@@ -7,7 +7,7 @@ function Assert-MyTableExists {
         ServerInstance = "localhost"
         Database       = "MyDatabase"
         Encrypt        = "Optional"
-        InputFile      = "$HOME\repos\ronhowe\code\sql\MySolution\Assert-MyTableExists.sql"
+        InputFile      = "$HOME\repos\ronhowe\code\sql\MySolution\MyScripts\Assert-MyTableExists.sql"
         QueryTimeout   = 100
     }
     return Invoke-SqlCmd @parameters
