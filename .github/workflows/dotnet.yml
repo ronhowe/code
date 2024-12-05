@@ -6,6 +6,8 @@ name: dotnet
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - ./dotnet/**
   pull_request:
     branches: [ "main" ]
 
