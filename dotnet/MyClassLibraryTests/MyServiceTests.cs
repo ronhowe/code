@@ -3,6 +3,7 @@ https://github.com/ronhowe
 *******************************************************************************/
 
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using MyClassLibrary;
@@ -86,7 +87,31 @@ public sealed class MyServiceTests
     }
 
     [TestMethod]
+    public void MyMethodIntegrationTest()
+    {
+        var serviceCollection = new ServiceCollection();
+        ConfigureServices(serviceCollection);
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var myService = serviceProvider.GetService<MyService>();
+        myService?.MyMethod(true).Should().BeTrue();
+    }
+
+    private static void ConfigureServices(IServiceCollection services)
+    {
+        services
+            .AddLogging(configure =>
+            {
+                configure.AddSimpleConsole();
+                configure.SetMinimumLevel(LogLevel.Debug);
+            })
+            .AddTransient<MyService>();
+    }
+
+    [TestMethod]
     public void PowerOnSelfTest()
     {
+        //todo
     }
 }
