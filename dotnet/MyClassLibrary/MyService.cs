@@ -2,7 +2,6 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
-using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 
@@ -29,8 +28,8 @@ public class MyService(ILogger<MyService> logger) : IMyService
         catch (Microsoft.Data.SqlClient.SqlException ex)
         {
             logger.LogCritical(ex, "{Message}", ex.Message);
-            // TODO - Throw "StorageUnavailableCustomException"?
-            throw ex;
+            // TODO - Throw "StorageUnavailableCustomException" instead?
+            throw;
         }
         finally
         {
