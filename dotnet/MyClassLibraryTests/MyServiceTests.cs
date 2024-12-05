@@ -21,7 +21,9 @@ public sealed class MyServiceTests
     [TestInitialize]
     public void TestInitialize()
     {
-        Trace.WriteLine("Power-On Self-Test");
+        Debug.WriteLine("Power-On Self-Test");
+
+        Debug.WriteLine("Configuring Logger");
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -31,7 +33,7 @@ public sealed class MyServiceTests
             .WriteTo.Console(outputTemplate: _outputTemplate)
             .CreateLogger();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug("Initializing Test");
+        Log.ForContext("SourceContext", _sourceContext).Debug("Power-On Self-Test");
     }
 
     [TestMethod]
