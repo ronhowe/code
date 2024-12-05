@@ -10,6 +10,14 @@
 *.userosscache
 *.sln.docstates
 
+# TODO - Eventually ignore VS Code settings?
+# @COPILOT
+# This folder contains workspace settings and extensions for Visual Studio Code.
+# While there are some situations where you might want to share specific settings with your team,
+# it's often better to exclude it to avoid overwriting personal configurations.
+# However, if your team has agreed on a set of shared settings or extensions, you might consider including it.
+#.vscode/
+
 powershell/module/Output/*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
