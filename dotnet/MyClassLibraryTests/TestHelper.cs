@@ -56,6 +56,15 @@ internal static class TestHelper
         return mockLogger.Object;
     }
 
+    internal static MyService CreateMyServiceWithMockDependencies()
+    {
+        var service = new MyService(
+            CreateMockLogger()
+        );
+
+        return service;
+    }
+
     public static Mock<ILogger<T>> VerifyLogDebug<T>(this Mock<ILogger<T>> logger, string expectedMessage)
     {
         ArgumentNullException.ThrowIfNull(expectedMessage);
@@ -88,14 +97,5 @@ internal static class TestHelper
                 It.Is<Func<It.IsAnyType, Exception?, string>>((v, t) => true)));
 
         return logger;
-    }
-
-    internal static MyService CreateMyServiceWithMockDependencies()
-    {
-        var service = new MyService(
-            CreateMockLogger()
-        );
-
-        return service;
     }
 }
