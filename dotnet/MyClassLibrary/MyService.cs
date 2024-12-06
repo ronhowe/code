@@ -18,7 +18,7 @@ public class MyService(ILogger<MyService> logger) : IMyService
 
         logger.LogInformation("OK");
 
-        logger.LogDebug("Logging Input Parameter(s) and Value(s)");
+        logger.LogDebug("Logging Input");
         logger.LogDebug("$input = {input}", input);
 
         try
