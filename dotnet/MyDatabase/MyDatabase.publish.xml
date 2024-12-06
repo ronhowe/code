@@ -1,10 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseName>MyDatabase</TargetDatabaseName>
-    <DeployScriptFileName>MyDatabase.sql</DeployScriptFileName>
-    <TargetConnectionString>Data Source=localhost;Integrated Security=True;Persist Security Info=False;Pooling=False;Multiple Active Result Sets=False;Connect Timeout=60;Encrypt=False;Trust Server Certificate=False;Command Timeout=0</TargetConnectionString>
+    <TargetConnectionString>Data Source=localhost;Initial Catalog=MyDatabase;Integrated Security=True;Password=******;Connect Timeout=30;Encrypt=False;Application Name=vscode-mssql;Command Timeout=30</TargetConnectionString>
+    <AllowIncompatiblePlatform>True</AllowIncompatiblePlatform>
+    <DropPermissionsNotInSource>True</DropPermissionsNotInSource>
+    <DropObjectsNotInSource>True</DropObjectsNotInSource>
+    <DropRoleMembersNotInSource>True</DropRoleMembersNotInSource>
+    <IgnoreKeywordCasing>False</IgnoreKeywordCasing>
+    <IgnoreSemicolonBetweenStatements>False</IgnoreSemicolonBetweenStatements>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <AllowDropBlockingAssemblies>True</AllowDropBlockingAssemblies>
     <ProfileVersionNumber>1</ProfileVersionNumber>
   </PropertyGroup>
 </Project>
