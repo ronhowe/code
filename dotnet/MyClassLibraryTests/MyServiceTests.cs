@@ -27,10 +27,10 @@ public sealed class MyServiceTests
         Debug.WriteLine($"Creating Service Collection");
         var serviceCollection = new ServiceCollection();
 
-        Debug.WriteLine($"Configuring Logging");
+        Debug.WriteLine($"Adding Logging");
         serviceCollection.AddLogging(configure =>
         {
-            Debug.WriteLine($"Clearing Providers");
+            Debug.WriteLine($"Clearing Log Providers");
             configure.ClearProviders();
 
             Debug.WriteLine($"Adding Simple Console Logger");
@@ -48,7 +48,7 @@ public sealed class MyServiceTests
         })
         .AddTransient<MyService>();
 
-        Debug.WriteLine("Building Service Provier");
+        Debug.WriteLine("Building Service Provider");
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
         Debug.WriteLine("Getting MyService");
