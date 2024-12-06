@@ -16,22 +16,22 @@ Write-Output "Running $($MyInvocation.MyCommand.Name)"
 Measure-Command {
     try {
         Push-Location -Path $Path
-        Write-Debug "Running dotnet clean"
+        Write-Debug "Running .NET Clean" -Debug
         dotnet clean
         if ($LASTEXITCODE -ne 0) {
             throw "dotnet clean failed"
         }
-        Write-Debug "dotnet restore"
+        Write-Debug "Running .NET Restore" -Debug
         dotnet restore
         if ($LASTEXITCODE -ne 0) {
             throw "dotnet restore failed"
         }
-        Write-Debug "dotnet build"
+        Write-Debug "Running .NET Build" -Debug
         dotnet build
         if ($LASTEXITCODE -ne 0) {
             throw "dotnet build failed"
         }
-        Write-Debug "dotnet test"
+        Write-Debug "Running .NET Test" -Debug
         dotnet test
         if ($LASTEXITCODE -ne 0) {
             throw "dotnet test failed"
