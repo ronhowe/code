@@ -14,22 +14,22 @@ public class MyService(ILogger<MyService> logger) : IMyService
 
     public bool MyMethod(bool input)
     {
-        logger.LogTrace("Entering {name}", nameof(MyService));
+        logger.LogDebug("Entering {name}", nameof(MyService));
 
         logger.LogInformation("OK");
 
-        logger.LogTrace("Logging Input");
-        logger.LogDebug("input = {input}", input);
+        logger.LogDebug("Logging Input");
+        logger.LogTrace("input = {input}", input);
 
         try
         {
-            logger.LogTrace("Connecting Query");
-            logger.LogDebug("_connectionString = {_connectionString}", _connectionString);
+            logger.LogDebug("Connecting Query");
+            logger.LogTrace("_connectionString = {_connectionString}", _connectionString);
             using SqlConnection connection = new(_connectionString);
             connection.Open();
 
-            logger.LogTrace("Executing Query");
-            logger.LogDebug("_sqlQuery = {_sqlQuery}", _sqlQuery);
+            logger.LogDebug("Executing Query");
+            logger.LogTrace("_sqlQuery = {_sqlQuery}", _sqlQuery);
             using SqlCommand command = new(_sqlQuery, connection);
             command.Parameters.AddWithValue("@Value", input);
             command.ExecuteNonQuery();
@@ -39,10 +39,10 @@ public class MyService(ILogger<MyService> logger) : IMyService
             logger.LogCritical(ex, "{Message}", ex.Message);
         }
 
-        logger.LogTrace("Returning Result");
+        logger.LogDebug("Returning Result");
         bool result = input;
 
-        logger.LogTrace("Exiting {name}", nameof(MyService));
+        logger.LogDebug("Exiting {name}", nameof(MyService));
 
         return result;
     }
