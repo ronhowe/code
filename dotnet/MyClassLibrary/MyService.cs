@@ -16,8 +16,6 @@ public class MyService(ILogger<MyService> logger) : IMyService
     {
         logger.LogDebug("Entering {name}", nameof(MyService));
 
-        logger.LogInformation("OK");
-
         logger.LogDebug("Logging Input");
         logger.LogTrace("input = {input}", input);
 
@@ -39,8 +37,11 @@ public class MyService(ILogger<MyService> logger) : IMyService
             logger.LogCritical(ex, "{Message}", ex.Message);
         }
 
-        logger.LogDebug("Returning Result");
+        // important business logic =)
         bool result = input;
+
+        logger.LogInformation("Returning {result}", result);
+
 
         logger.LogDebug("Exiting {name}", nameof(MyService));
 

@@ -18,7 +18,13 @@ public sealed class MyServiceTests
     [TestInitialize]
     public void TestInitialize()
     {
-        Debug.WriteLine("Initializing Test");
+        Debug.WriteLine("Entering Test");
+    }
+
+    [TestCleanup]
+    public void TestCleanup()
+    {
+        Debug.WriteLine("Exiting Test");
     }
 
     [TestMethod]
@@ -93,14 +99,14 @@ public sealed class MyServiceTests
     }
 
     [TestMethod]
-    public void MyMethodLogsOK()
+    public void MyMethodLogsResult()
     {
         var mockLogger = new Mock<ILogger<MyService>>();
         var myService = new MyService(mockLogger.Object);
 
         myService.MyMethod(false);
 
-        mockLogger.VerifyLogInformation($"OK");
+        mockLogger.VerifyLogInformation($"Returning {false}");
     }
 
     [TestMethod]
