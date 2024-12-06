@@ -42,8 +42,9 @@ public sealed class MyServiceTests
                 options.TimestampFormat = "yyyy-MM-dd HH:mm:ss ";
             });
 
-            Debug.WriteLine($"Setting Minimum Log Level = {LogLevel.Debug}");
-            configure.SetMinimumLevel(LogLevel.Debug);
+            var logLevel = LogLevel.Trace;
+            Debug.WriteLine($"Setting Minimum Log Level = {logLevel}");
+            configure.SetMinimumLevel(logLevel);
 
         })
         .AddTransient<MyService>();
@@ -81,6 +82,17 @@ public sealed class MyServiceTests
     }
 
     [TestMethod]
+    public void MyMethodLogsInputMessage()
+    {
+        var mockLogger = new Mock<ILogger<MyService>>();
+        var myService = new MyService(mockLogger.Object);
+
+        myService.MyMethod(false);
+
+        mockLogger.VerifyLogTrace($"input = {Boolean.FalseString}");
+    }
+
+    [TestMethod]
     public void MyMethodLogsOKMessage()
     {
         var mockLogger = new Mock<ILogger<MyService>>();
@@ -89,17 +101,6 @@ public sealed class MyServiceTests
         myService.MyMethod(false);
 
         mockLogger.VerifyLogInformation($"OK");
-    }
-
-    [TestMethod]
-    public void MyMethodLogsInputParameters()
-    {
-        var mockLogger = new Mock<ILogger<MyService>>();
-        var myService = new MyService(mockLogger.Object);
-
-        myService.MyMethod(false);
-
-        mockLogger.VerifyLogTrace($"input = {Boolean.FalseString}");
     }
 
     [TestMethod]
