@@ -5,7 +5,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - ./dotnet/**
+      - dotnet/*
   pull_request:
     branches: [ "main" ]
 jobs:
@@ -13,13 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Setup
+    - name: Install .NET SDK
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
-    - name: Restore
+    - name: Run .NET Restore
       run: dotnet restore ./dotnet
-    - name: Build
+    - name: Run .NET Build
       run: dotnet build ./dotnet --no-restore
-    - name: Test
+    - name: Run .NET Test
       run: dotnet test ./dotnet --no-build --nologo --verbosity normal
