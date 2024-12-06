@@ -99,7 +99,7 @@ public sealed class MyServiceTests
 
         myService.MyMethod(false);
 
-        mockLogger.VerifyLogDebug($"$input = {Boolean.FalseString}");
+        mockLogger.VerifyLogDebug($"input = {Boolean.FalseString}");
     }
 
     [TestMethod]

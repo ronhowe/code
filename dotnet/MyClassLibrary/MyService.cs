@@ -18,20 +18,18 @@ public class MyService(ILogger<MyService> logger) : IMyService
 
         logger.LogInformation("OK");
 
-        logger.LogDebug("Logging Input");
-        logger.LogDebug("$input = {input}", input);
+        logger.LogTrace("Logging Input");
+        logger.LogDebug("input = {input}", input);
 
         try
         {
-            logger.LogTrace("Configuring Query");
+            logger.LogTrace("Connecting Query");
             logger.LogDebug("_connectionString = {_connectionString}", _connectionString);
-            logger.LogDebug("_sqlQuery = {_sqlQuery}", _sqlQuery);
-
-            logger.LogTrace("Opening Connection");
             using SqlConnection connection = new(_connectionString);
             connection.Open();
 
             logger.LogTrace("Executing Query");
+            logger.LogDebug("_sqlQuery = {_sqlQuery}", _sqlQuery);
             using SqlCommand command = new(_sqlQuery, connection);
             command.Parameters.AddWithValue("@Value", input);
             command.ExecuteNonQuery();
