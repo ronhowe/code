@@ -1,3 +1,5 @@
+SET NOCOUNT ON;
+
 SELECT
     COUNT(*) AS [CountOfMyTable]
 FROM
