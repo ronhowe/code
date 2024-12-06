@@ -60,7 +60,7 @@ public sealed class MyServiceTests
     }
 
     [TestMethod]
-    public void MyMethodLogsEntryMessage()
+    public void MyMethodLogsEntry()
     {
         var mockLogger = new Mock<ILogger<MyService>>();
         var myService = new MyService(mockLogger.Object);
@@ -71,7 +71,7 @@ public sealed class MyServiceTests
     }
 
     [TestMethod]
-    public void MyMethodLogsExitMessage()
+    public void MyMethodLogsExit()
     {
         var mockLogger = new Mock<ILogger<MyService>>();
         var myService = new MyService(mockLogger.Object);
@@ -82,7 +82,7 @@ public sealed class MyServiceTests
     }
 
     [TestMethod]
-    public void MyMethodLogsInputMessage()
+    public void MyMethodLogsInput()
     {
         var mockLogger = new Mock<ILogger<MyService>>();
         var myService = new MyService(mockLogger.Object);
@@ -93,7 +93,7 @@ public sealed class MyServiceTests
     }
 
     [TestMethod]
-    public void MyMethodLogsOKMessage()
+    public void MyMethodLogsOK()
     {
         var mockLogger = new Mock<ILogger<MyService>>();
         var myService = new MyService(mockLogger.Object);
@@ -104,7 +104,7 @@ public sealed class MyServiceTests
     }
 
     [TestMethod]
-    public void MyMethodReturnsFalseFromFalseInput()
+    public void MyMethodReturnsFalse()
     {
         var myService = TestHelper.CreateMyServiceWithMockDependencies();
 
@@ -112,7 +112,7 @@ public sealed class MyServiceTests
     }
 
     [TestMethod]
-    public void MyMethodReturnsTrueFromTrueInput()
+    public void MyMethodReturnsTrue()
     {
         var myService = TestHelper.CreateMyServiceWithMockDependencies();
 
