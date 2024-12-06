@@ -8,8 +8,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using Moq;
 using MyClassLibrary;
-using Serilog;
-using Serilog.Events;
 using System.Diagnostics;
 
 namespace MyClassLibraryTests;
@@ -17,25 +15,47 @@ namespace MyClassLibraryTests;
 [TestClass]
 public sealed class MyServiceTests
 {
-    internal readonly string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{SourceContext}] [{MachineName}] {Message}{NewLine}{Exception}";
-    internal readonly string _sourceContext = nameof(MyServiceTests);
-
     [TestInitialize]
     public void TestInitialize()
     {
-        Debug.WriteLine("Power-On Self-Test");
+        Debug.WriteLine("Initializing Test");
+    }
 
-        Debug.WriteLine("Configuring Logger");
+    [TestMethod]
+    public void IntegrationTest()
+    {
+        Debug.WriteLine($"Creating Service Collection");
+        var serviceCollection = new ServiceCollection();
 
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            .Enrich.FromLogContext()
-            .Enrich.WithMachineName()
-            .WriteTo.Console(outputTemplate: _outputTemplate)
-            .CreateLogger();
+        Debug.WriteLine($"Configuring Logging");
+        serviceCollection.AddLogging(configure =>
+        {
+            Debug.WriteLine($"Clearing Providers");
+            configure.ClearProviders();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug("Power-On Self-Test");
+            Debug.WriteLine($"Adding Simple Console Logger");
+            configure.AddSimpleConsole(options =>
+            {
+                options.ColorBehavior = LoggerColorBehavior.Disabled;
+                options.SingleLine = true;
+                options.UseUtcTimestamp = true;
+                options.TimestampFormat = "yyyy-MM-dd HH:mm:ss ";
+            });
+
+            Debug.WriteLine($"Setting Minimum Log Level = {LogLevel.Trace}");
+            configure.SetMinimumLevel(LogLevel.Trace);
+
+        })
+        .AddTransient<MyService>();
+
+        Debug.WriteLine("Building Service Provier");
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        Debug.WriteLine("Getting MyService");
+        var myService = serviceProvider.GetService<MyService>();
+
+        Debug.WriteLine($"Calling MyService");
+        myService?.MyMethod(true).Should().BeTrue();
     }
 
     [TestMethod]
@@ -46,7 +66,7 @@ public sealed class MyServiceTests
 
         myService.MyMethod(false);
 
-        mockLogger.VerifyLogDebug($"Entering {nameof(MyService)}");
+        mockLogger.VerifyLogTrace($"Entering {nameof(MyService)}");
     }
 
     [TestMethod]
@@ -57,7 +77,18 @@ public sealed class MyServiceTests
 
         myService.MyMethod(false);
 
-        mockLogger.VerifyLogDebug($"Exiting {nameof(MyService)}");
+        mockLogger.VerifyLogTrace($"Exiting {nameof(MyService)}");
+    }
+
+    [TestMethod]
+    public void MyMethodLogsOKMessage()
+    {
+        var mockLogger = new Mock<ILogger<MyService>>();
+        var myService = new MyService(mockLogger.Object);
+
+        myService.MyMethod(false);
+
+        mockLogger.VerifyLogInformation($"OK");
     }
 
     [TestMethod]
@@ -85,38 +116,5 @@ public sealed class MyServiceTests
         var myService = TestHelper.CreateMyServiceWithMockDependencies();
 
         myService.MyMethod(true).Should().BeTrue();
-    }
-
-    [TestMethod]
-    public void MyMethodIntegrationTest()
-    {
-        var serviceCollection = new ServiceCollection();
-        ConfigureServices(serviceCollection);
-
-        var serviceProvider = serviceCollection.BuildServiceProvider();
-
-        var myService = serviceProvider.GetService<MyService>();
-        myService?.MyMethod(true).Should().BeTrue();
-    }
-
-    private static void ConfigureServices(IServiceCollection services)
-    {
-        services.AddLogging(configure =>
-        {
-            configure.ClearProviders();
-            configure.SetMinimumLevel(LogLevel.Debug);
-            configure.AddDebug();
-            configure.AddSimpleConsole(options =>
-            {
-                options.ColorBehavior = LoggerColorBehavior.Disabled;
-            });
-        })
-        .AddTransient<MyService>();
-    }
-
-    [TestMethod]
-    public void PowerOnSelfTest()
-    {
-        //todo
     }
 }

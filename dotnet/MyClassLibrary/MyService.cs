@@ -9,36 +9,42 @@ namespace MyClassLibrary;
 
 public class MyService(ILogger<MyService> logger) : IMyService
 {
+    private const string _connectionString = "Application Name=MyClassLibraryTests;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;";
+    private const string _sqlQuery = "INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);";
+
     public bool MyMethod(bool input)
     {
-        logger.LogDebug("Entering {name}", nameof(MyService));
+        logger.LogTrace("Entering {name}", nameof(MyService));
+
+        logger.LogInformation("OK");
 
         logger.LogDebug("Logging Input Parameter(s) and Value(s)");
         logger.LogDebug("$input = {input}", input);
 
-        logger.LogDebug("Running Query");
         try
         {
-            using SqlConnection connection = new("Application Name=MyClassLibraryTests;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;");
+            logger.LogTrace("Configuring Query");
+            logger.LogDebug("_connectionString = {_connectionString}", _connectionString);
+            logger.LogDebug("_sqlQuery = {_sqlQuery}", _sqlQuery);
+
+            logger.LogTrace("Opening Connection");
+            using SqlConnection connection = new(_connectionString);
             connection.Open();
-            using SqlCommand command = new("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);", connection);
+
+            logger.LogTrace("Executing Query");
+            using SqlCommand command = new(_sqlQuery, connection);
             command.Parameters.AddWithValue("@Value", input);
             command.ExecuteNonQuery();
-
-            logger.LogDebug("Query Succeeded");
         }
         catch (Microsoft.Data.SqlClient.SqlException ex)
         {
             logger.LogCritical(ex, "{Message}", ex.Message);
-
-            logger.LogDebug("Query Failed");
         }
 
-        logger.LogDebug("Returning Result");
-
+        logger.LogTrace("Returning Result");
         bool result = input;
 
-        logger.LogDebug("Exiting {name}", nameof(MyService));
+        logger.LogTrace("Exiting {name}", nameof(MyService));
 
         return result;
     }
