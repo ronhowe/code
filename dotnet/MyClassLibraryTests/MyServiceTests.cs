@@ -48,7 +48,7 @@ public sealed class MyServiceTests
                 options.TimestampFormat = "yyyy-MM-dd HH:mm:ss ";
             });
 
-            var logLevel = LogLevel.Trace;
+            var logLevel = LogLevel.Debug;
             Debug.WriteLine($"Setting Minimum Log Level = {logLevel}");
             configure.SetMinimumLevel(logLevel);
 
