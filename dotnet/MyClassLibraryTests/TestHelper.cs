@@ -10,44 +10,6 @@ namespace MyClassLibraryTests;
 
 internal static class TestHelper
 {
-    //internal static IConfiguration CreateMockConfiguration(bool value)
-    //{
-    //    //link - https://adamstorr.azurewebsites.net/blog/mocking-ilogger-with-moq
-    //    var mockConfigurationSection = new Mock<IConfigurationSection>();
-    //    mockConfigurationSection.Setup(x => x.Value).Returns(value.ToString());
-
-    //    var mockConfiguration = new Mock<IConfiguration>();
-    //    mockConfiguration.Setup(x => x.GetSection(nameof(Service1Feature.MockService1PermanentExceptionToggle))).Returns(mockConfigurationSection.Object);
-    //    mockConfiguration.Setup(x => x.GetSection(nameof(Service1Feature.MockService1TransientExceptionToggle))).Returns(mockConfigurationSection.Object);
-
-    //    return mockConfiguration.Object;
-    //}
-
-    //internal static IDateTimeService CreateMockDateTimeService(bool even)
-    //{
-    //    long ticks = even ? (DateTime.UtcNow.Ticks / 2) * 2 : ((DateTime.UtcNow.Ticks / 2) * 2) + 1;
-    //    DateTime dateTime = new(ticks);
-
-    //    var mockDateTimeService = new Mock<IDateTimeService>();
-    //    mockDateTimeService.Setup(x => x.UtcNow).Returns(dateTime);
-
-    //    return mockDateTimeService.Object;
-    //}
-
-    //internal static IFeatureManager CreateMockFeatureManager(string name, bool value)
-    //{
-    //    var mockFeatureManager = new Mock<IFeatureManager>();
-    //    mockFeatureManager.Setup(x => x.IsEnabledAsync(name).Result).Returns(value);
-
-    //    return mockFeatureManager.Object;
-    //}
-
-    //internal static IHealthCheck CreateMockHealthCheck()
-    //{
-    //    var mockHealthCheck = new Mock<IHealthCheck>();
-
-    //    return mockHealthCheck.Object;
-    //}
 
     internal static ILogger<MyService> CreateMockLogger()
     {
