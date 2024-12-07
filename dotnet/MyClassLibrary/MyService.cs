@@ -115,7 +115,6 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
 
         logger.LogInformation("Returning {result}", result);
 
-
         logger.LogDebug("Exiting {name}", nameof(MyService));
 
         return result;
