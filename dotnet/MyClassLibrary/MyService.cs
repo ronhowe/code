@@ -3,14 +3,15 @@ https://github.com/ronhowe
 *******************************************************************************/
 
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace MyClassLibrary;
 
-public class MyService(ILogger<MyService> logger) : IMyService
+public class MyService(ILogger<MyService> logger, IConfiguration configuration) : IMyService
 {
     private const string _connectionString = "Application Name=MyClassLibraryTests;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;";
-    private const string _sqlQuery = "INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);";
+    private const string _cmdText = "INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);";
 
     public bool MyMethod(bool input)
     {
@@ -19,21 +20,56 @@ public class MyService(ILogger<MyService> logger) : IMyService
         logger.LogDebug("Logging Input");
         logger.LogTrace("input = {input}", input);
 
+        string connectionString = _connectionString;
         try
         {
-            logger.LogDebug("Connecting Query");
-            logger.LogTrace("_connectionString = {_connectionString}", _connectionString);
+            logger.LogDebug("Getting Connection String");
+            // todo - truly understand why this doesn't work in Moq
+            //connectionString = configuration.GetConnectionString("MyDatabase") ?? _connectionString;
+            // todo - workaround is to use the standard notation and not the helper method
+            connectionString = configuration["ConnectionStrings.MyDatabase"] ?? _connectionString;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("Error Getting Connection String ; Using Default");
+            logger.LogError(ex, "{Message}", ex.Message);
+        }
+        finally
+        {
+            logger.LogTrace("connectionString = {connectionString}", connectionString);
+        }
+
+        string cmdText = _cmdText;
+        try
+        {
+            logger.LogDebug("Getting Command Text");
+            cmdText = configuration["MyCommand"] ?? _cmdText;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("Error Getting Command Text ; Using Default");
+            logger.LogError(ex, "{Message}", ex.Message);
+        }
+        finally
+        {
+            logger.LogTrace("cmdText = {cmdText}", cmdText);
+        }
+
+        logger.LogDebug("Running Query");
+        try
+        {
+            logger.LogDebug("Opening Connecting");
             using SqlConnection connection = new(_connectionString);
             connection.Open();
 
-            logger.LogDebug("Executing Query");
-            logger.LogTrace("_sqlQuery = {_sqlQuery}", _sqlQuery);
-            using SqlCommand command = new(_sqlQuery, connection);
+            logger.LogDebug("Executing Command");
+            using SqlCommand command = new(_cmdText, connection);
             command.Parameters.AddWithValue("@Value", input);
             command.ExecuteNonQuery();
         }
         catch (Microsoft.Data.SqlClient.SqlException ex)
         {
+            logger.LogCritical("Critical Error Running Query");
             logger.LogCritical(ex, "{Message}", ex.Message);
         }
 
