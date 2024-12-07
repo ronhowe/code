@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
+using Microsoft.FeatureManagement;
 using Moq;
 using MyClassLibrary;
 using System.Diagnostics;
@@ -67,12 +68,21 @@ public sealed class MyServiceTests
         var configurationSettings = new Dictionary<string, string?>
         {
             { "ConnectionStrings:MyDatabase", "Application Name=MyClassLibraryTests;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
-            { "MyCommand", "INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);" }
+            { "MyCommand", "INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);" },
+            { "FeatureManagement:MyFeature", "true" }
         };
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(configurationSettings)
             .Build();
+
         serviceCollection.AddSingleton<IConfiguration>(configuration);
+
+        /*******************************************************************************
+        FEATURES
+        *******************************************************************************/
+
+        Debug.WriteLine($"Adding Features");
+        serviceCollection.AddFeatureManagement();
 
         /*******************************************************************************
         SERVICES
@@ -96,7 +106,8 @@ public sealed class MyServiceTests
     {
         var mockLogger = new Mock<ILogger<MyService>>();
         var mockConfiguration = MockHelpers.CreateMockConfiguration();
-        var myService = new MyService(mockLogger.Object, mockConfiguration);
+        var mockFeatureManager = MockHelpers.CreateMockFeatureManager("MyFeature", false);
+        var myService = new MyService(mockLogger.Object, mockConfiguration, mockFeatureManager);
 
         myService.MyMethod(false);
 
@@ -108,7 +119,8 @@ public sealed class MyServiceTests
     {
         var mockLogger = new Mock<ILogger<MyService>>();
         var mockConfiguration = MockHelpers.CreateMockConfiguration();
-        var myService = new MyService(mockLogger.Object, mockConfiguration);
+        var mockFeatureManager = MockHelpers.CreateMockFeatureManager("MyFeature", false);
+        var myService = new MyService(mockLogger.Object, mockConfiguration, mockFeatureManager);
 
         myService.MyMethod(false);
 
@@ -120,7 +132,8 @@ public sealed class MyServiceTests
     {
         var mockLogger = new Mock<ILogger<MyService>>();
         var mockConfiguration = MockHelpers.CreateMockConfiguration();
-        var myService = new MyService(mockLogger.Object, mockConfiguration);
+        var mockFeatureManager = MockHelpers.CreateMockFeatureManager("MyFeature", false);
+        var myService = new MyService(mockLogger.Object, mockConfiguration, mockFeatureManager);
 
         myService.MyMethod(false);
 
@@ -132,7 +145,8 @@ public sealed class MyServiceTests
     {
         var mockLogger = new Mock<ILogger<MyService>>();
         var mockConfiguration = MockHelpers.CreateMockConfiguration();
-        var myService = new MyService(mockLogger.Object, mockConfiguration);
+        var mockFeatureManager = MockHelpers.CreateMockFeatureManager("MyFeature", false);
+        var myService = new MyService(mockLogger.Object, mockConfiguration, mockFeatureManager);
 
         myService.MyMethod(false);
 
@@ -167,6 +181,14 @@ internal static class MockHelpers
         return mockConfiguration.Object;
     }
 
+    internal static IFeatureManager CreateMockFeatureManager(string name, bool value)
+    {
+        var mockFeatureManager = new Mock<IFeatureManager>();
+        mockFeatureManager.Setup(x => x.IsEnabledAsync(name).Result).Returns(value);
+
+        return mockFeatureManager.Object;
+    }
+
     internal static ILogger<MyService> CreateMockLogger()
     {
         var mockLogger = new Mock<ILogger<MyService>>();
@@ -178,7 +200,8 @@ internal static class MockHelpers
     {
         var service = new MyService(
             CreateMockLogger(),
-            CreateMockConfiguration()
+            CreateMockConfiguration(),
+            CreateMockFeatureManager("MyFeature", false)
         );
 
         return service;

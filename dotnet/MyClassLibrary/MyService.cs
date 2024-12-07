@@ -5,13 +5,15 @@ https://github.com/ronhowe
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
 
 namespace MyClassLibrary;
 
-public class MyService(ILogger<MyService> logger, IConfiguration configuration) : IMyService
+public class MyService(ILogger<MyService> logger, IConfiguration configuration, IFeatureManager featureManager) : IMyService
 {
     private const string _connectionString = "Application Name=MyClassLibraryTests;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;";
     private const string _cmdText = "INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);";
+    private const bool _myFeature = false;
 
     public bool MyMethod(bool input)
     {
@@ -20,13 +22,16 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration) 
         logger.LogDebug("Logging Input");
         logger.LogTrace("input = {input}", input);
 
+        /*******************************************************************************
+        CONFIGURATIONS
+        *******************************************************************************/
+
         string connectionString = _connectionString;
         try
         {
             logger.LogDebug("Getting Connection String");
             // todo - truly understand why this doesn't work in Moq
-            //connectionString = configuration.GetConnectionString("MyDatabase") ?? _connectionString;
-            // todo - workaround is to use the standard notation and not the helper method
+            // connectionString = configuration.GetConnectionString("MyDatabase") ?? _connectionString;
             connectionString = configuration["ConnectionStrings.MyDatabase"] ?? _connectionString;
         }
         catch (Exception ex)
@@ -55,22 +60,54 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration) 
             logger.LogTrace("cmdText = {cmdText}", cmdText);
         }
 
-        logger.LogDebug("Running Query");
+        /*******************************************************************************
+        FEATURES
+        *******************************************************************************/
+
+        bool myFeature = _myFeature;
         try
         {
-            logger.LogDebug("Opening Connecting");
-            using SqlConnection connection = new(_connectionString);
-            connection.Open();
-
-            logger.LogDebug("Executing Command");
-            using SqlCommand command = new(_cmdText, connection);
-            command.Parameters.AddWithValue("@Value", input);
-            command.ExecuteNonQuery();
+            logger.LogDebug("Getting MyFeature Toggle");
+            myFeature = featureManager.IsEnabledAsync("MyFeature").Result;
         }
-        catch (Microsoft.Data.SqlClient.SqlException ex)
+        catch (Exception ex)
         {
-            logger.LogCritical("Critical Error Running Query");
-            logger.LogCritical(ex, "{Message}", ex.Message);
+            logger.LogError("Error Getting MyFeature Toggle ; Using Default");
+            logger.LogError(ex, "{Message}", ex.Message);
+        }
+        finally
+        {
+            logger.LogTrace("myFeature = {myFeature}", myFeature);
+        }
+
+        /*******************************************************************************
+        SERVICES
+        *******************************************************************************/
+
+        if (myFeature)
+        {
+            logger.LogDebug("Featured Enabled");
+            try
+            {
+                logger.LogDebug("Opening Connecting");
+                using SqlConnection connection = new(_connectionString);
+                connection.Open();
+
+                logger.LogDebug("Executing Command");
+                using SqlCommand command = new(_cmdText, connection);
+                command.Parameters.AddWithValue("@Value", input);
+                command.ExecuteNonQuery();
+
+            }
+            catch (Microsoft.Data.SqlClient.SqlException ex)
+            {
+                logger.LogCritical("Feature Failed");
+                logger.LogCritical(ex, "{Message}", ex.Message);
+            }
+        }
+        else
+        {
+            logger.LogWarning("Feature Not Enabled");
         }
 
         // important business logic =)
