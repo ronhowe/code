@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.FeatureManagement;
-using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
 using Moq;
 using MyClassLibrary;
 using System.Diagnostics;
@@ -38,10 +37,10 @@ public sealed class MyServiceTests
         var myService = new MyService(mockLogger.Object, mockConfiguration, mockFeatureManager);
 
         myService.MyMethod(value).Should().Be(value);
-        mockLogger.VerifyLogDebug($"Entering {nameof(MyService)}");
-        mockLogger.VerifyLogTrace($"input = {value}");
-        mockLogger.VerifyLogInformation($"Returning {value}");
-        mockLogger.VerifyLogDebug($"Exiting {nameof(MyService)}");
+        mockLogger.VerifyLogMessage($"Entering {nameof(MyService)}", LogLevel.Debug);
+        mockLogger.VerifyLogMessage($"input = {value}", LogLevel.Trace);
+        mockLogger.VerifyLogMessage($"Returning {value}", LogLevel.Information);
+        mockLogger.VerifyLogMessage($"Exiting {nameof(MyService)}", LogLevel.Debug);
     }
 
     [TestMethod]
@@ -123,7 +122,6 @@ public sealed class MyServiceTests
         Debug.WriteLine("Exiting Test");
         Debug.WriteLine(new string('*', 80));
     }
-
 }
 
 internal static class MockHelpers
@@ -163,7 +161,7 @@ internal static class MockHelpers
         return service;
     }
 
-    internal static Mock<ILogger<T>> VerifyLogDebug<T>(this Mock<ILogger<T>> logger, string expectedMessage)
+    internal static Mock<ILogger<T>> VerifyLogMessage<T>(this Mock<ILogger<T>> logger, string expectedMessage, LogLevel expectedLogLevel)
     {
         ArgumentNullException.ThrowIfNull(expectedMessage);
 
@@ -171,41 +169,7 @@ internal static class MockHelpers
 
         logger.Verify(
             x => x.Log(
-                It.Is<LogLevel>(l => l == LogLevel.Debug),
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => state(v, t)),
-                It.IsAny<Exception>(),
-                It.Is<Func<It.IsAnyType, Exception?, string>>((v, t) => true)));
-
-        return logger;
-    }
-
-    internal static Mock<ILogger<T>> VerifyLogInformation<T>(this Mock<ILogger<T>> logger, string expectedMessage)
-    {
-        ArgumentNullException.ThrowIfNull(expectedMessage);
-
-        Func<object, Type, bool> state = (v, t) => v?.ToString()?.CompareTo(expectedMessage) == 0;
-
-        logger.Verify(
-            x => x.Log(
-                It.Is<LogLevel>(l => l == LogLevel.Information),
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => state(v, t)),
-                It.IsAny<Exception>(),
-                It.Is<Func<It.IsAnyType, Exception?, string>>((v, t) => true)));
-
-        return logger;
-    }
-
-    internal static Mock<ILogger<T>> VerifyLogTrace<T>(this Mock<ILogger<T>> logger, string expectedMessage)
-    {
-        ArgumentNullException.ThrowIfNull(expectedMessage);
-
-        Func<object, Type, bool> state = (v, t) => v?.ToString()?.CompareTo(expectedMessage) == 0;
-
-        logger.Verify(
-            x => x.Log(
-                It.Is<LogLevel>(l => l == LogLevel.Trace),
+                It.Is<LogLevel>(l => l == expectedLogLevel),
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, t) => state(v, t)),
                 It.IsAny<Exception>(),
