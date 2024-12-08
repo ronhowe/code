@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.FeatureManagement;
+using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
 using Moq;
 using MyClassLibrary;
 using System.Diagnostics;
@@ -17,6 +18,32 @@ namespace MyClassLibraryTests;
 [TestClass]
 public sealed class MyServiceTests
 {
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        Debug.WriteLine(new string('*', 80));
+        Debug.WriteLine("Entering Test");
+    }
+
+    [TestMethod]
+    [TestCategory("UnitTest")]
+    [DataTestMethod]
+    [DataRow(true)]
+    [DataRow(false)]
+    public void MyMethodTest(bool value)
+    {
+        var mockLogger = new Mock<ILogger<MyService>>();
+        var mockConfiguration = MockHelpers.CreateMockConfiguration();
+        var mockFeatureManager = MockHelpers.CreateMockFeatureManager("MyFeature", false);
+        var myService = new MyService(mockLogger.Object, mockConfiguration, mockFeatureManager);
+
+        myService.MyMethod(value).Should().Be(value);
+        mockLogger.VerifyLogDebug($"Entering {nameof(MyService)}");
+        mockLogger.VerifyLogTrace($"input = {value}");
+        mockLogger.VerifyLogInformation($"Returning {value}");
+        mockLogger.VerifyLogDebug($"Exiting {nameof(MyService)}");
+    }
+
     [TestMethod]
     [TestCategory("IntegrationTest")]
     public void MyServiceTest()
@@ -90,36 +117,13 @@ public sealed class MyServiceTests
         myService?.MyMethod(true).Should().BeTrue();
     }
 
-    [TestMethod]
-    [TestCategory("UnitTest")]
-    [DataTestMethod]
-    [DataRow(true)]
-    [DataRow(false)]
-    public void MyMethodTest(bool value)
-    {
-        var mockLogger = new Mock<ILogger<MyService>>();
-        var mockConfiguration = MockHelpers.CreateMockConfiguration();
-        var mockFeatureManager = MockHelpers.CreateMockFeatureManager("MyFeature", false);
-        var myService = new MyService(mockLogger.Object, mockConfiguration, mockFeatureManager);
-
-        myService.MyMethod(value).Should().Be(value);
-        mockLogger.VerifyLogDebug($"Entering {nameof(MyService)}");
-        mockLogger.VerifyLogTrace($"input = {value}");
-        mockLogger.VerifyLogInformation($"Returning {value}");
-        mockLogger.VerifyLogDebug($"Exiting {nameof(MyService)}");
-    }
-
     [TestCleanup]
     public void TestCleanup()
     {
         Debug.WriteLine("Exiting Test");
+        Debug.WriteLine(new string('*', 80));
     }
 
-    [TestInitialize]
-    public void TestInitialize()
-    {
-        Debug.WriteLine("Entering Test");
-    }
 }
 
 internal static class MockHelpers
