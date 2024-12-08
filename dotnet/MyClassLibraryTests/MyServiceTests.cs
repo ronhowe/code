@@ -29,7 +29,7 @@ public sealed class MyServiceTests
     [DataTestMethod]
     [DataRow(true)]
     [DataRow(false)]
-    public void MyMethodTest(bool value)
+    public void UnitTest(bool value)
     {
         var mockLogger = new Mock<ILogger<MyService>>();
         var mockConfiguration = MockHelpers.CreateMockConfiguration();
@@ -45,7 +45,7 @@ public sealed class MyServiceTests
 
     [TestMethod]
     [TestCategory("IntegrationTest")]
-    public void MyServiceTest()
+    public void IntegrationTest()
     {
         Debug.WriteLine($"Creating Service Collection");
         var serviceCollection = new ServiceCollection();
@@ -130,8 +130,8 @@ internal static class MockHelpers
     {
         var mockConfiguration = new Mock<IConfiguration>();
 
-        mockConfiguration.Setup(x => x["MyCommand"]).Returns("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);");
-        mockConfiguration.Setup(x => x["ConnectionStrings:MyDatabase"]).Returns("Application Name=MyClassLibraryTests;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;");
+        //mockConfiguration.Setup(x => x["MyCommand"]).Returns("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);");
+        //mockConfiguration.Setup(x => x["ConnectionStrings:MyDatabase"]).Returns("Application Name=MyClassLibraryTests;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;");
         return mockConfiguration.Object;
     }
 
