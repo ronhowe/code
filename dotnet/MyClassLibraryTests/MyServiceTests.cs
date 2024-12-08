@@ -32,9 +32,10 @@ public sealed class MyServiceTests
     public void UnitTest(bool value)
     {
         var mockLogger = new Mock<ILogger<MyService>>();
-        var mockConfiguration = MockHelpers.CreateMockConfiguration();
-        var mockFeatureManager = MockHelpers.CreateMockFeatureManager("MyFeature", false);
-        var myService = new MyService(mockLogger.Object, mockConfiguration, mockFeatureManager);
+        var mockConfiguration = new Mock<IConfiguration>();
+        var mockFeatureManager = new Mock<IFeatureManager>();
+        mockFeatureManager.Setup(x => x.IsEnabledAsync("MyFeature").Result).Returns(value);
+        var myService = new MyService(mockLogger.Object, mockConfiguration.Object, mockFeatureManager.Object);
 
         myService.MyMethod(value).Should().Be(value);
         mockLogger.VerifyLogMessage($"Entering {nameof(MyService)}", LogLevel.Debug);
@@ -124,43 +125,8 @@ public sealed class MyServiceTests
     }
 }
 
-internal static class MockHelpers
+internal static class MockExtensions
 {
-    internal static IConfiguration CreateMockConfiguration()
-    {
-        var mockConfiguration = new Mock<IConfiguration>();
-
-        //mockConfiguration.Setup(x => x["MyCommand"]).Returns("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);");
-        //mockConfiguration.Setup(x => x["ConnectionStrings:MyDatabase"]).Returns("Application Name=MyClassLibraryTests;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;");
-        return mockConfiguration.Object;
-    }
-
-    internal static IFeatureManager CreateMockFeatureManager(string name, bool value)
-    {
-        var mockFeatureManager = new Mock<IFeatureManager>();
-        mockFeatureManager.Setup(x => x.IsEnabledAsync(name).Result).Returns(value);
-
-        return mockFeatureManager.Object;
-    }
-
-    internal static ILogger<MyService> CreateMockLogger()
-    {
-        var mockLogger = new Mock<ILogger<MyService>>();
-
-        return mockLogger.Object;
-    }
-
-    internal static MyService CreateMyServiceWithMockDependencies()
-    {
-        var service = new MyService(
-            CreateMockLogger(),
-            CreateMockConfiguration(),
-            CreateMockFeatureManager("MyFeature", false)
-        );
-
-        return service;
-    }
-
     internal static Mock<ILogger<T>> VerifyLogMessage<T>(this Mock<ILogger<T>> logger, string expectedMessage, LogLevel expectedLogLevel)
     {
         ArgumentNullException.ThrowIfNull(expectedMessage);
