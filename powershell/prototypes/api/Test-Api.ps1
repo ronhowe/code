@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $false)]
-    [ValidateSet("*", "Application", "FunctionApp1", "WebApplication1")]
+    [ValidateSet("*", "Application", "FunctionApp1", "MyWebApplication")]
     [string]$Name = "*",
 
     [Parameter(Mandatory = $false)]
