@@ -14,8 +14,8 @@ POST
 *******************************************************************************/
 
 const string _sourceContext = nameof(Program);
-//const string _outputTemplate = "{Message}{NewLine}{Exception}";
-const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
+const string _outputTemplate = "{Message}{NewLine}{Exception}";
+//const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
@@ -55,7 +55,7 @@ try
 
     Log.ForContext("SourceContext", _sourceContext).Debug("Logging Environment Name");
     var environmentName = builder.Environment.EnvironmentName;
-    Log.ForContext("SourceContext", _sourceContext).Debug("$nvironmentName = {environmentName}", environmentName);
+    Log.ForContext("SourceContext", _sourceContext).Debug("$environmentName = {environmentName}", environmentName);
 
     /*******************************************************************************
     FEATURE MANAGEMENT

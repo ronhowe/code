@@ -24,7 +24,20 @@ public sealed class MyTest
     [TestCategory("IntegrationTest")]
     public async Task MyWebApplicationTest()
     {
-        using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        var configurationSettings = new Dictionary<string, string?>
+        {
+            { "MyMessage", "HELLO THERE" },
+            { "ConnectionStrings:MyDatabase", "Application Name=MyTestProject;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
+            { "FeatureManagement:MyFeature", "true" }
+        };
+        //using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureAppConfiguration((context, configBuilder) =>
+            {
+                configBuilder.AddInMemoryCollection(configurationSettings);
+            });
+        });
         using var client = application.CreateClient();
         using var response = await client.GetAsync($"/api/{nameof(MyService)}?input={Boolean.TrueString}");
 
