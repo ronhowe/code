@@ -28,11 +28,12 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console(outputTemplate: _outputTemplate)
     .CreateLogger();
 
-Log.ForContext("SourceContext", _sourceContext).Debug("POST (1 of 5) => Debug Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Information("POST (2 of 5) => Information Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Warning("POST (3 of 5) => Warning Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Error("POST (4 of 5) => Error Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Fatal("POST (5 of 5) => Fatal Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Verbose("POST (1 of 6) => Verbose Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Debug("POST (2 of 6) => Debug Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Information("POST (3 of 6) => Information Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Warning("POST (4 of 6) => Warning Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Error("POST (5 of 6) => Error Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Fatal("POST (6 of 6) => Fatal Logging ON");
 
 #endregion post
 
