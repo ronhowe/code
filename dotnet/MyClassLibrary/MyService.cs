@@ -76,7 +76,6 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
                 using SqlCommand command = new("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);", connection);
                 command.Parameters.AddWithValue("@Value", input);
                 command.ExecuteNonQuery();
-
             }
             catch (Microsoft.Data.SqlClient.SqlException ex)
             {
