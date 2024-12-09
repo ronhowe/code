@@ -163,17 +163,13 @@ public sealed class MyTest
     [TestCleanup]
     public void TestCleanup()
     {
-        Debug.WriteLine(new string('*', 80));
         Debug.WriteLine("Cleaning Test");
-        Debug.WriteLine(new string('*', 80));
     }
 
     [TestInitialize]
     public void TestInitialize()
     {
-        Debug.WriteLine(new string('*', 80));
         Debug.WriteLine("Initializing Test");
-        Debug.WriteLine(new string('*', 80));
     }
 }
 
