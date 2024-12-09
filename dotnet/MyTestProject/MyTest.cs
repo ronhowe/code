@@ -22,6 +22,12 @@ public sealed class MyTest
     [TestCategory("IntegrationTest")]
     public void IntegrationTest()
     {
+        #region post
+
+        /*******************************************************************************
+        POST
+        *******************************************************************************/
+
         const string _sourceContext = nameof(MyTest);
         const string _outputTemplate = "{Message}{NewLine}{Exception}";
         //const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{SourceContext}] [{MachineName}]\n     {Message}{NewLine}{Exception}";
@@ -33,12 +39,6 @@ public sealed class MyTest
             .Enrich.WithMachineName()
             .WriteTo.Console(outputTemplate: _outputTemplate)
             .CreateLogger();
-
-        #region post
-
-        /*******************************************************************************
-        POST
-        *******************************************************************************/
 
         Log.ForContext("SourceContext", _sourceContext).Debug("POST (1 of 5) => Debug Logging ON");
         Log.ForContext("SourceContext", _sourceContext).Information("POST (2 of 5) => Information Logging ON");
@@ -76,13 +76,13 @@ public sealed class MyTest
         Log.ForContext("SourceContext", _sourceContext).Debug("Adding Configuration");
         var configurationSettings = new Dictionary<string, string?>
         {
+            { "MyMessage", "OK" },
             { "ConnectionStrings:MyDatabase", "Application Name=MyTestProject;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
             { "FeatureManagement:MyFeature", "true" }
         };
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(configurationSettings)
             .Build();
-
         serviceCollection.AddSingleton<IConfiguration>(configuration);
 
         /*******************************************************************************
@@ -96,7 +96,10 @@ public sealed class MyTest
         SERVICES
         *******************************************************************************/
 
-        Log.ForContext("SourceContext", _sourceContext).Debug("Adding Service");
+        Log.ForContext("SourceContext", _sourceContext).Debug("Adding MyRepository");
+        serviceCollection.AddTransient<IMyRepository, MyRepository>();
+
+        Log.ForContext("SourceContext", _sourceContext).Debug("Adding MyService");
         serviceCollection.AddTransient<MyService>();
 
         Log.ForContext("SourceContext", _sourceContext).Debug("Building Service Provider");
@@ -125,10 +128,18 @@ public sealed class MyTest
 
         Debug.WriteLine("Mocking FeaturerManger");
         var mockFeatureManager = new Mock<IFeatureManager>();
-        mockFeatureManager.Setup(x => x.IsEnabledAsync("MyFeature").Result).Returns(false);
+        mockFeatureManager.Setup(x => x.IsEnabledAsync("MyFeature").Result).Returns(value);
+
+        Debug.WriteLine("Mocking Repository");
+        var mockRepository = new Mock<IMyRepository>();
 
         Debug.WriteLine("Creating MyService");
-        var myService = new MyService(mockLogger.Object, mockConfiguration.Object, mockFeatureManager.Object);
+        var myService = new MyService(
+            mockLogger.Object,
+            mockConfiguration.Object,
+            mockFeatureManager.Object,
+            mockRepository.Object
+        );
 
         Debug.WriteLine($"Calling MyService with {value}");
         bool result = myService.MyMethod(value);

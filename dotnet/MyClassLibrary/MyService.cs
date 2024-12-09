@@ -2,14 +2,13 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 
 namespace MyClassLibrary;
 
-public class MyService(ILogger<MyService> logger, IConfiguration configuration, IFeatureManager featureManager) : IMyService
+public class MyService(ILogger<MyService> logger, IConfiguration configuration, IFeatureManager featureManager, IMyRepository repository) : IMyService
 {
     public bool MyMethod(bool input)
     {
@@ -22,21 +21,21 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         CONFIGURATIONS
         *******************************************************************************/
 
-        string connectionString = string.Empty;
+        string message = string.Empty;
         try
         {
-            logger.LogDebug("Getting Connection String");
-            connectionString = configuration["ConnectionStrings:MyDatabase"] ?? string.Empty;
+            logger.LogDebug("Getting Message");
+            message = configuration["MyMessage"] ?? string.Empty;
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting Connection String");
+            logger.LogError("Error Getting Message");
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }
         finally
         {
-            logger.LogTrace("connectionString = {connectionString}", connectionString);
+            logger.LogTrace("message = {message}", message);
         }
 
         /*******************************************************************************
@@ -59,29 +58,10 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
             logger.LogTrace("myFeature = {myFeature}", myFeature);
         }
 
-        /*******************************************************************************
-        SERVICES
-        *******************************************************************************/
-
         if (myFeature)
         {
             logger.LogDebug("Featured Enabled");
-            try
-            {
-                logger.LogDebug("Opening Connecting");
-                using SqlConnection connection = new(connectionString);
-                connection.Open();
-
-                logger.LogDebug("Executing Command");
-                using SqlCommand command = new("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);", connection);
-                command.Parameters.AddWithValue("@Value", input);
-                command.ExecuteNonQuery();
-            }
-            catch (Microsoft.Data.SqlClient.SqlException ex)
-            {
-                logger.LogCritical("Feature Failed");
-                logger.LogCritical(ex, "{Message}", ex.Message);
-            }
+            repository.Save(input);
         }
         else
         {
