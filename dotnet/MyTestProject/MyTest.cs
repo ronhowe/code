@@ -26,7 +26,7 @@ public sealed class MyTest
         const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{SourceContext}] [{MachineName}]\n     {Message}{NewLine}{Exception}";
 
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Verbose() // includes LogTrace
+            .MinimumLevel.Verbose()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .Enrich.WithMachineName()
