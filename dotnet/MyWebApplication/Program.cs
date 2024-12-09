@@ -10,37 +10,32 @@ using MyWebApplication;
 using Serilog;
 using Serilog.Events;
 
+#region post
+
+/*******************************************************************************
+POST
+*******************************************************************************/
+
 const string _sourceContext = nameof(Program);
-const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{SourceContext}] [{MachineName}] {Message}{NewLine}{Exception}";
+const string _outputTemplate = "{Message}{NewLine}{Exception}";
+//const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{SourceContext}] [{MachineName}]\n     {Message}{NewLine}{Exception}";
 
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Debug()
+    .MinimumLevel.Verbose()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
     .Enrich.FromLogContext()
     .Enrich.WithMachineName()
     .WriteTo.Console(outputTemplate: _outputTemplate)
     .CreateLogger();
 
-#region post
-
-/******************************************************************************
-
-                    _
- _ __    ___   ___ | |_
-| '_ \  / _ \ / __|| __|
-| |_) || (_) |\__ \| |_
-| .__/  \___/ |___/ \__|
-|_|
-
-******************************************************************************/
-
-Log.ForContext("SourceContext", _sourceContext).Debug("Power-On Self-Test (1 of 5) => Debug Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Information("Power-On Self-Test (2 of 5) => Information Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Warning("Power-On Self-Test (3 of 5) => Warning Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Error("Power-On Self-Test (4 of 5) => Error Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Fatal("Power-On Self-Test (5 of 5) => Fatal Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Debug("POST (1 of 5) => Debug Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Information("POST (2 of 5) => Information Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Warning("POST (3 of 5) => Warning Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Error("POST (4 of 5) => Error Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Fatal("POST (5 of 5) => Fatal Logging ON");
 
 #endregion post
+
 
 Log.ForContext("SourceContext", _sourceContext).Information("Program Running");
 
@@ -89,11 +84,11 @@ try
     app.Logger.LogInformation("Using Request Logging Middleware");
     app.UseMiddleware<RequestLoggingMiddleware>();
 
-    app.Logger.LogDebug("Power-On Self-Test (1 of 5) => Debug Logging ON");
-    app.Logger.LogInformation("Power-On Self-Test (2 of 5) => Information Logging ON");
-    app.Logger.LogWarning("Power-On Self-Test (3 of 5) => Warning Logging ON");
-    app.Logger.LogError("Power-On Self-Test (4 of 5) => Error Logging ON");
-    app.Logger.LogCritical("Power-On Self-Test (5 of 5) => Fatal Logging ON");
+    app.Logger.LogDebug("POST (1 of 5) => Debug Logging ON");
+    app.Logger.LogInformation("POST (2 of 5) => Information Logging ON");
+    app.Logger.LogWarning("POST (3 of 5) => Warning Logging ON");
+    app.Logger.LogError("POST (4 of 5) => Error Logging ON");
+    app.Logger.LogCritical("POST (5 of 5) => Fatal Logging ON");
 
     app.Logger.LogInformation("Web Application Running");
 
