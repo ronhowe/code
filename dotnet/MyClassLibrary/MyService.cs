@@ -51,7 +51,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting MyFeature Toggle ; Using Default");
+            logger.LogError("Error Getting MyFeature Toggle");
             logger.LogError(ex, "{Message}", ex.Message);
         }
         finally
