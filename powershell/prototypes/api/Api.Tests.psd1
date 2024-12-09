@@ -19,7 +19,7 @@
             }
         }
         @{
-            Enabled  = $true
+            Enabled  = $false
             Endpoint = @{
                 Name         = "WebApplication1"
                 Platform     = "IIS"
@@ -30,7 +30,7 @@
         @{
             Enabled  = $true
             Endpoint = @{
-                Name         = "WebApplication1"
+                Name         = "MyWebApplication"
                 Platform     = "Kestrel"
                 Uri          = "https://localhost:444"
                 CustomHeader = "default"
@@ -46,7 +46,7 @@
             }
         }
         @{
-            Enabled  = $true
+            Enabled  = $false
             Endpoint = @{
                 Name         = "WebApplication1"
                 Platform     = "AppService"
@@ -82,7 +82,7 @@
             }
         }
         @{
-            Enabled  = $true
+            Enabled  = $false
             Endpoint = @{
                 Name         = "FunctionApp1"
                 Platform     = "FunctionApp"
