@@ -56,8 +56,7 @@ public sealed class MyTest
         Debug.WriteLine($"Adding Configuration");
         var configurationSettings = new Dictionary<string, string?>
         {
-            { "ConnectionStrings:MyDatabase", "Application Name=MyClassLibraryTests;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
-            { "MyCommand", "INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);" },
+            { "ConnectionStrings:MyDatabase", "Application Name=MyTestProject;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
             { "FeatureManagement:MyFeature", "true" }
         };
         var configuration = new ConfigurationBuilder()
@@ -98,9 +97,13 @@ public sealed class MyTest
     public void UnitTest(bool value)
     {
         var mockLogger = new Mock<ILogger<MyService>>();
+
         var mockConfiguration = new Mock<IConfiguration>();
+        mockConfiguration.Setup(x => x["ConnectionStrings.MyDatabase"]).Returns("MOCK_CONNECTION_STRING");
+
         var mockFeatureManager = new Mock<IFeatureManager>();
-        mockFeatureManager.Setup(x => x.IsEnabledAsync("MyFeature").Result).Returns(value);
+        mockFeatureManager.Setup(x => x.IsEnabledAsync("MyFeature").Result).Returns(false);
+
         var myService = new MyService(mockLogger.Object, mockConfiguration.Object, mockFeatureManager.Object);
 
         myService.MyMethod(value).Should().Be(value);
