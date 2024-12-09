@@ -12,38 +12,11 @@ using Moq;
 using MyClassLibrary;
 using System.Diagnostics;
 
-namespace MyClassLibraryTests;
+namespace MyTestProject;
 
 [TestClass]
-public sealed class MyServiceTests
+public sealed class MyTest
 {
-    [TestInitialize]
-    public void TestInitialize()
-    {
-        Debug.WriteLine(new string('*', 80));
-        Debug.WriteLine("Entering Test");
-    }
-
-    [TestMethod]
-    [TestCategory("UnitTest")]
-    [DataTestMethod]
-    [DataRow(true)]
-    [DataRow(false)]
-    public void UnitTest(bool value)
-    {
-        var mockLogger = new Mock<ILogger<MyService>>();
-        var mockConfiguration = new Mock<IConfiguration>();
-        var mockFeatureManager = new Mock<IFeatureManager>();
-        mockFeatureManager.Setup(x => x.IsEnabledAsync("MyFeature").Result).Returns(value);
-        var myService = new MyService(mockLogger.Object, mockConfiguration.Object, mockFeatureManager.Object);
-
-        myService.MyMethod(value).Should().Be(value);
-        mockLogger.VerifyLogMessage($"Entering {nameof(MyService)}", LogLevel.Debug);
-        mockLogger.VerifyLogMessage($"input = {value}", LogLevel.Trace);
-        mockLogger.VerifyLogMessage($"Returning {value}", LogLevel.Information);
-        mockLogger.VerifyLogMessage($"Exiting {nameof(MyService)}", LogLevel.Debug);
-    }
-
     [TestMethod]
     [TestCategory("IntegrationTest")]
     public void IntegrationTest()
@@ -117,15 +90,42 @@ public sealed class MyServiceTests
         myService?.MyMethod(true).Should().BeTrue();
     }
 
+    [TestMethod]
+    [TestCategory("UnitTest")]
+    [DataTestMethod]
+    [DataRow(true)]
+    [DataRow(false)]
+    public void UnitTest(bool value)
+    {
+        var mockLogger = new Mock<ILogger<MyService>>();
+        var mockConfiguration = new Mock<IConfiguration>();
+        var mockFeatureManager = new Mock<IFeatureManager>();
+        mockFeatureManager.Setup(x => x.IsEnabledAsync("MyFeature").Result).Returns(value);
+        var myService = new MyService(mockLogger.Object, mockConfiguration.Object, mockFeatureManager.Object);
+
+        myService.MyMethod(value).Should().Be(value);
+        mockLogger.VerifyLogMessage($"Entering {nameof(MyService)}", LogLevel.Debug);
+        mockLogger.VerifyLogMessage($"input = {value}", LogLevel.Trace);
+        mockLogger.VerifyLogMessage($"Returning {value}", LogLevel.Information);
+        mockLogger.VerifyLogMessage($"Exiting {nameof(MyService)}", LogLevel.Debug);
+    }
+
     [TestCleanup]
     public void TestCleanup()
     {
         Debug.WriteLine("Exiting Test");
         Debug.WriteLine(new string('*', 80));
     }
+
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        Debug.WriteLine(new string('*', 80));
+        Debug.WriteLine("Entering Test");
+    }
 }
 
-internal static class MockExtensions
+internal static class MockLoggerExtensions
 {
     internal static Mock<ILogger<T>> VerifyLogMessage<T>(this Mock<ILogger<T>> logger, string expectedMessage, LogLevel expectedLogLevel)
     {
