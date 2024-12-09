@@ -15,10 +15,10 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         logger.LogDebug("Entering {name}", nameof(MyService));
 
         logger.LogDebug("Logging Input");
-        logger.LogTrace("input = {input}", input);
+        logger.LogTrace("$input = {input}", input);
 
         /*******************************************************************************
-        CONFIGURATIONS
+        CONFIGURATION
         *******************************************************************************/
 
         string message = string.Empty;
@@ -35,11 +35,11 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
         finally
         {
-            logger.LogTrace("message = {message}", message);
+            logger.LogTrace("$message = {message}", message);
         }
 
         /*******************************************************************************
-        FEATURES
+        FEATURE MANAGER
         *******************************************************************************/
 
         bool myFeature = false;
@@ -55,18 +55,27 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
         finally
         {
-            logger.LogTrace("myFeature = {myFeature}", myFeature);
+            logger.LogTrace("$myFeature = {myFeature}", myFeature);
         }
 
         if (myFeature)
         {
             logger.LogDebug("Featured Enabled");
+
+            /*******************************************************************************
+            REPOSITORY
+            *******************************************************************************/
+
             repository.Save(input);
         }
         else
         {
             logger.LogWarning("Feature Not Enabled");
         }
+
+        /*******************************************************************************
+        APPLICATION
+        *******************************************************************************/
 
         // important business logic =)
         bool result = input;

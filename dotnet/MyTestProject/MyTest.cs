@@ -22,18 +22,17 @@ public sealed class MyTest
     [TestCategory("IntegrationTest")]
     public void IntegrationTest()
     {
-        #region post
-
         /*******************************************************************************
         POST
         *******************************************************************************/
 
         const string _sourceContext = nameof(MyTest);
-        const string _outputTemplate = "[{Level:u3}] {Message}{NewLine}{Exception}";
+        const string _outputTemplate = "{Message}{NewLine}{Exception}";
         //const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{SourceContext}] [{MachineName}]\n     {Message}{NewLine}{Exception}";
 
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Verbose()
+            //.MinimumLevel.Verbose()
+            .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .Enrich.WithMachineName()
@@ -47,13 +46,11 @@ public sealed class MyTest
         Log.ForContext("SourceContext", _sourceContext).Error("POST (5 of 6) => Error Logging ON");
         Log.ForContext("SourceContext", _sourceContext).Fatal("POST (6 of 6) => Fatal Logging ON");
 
-        #endregion post
-
         Log.ForContext("SourceContext", _sourceContext).Debug("Creating Service Collection");
         var serviceCollection = new ServiceCollection();
 
         /*******************************************************************************
-        LOGGERS
+        LOGGING
         *******************************************************************************/
 
         Log.ForContext("SourceContext", _sourceContext).Debug("Adding Logging");
@@ -62,7 +59,7 @@ public sealed class MyTest
             Log.ForContext("SourceContext", _sourceContext).Debug("Clearing Log Providers");
             configure.ClearProviders();
 
-            Log.ForContext("SourceContext", _sourceContext).Debug("Adding Serilog Logger");
+            Log.ForContext("SourceContext", _sourceContext).Debug("Adding Serilog");
             configure.AddSerilog();
 
             var logLevel = LogLevel.Trace;
@@ -71,7 +68,7 @@ public sealed class MyTest
         });
 
         /*******************************************************************************
-        CONFIGURATIONS
+        CONFIGURATION
         *******************************************************************************/
 
         Log.ForContext("SourceContext", _sourceContext).Debug("Adding Configuration");
@@ -87,21 +84,29 @@ public sealed class MyTest
         serviceCollection.AddSingleton<IConfiguration>(configuration);
 
         /*******************************************************************************
-        FEATURES
+        FEATURE MANAGEMENT
         *******************************************************************************/
 
-        Log.ForContext("SourceContext", _sourceContext).Debug("Adding Features");
+        Log.ForContext("SourceContext", _sourceContext).Debug("Adding Feature Management");
         serviceCollection.AddFeatureManagement();
 
         /*******************************************************************************
-        SERVICES
+        REPOSITORY
         *******************************************************************************/
 
         Log.ForContext("SourceContext", _sourceContext).Debug("Adding MyRepository");
         serviceCollection.AddTransient<IMyRepository, MyRepository>();
 
+        /*******************************************************************************
+        SERVICE
+        *******************************************************************************/
+
         Log.ForContext("SourceContext", _sourceContext).Debug("Adding MyService");
         serviceCollection.AddTransient<MyService>();
+
+        /*******************************************************************************
+        APPLICATION
+        *******************************************************************************/
 
         Log.ForContext("SourceContext", _sourceContext).Debug("Building Service Provider");
         var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -127,7 +132,7 @@ public sealed class MyTest
         var mockConfiguration = new Mock<IConfiguration>();
         mockConfiguration.Setup(x => x["ConnectionStrings.MyDatabase"]).Returns("MOCK_CONNECTION_STRING");
 
-        Debug.WriteLine("Mocking FeaturerManger");
+        Debug.WriteLine("Mocking Featurer Manager");
         var mockFeatureManager = new Mock<IFeatureManager>();
         mockFeatureManager.Setup(x => x.IsEnabledAsync("MyFeature").Result).Returns(value);
 
@@ -152,12 +157,12 @@ public sealed class MyTest
         mockLogger.VerifyLogMessage($"Entering {nameof(MyService)}", LogLevel.Debug);
 
         Debug.WriteLine("Asserting Input Log Message");
-        mockLogger.VerifyLogMessage($"input = {value}", LogLevel.Trace);
+        mockLogger.VerifyLogMessage($"$input = {value}", LogLevel.Trace);
 
         Debug.WriteLine("Asserting Returning Log Message");
         mockLogger.VerifyLogMessage($"Returning {value}", LogLevel.Information);
 
-        Debug.WriteLine("Asserting Exitinig Log Message");
+        Debug.WriteLine("Asserting Exiting Log Message");
         mockLogger.VerifyLogMessage($"Exiting {nameof(MyService)}", LogLevel.Debug);
     }
 
