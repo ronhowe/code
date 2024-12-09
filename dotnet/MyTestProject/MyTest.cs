@@ -23,7 +23,7 @@ public sealed class MyTest
     public void IntegrationTest()
     {
         const string _sourceContext = nameof(MyTest);
-        const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{SourceContext}] [{MachineName}] {Message}{NewLine}{Exception}";
+        const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{SourceContext}] [{MachineName}]\n     {Message}{NewLine}{Exception}";
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Verbose() // includes LogTrace
@@ -151,13 +151,17 @@ public sealed class MyTest
     [TestCleanup]
     public void TestCleanup()
     {
+        Debug.WriteLine(new string('*', 80));
         Debug.WriteLine("Cleaning Test");
+        Debug.WriteLine(new string('*', 80));
     }
 
     [TestInitialize]
     public void TestInitialize()
     {
+        Debug.WriteLine(new string('*', 80));
         Debug.WriteLine("Initializing Test");
+        Debug.WriteLine(new string('*', 80));
     }
 }
 
