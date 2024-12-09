@@ -16,7 +16,7 @@ POST
 
 const string _sourceContext = nameof(Program);
 //const string _outputTemplate = "{Message}{NewLine}{Exception}";
-const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{SourceContext}] [{MachineName}]\n     {Message}{NewLine}{Exception}";
+const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
@@ -65,7 +65,12 @@ try
     Log.ForContext("SourceContext", _sourceContext).Information("Adding Feature Management");
     builder.Services.AddFeatureManagement();
 
-    // TODO - Add REPOSITORY
+    /*******************************************************************************
+    REPOSITORY
+    *******************************************************************************/
+
+    Log.ForContext("SourceContext", _sourceContext).Information("Adding {0}", nameof(MyRepository));
+    builder.Services.AddSingleton<IMyRepository, MyRepository>();
 
     /*******************************************************************************
     SERVICE

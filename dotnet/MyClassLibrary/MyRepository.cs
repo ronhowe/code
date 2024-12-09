@@ -28,12 +28,12 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         }
         finally
         {
-            logger.LogTrace("connectionString = {connectionString}", connectionString);
+            logger.LogTrace("$connectionString = {connectionString}", connectionString);
         }
 
         try
         {
-            logger.LogDebug("Opening Connecting");
+            logger.LogDebug("Opening Connection");
             using SqlConnection connection = new(connectionString);
             connection.Open();
 

@@ -28,7 +28,7 @@ public sealed class MyTest
 
         const string _sourceContext = nameof(MyTest);
         const string _outputTemplate = "{Message}{NewLine}{Exception}";
-        //const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{SourceContext}] [{MachineName}]\n     {Message}{NewLine}{Exception}";
+        //const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}"
 
         Log.Logger = new LoggerConfiguration()
             //.MinimumLevel.Verbose()
