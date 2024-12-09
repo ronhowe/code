@@ -34,6 +34,12 @@
           <AssociatedConnUserName />
           <FullPath>Drop-MyDatabase.sql</FullPath>
         </FileNode>
+        <FileNode Name="Insert-MyTable.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:LOCALHOST:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>LOCALHOST</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Insert-MyTable.sql</FullPath>
+        </FileNode>
         <FileNode Name="Select-MyTable.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:LOCALHOST:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>LOCALHOST</AssociatedConnSrvName>
