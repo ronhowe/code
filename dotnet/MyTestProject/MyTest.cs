@@ -3,10 +3,12 @@ https://github.com/ronhowe
 *******************************************************************************/
 
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using MyClassLibrary;
 using Serilog;
@@ -20,7 +22,18 @@ public sealed class MyTest
 {
     [TestMethod]
     [TestCategory("IntegrationTest")]
-    public void IntegrationTest()
+    public async Task MyWebApplicationTest()
+    {
+        using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
+        using var client = application.CreateClient();
+        using var response = await client.GetAsync($"/api/{nameof(MyService)}?input={Boolean.TrueString}");
+
+        Boolean.Parse(response.Content.ReadAsStringAsync().Result).Should().BeTrue();
+    }
+
+    [TestMethod]
+    [TestCategory("IntegrationTest")]
+    public void MyServiceTest()
     {
         /*******************************************************************************
         POST
@@ -123,7 +136,7 @@ public sealed class MyTest
     [DataTestMethod]
     [DataRow(true)]
     [DataRow(false)]
-    public void UnitTest(bool value)
+    public void MyMethodTest(bool value)
     {
         Debug.WriteLine("Mocking Logger");
         var mockLogger = new Mock<ILogger<MyService>>();
