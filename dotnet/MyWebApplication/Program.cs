@@ -31,9 +31,9 @@ Log.ForContext("SourceContext", _sourceContext).Warning($"POST (4 of 6) => Warni
 Log.ForContext("SourceContext", _sourceContext).Error($"POST (5 of 6) => Error Logging ON");
 Log.ForContext("SourceContext", _sourceContext).Fatal($"POST (6 of 6) => Fatal Logging ON");
 
+Log.ForContext("SourceContext", _sourceContext).Information($"OK");
 Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.Now} LOCAL");
 Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.UtcNow} UTC");
-Log.ForContext("SourceContext", _sourceContext).Information($"OK");
 
 try
 {
@@ -93,9 +93,9 @@ try
     app.Logger.LogError("POST (5 of 6) => Error Logging ON");
     app.Logger.LogCritical("POST (6 of 6) => Critical Logging ON");
 
-    app.Logger.LogInformation("{local} LOCAL", DateTime.Now);
-    app.Logger.LogInformation("{utc} UTC", DateTime.UtcNow);
     app.Logger.LogInformation("OK");
+    app.Logger.LogInformation("{now} LOCAL", DateTime.Now);
+    app.Logger.LogInformation("{now} UTC", DateTime.UtcNow);
 
     app.Logger.LogInformation("Using Request Logging Middleware");
     app.UseMiddleware<RequestLoggingMiddleware>();

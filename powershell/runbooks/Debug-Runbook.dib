@@ -4,4 +4,6 @@
 
 #!pwsh
 
-Write-Debug "Power-On Self-Test" -Debug
+Write-Output "OK"
+Get-Date
+Get-Date -AsUTC

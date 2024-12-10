@@ -47,9 +47,9 @@ public sealed class MyTest
         Log.ForContext("SourceContext", _sourceContext).Error($"POST (5 of 6) => Error Logging ON");
         Log.ForContext("SourceContext", _sourceContext).Fatal($"POST (6 of 6) => Fatal Logging ON");
 
+        Log.ForContext("SourceContext", _sourceContext).Information($"OK");
         Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.Now} LOCAL");
         Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.UtcNow} UTC");
-        Log.ForContext("SourceContext", _sourceContext).Information($"OK");
 
         Log.ForContext("SourceContext", _sourceContext).Debug($"Creating Service Collection");
         var serviceCollection = new ServiceCollection();
@@ -219,9 +219,9 @@ public sealed class MyTest
     public void TestInitialize()
     {
         Debug.WriteLine($"/{new string('*', 79)}");
+        Debug.WriteLine($"OK");
         Debug.WriteLine($"{DateTime.Now} LOCAL");
         Debug.WriteLine($"{DateTime.UtcNow} UTC");
-        Debug.WriteLine($"OK");
         Debug.WriteLine($"Initializing Test");
     }
 }
