@@ -79,8 +79,8 @@ public sealed class MyTest
         Log.ForContext("SourceContext", _sourceContext).Debug($"Adding Configuration");
         var configurationSettings = new Dictionary<string, string?>
         {
-            { "MyMessage", "OK" },
-            { "ConnectionStrings:MyDatabase", "Application Name=MyTestProject;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
+            { "MyMessage", "TestProjectHost" },
+            { "ConnectionStrings:MyDatabase", "Application Name=TestProjectHost;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
             { "FeatureManagement:MyFeature", "true" }
         };
         var configuration = new ConfigurationBuilder()
@@ -133,8 +133,8 @@ public sealed class MyTest
         Debug.WriteLine($"Building Configuration");
         var configurationSettings = new Dictionary<string, string?>
         {
-            { "MyMessage", "MyTestProject" },
-            { "ConnectionStrings:MyDatabase", "Application Name=MyTestProject;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
+            { "MyMessage", "WebApplicationHost" },
+            { "ConnectionStrings:MyDatabase", "Application Name=WebApplicationHost;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
             { "FeatureManagement:MyFeature", "true" }
         };
 
