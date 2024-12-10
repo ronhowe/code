@@ -38,6 +38,27 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
 
         /*******************************************************************************
+        SECRETS
+        *******************************************************************************/
+
+        string mySecret = string.Empty;
+        try
+        {
+            logger.LogDebug("Getting MySecret from Configuration");
+            mySecret = configuration["MySecret"] ?? string.Empty;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("Error Getting MySecret from Configuration");
+            logger.LogError(ex, "{Message}", ex.Message);
+            throw;
+        }
+        finally
+        {
+            logger.LogTrace("mySecret = {mySecret}", mySecret);
+        }
+
+        /*******************************************************************************
         FEATURE MANAGER
         *******************************************************************************/
 
