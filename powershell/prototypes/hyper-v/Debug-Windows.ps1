@@ -10,6 +10,9 @@ $credential = Get-Credential -Message "Enter Administrator Credential" -UserName
 # Get the host name.
 $nodeName = Read-Host -Prompt "Enter Node Name"
 
+# Get the VM.
+Get-VM -Name $nodeName
+
 # Get the host name.
 Invoke-Command -VMName $nodeName -Credential $credential -ScriptBlock { hostname }
 
@@ -23,22 +26,35 @@ $scriptBlock = {
 }
 Invoke-Command -VMName $nodeName -Credential $credential -ScriptBlock $scriptBlock
 
-# Get the IP address.
-# 192.168.0.10 - LAB-DC-01
-# 192.168.0.20 - LAB-APP-01
-# 192.168.0.30 - LAB-SQL-01
-# 192.168.0.40 - LAB-WEB-01
-$ipAddress = Read-Host -Prompt "Enter IP Address"
+# Get the virtual machine IP addresses.
+$LABDC01 = "192.168.0.10" ; $LABDC01 ; $ipAddress = $LABDC01
+$LABAPP01 = "192.168.0.20" ; $LABAPP01 ; $ipAddress = $LABAPP01
+$LABSQL01 = "192.168.0.30" ; $LABSQL01 ; $ipAddress = $LABSQL01
+$LABWEB01 = "192.168.0.40" ; $LABWEB01 ; $ipAddress = $LABWEB01
+# or
+$DOMAIN01 = "192.168.0.197" ; $DOMAIN01 ; $ipAddress = $DOMAIN01
+$DOMAIN02 = "192.168.0.198" ; $DOMAIN02 ; $ipAddress = $DOMAIN02
+$DOMAIN41 = "192.168.0.129" ; $DOMAIN41 ; $ipAddress = $DOMAIN41
+$DOMAIN42 = "192.168.0.130" ; $DOMAIN42 ; $ipAddress = $DOMAIN42
+# or
+$ipAddress = Read-Host -Prompt "Enter IP address"
 
-# Get the Gateway IP address.
-# 192.168.0.1
-$gatewayIpAddress = Read-Host -Prompt "Enter Gateway IP Address"
+# Get the gateway IP address.
+$GATEWAY = "192.168.0.1" ; $GATEWAY ; $gatewayIpAddress = $GATEWAY
+# ro
+$gatewayIpAddress = Read-Host -Prompt "Enter gateway IP address"
+
+# Get the router IP address.
+$ROUTER = "192.168.1.1" ; $ROUTER ; $routerIpAddress = $ROUTER
+# or
+$routerIpAddress = Read-Host -Prompt "Enter router IP address"
 
 # Get the DNS IP addresses.
-# 192.168.0.10 - Primary / LAB-DC-01
-# 192.168.1.1 - Secondary / Router
-$primaryDnsIpAddress = Read-Host -Prompt "Enter Primary DNS IP Address"
-$secondaryDnsIpAddress = Read-Host -Prompt "Enter Secondary DNS IP Address"
+$PRIMARY = $LABDC01 ; $PRIMARY ; $primaryDnsIpAddress = $PRIMARY
+$SECONDARY = $routerIpAddress; $SECONDARY ; $secondaryDnsIpAddress = $SECONDARY
+# or
+$primaryDnsIpAddress = Read-Host -Prompt "Enter primary DNS IP address"
+$secondaryDnsIpAddress = Read-Host -Prompt "Enter secondary DNS IP address"
 
 # Set a static IP address.
 $scriptBlock = {
