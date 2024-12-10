@@ -59,7 +59,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
 
         if (myFeature)
         {
-            logger.LogDebug("Featured Enabled");
+            logger.LogDebug("MyFeature Enabled");
 
             /*******************************************************************************
             REPOSITORY
