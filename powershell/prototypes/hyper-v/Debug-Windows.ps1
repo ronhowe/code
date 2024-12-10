@@ -53,6 +53,9 @@ $routerIpAddress = Read-Host -Prompt "Enter router IP address"
 $PRIMARY = $LABDC01 ; $PRIMARY ; $primaryDnsIpAddress = $PRIMARY
 $SECONDARY = $routerIpAddress; $SECONDARY ; $secondaryDnsIpAddress = $SECONDARY
 # or
+$PRIMARY = $DOMAIN01 ; $PRIMARY ; $primaryDnsIpAddress = $PRIMARY
+$SECONDARY = $routerIpAddress; $SECONDARY ; $secondaryDnsIpAddress = $SECONDARY
+# or
 $primaryDnsIpAddress = Read-Host -Prompt "Enter primary DNS IP address"
 $secondaryDnsIpAddress = Read-Host -Prompt "Enter secondary DNS IP address"
 
