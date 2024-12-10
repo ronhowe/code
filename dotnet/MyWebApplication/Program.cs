@@ -31,9 +31,12 @@ Log.ForContext("SourceContext", _sourceContext).Warning($"POST (4 of 6) => Warni
 Log.ForContext("SourceContext", _sourceContext).Error($"POST (5 of 6) => Error Logging ON");
 Log.ForContext("SourceContext", _sourceContext).Fatal($"POST (6 of 6) => Fatal Logging ON");
 
+Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.UtcNow}");
+Log.ForContext("SourceContext", _sourceContext).Information($"OK");
+
 try
 {
-    Log.ForContext("SourceContext", _sourceContext).Information("$Creating Web Application Builder");
+    Log.ForContext("SourceContext", _sourceContext).Information($"Creating Web Application Builder");
     var builder = WebApplication.CreateBuilder(args);
 
     /*******************************************************************************
@@ -82,26 +85,29 @@ try
     Log.ForContext("SourceContext", _sourceContext).Information($"Building Web Application");
     var app = builder.Build();
 
-    app.Logger.LogTrace($"POST (1 of 6) => Trace Logging ON");
-    app.Logger.LogDebug($"POST (2 of 6) => Debug Logging ON");
-    app.Logger.LogInformation($"POST (3 of 6) => Information Logging ON");
-    app.Logger.LogWarning($"POST (4 of 6) => Warning Logging ON");
-    app.Logger.LogError($"POST (5 of 6) => Error Logging ON");
-    app.Logger.LogCritical($"POST (6 of 6) => Critical Logging ON");
+    app.Logger.LogTrace("POST (1 of 6) => Trace Logging ON");
+    app.Logger.LogDebug("POST (2 of 6) => Debug Logging ON");
+    app.Logger.LogInformation("POST (3 of 6) => Information Logging ON");
+    app.Logger.LogWarning("POST (4 of 6) => Warning Logging ON");
+    app.Logger.LogError("POST (5 of 6) => Error Logging ON");
+    app.Logger.LogCritical("POST (6 of 6) => Critical Logging ON");
 
-    app.Logger.LogInformation($"Using Request Logging Middleware");
+    app.Logger.LogInformation("{now}", DateTime.UtcNow);
+    app.Logger.LogInformation("OK");
+
+    app.Logger.LogInformation("Using Request Logging Middleware");
     app.UseMiddleware<RequestLoggingMiddleware>();
 
-    app.Logger.LogInformation($"Using HTTPS Redirection");
+    app.Logger.LogInformation("Using HTTPS Redirection");
     app.UseHttpsRedirection();
 
-    app.Logger.LogInformation($"Using Serilog Request Logging");
+    app.Logger.LogInformation("Using Serilog Request Logging");
     app.UseSerilogRequestLogging();
 
-    app.Logger.LogInformation($"Mapping Get Route to {nameof(MyService)}");
+    app.Logger.LogInformation("Mapping Get Route to {name}", nameof(MyService));
     app.MapGet($"/api/{nameof(MyService)}", (bool input, [FromServices] IMyService myService) =>
     {
-        app.Logger.LogInformation($"Routing to {nameof(MyService)}");
+        app.Logger.LogInformation("Routing to {name}", nameof(MyService));
         return myService.MyMethod(input);
     });
 

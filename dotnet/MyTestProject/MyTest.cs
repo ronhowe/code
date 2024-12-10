@@ -23,7 +23,7 @@ public sealed class MyTest
 {
     [TestMethod]
     [TestCategory("IntegrationTest")]
-    public void MyServiceTest()
+    public void TestProjectHostTests()
     {
         /*******************************************************************************
         POST
@@ -46,6 +46,9 @@ public sealed class MyTest
         Log.ForContext("SourceContext", _sourceContext).Warning($"POST (4 of 6) => Warning Logging ON");
         Log.ForContext("SourceContext", _sourceContext).Error($"POST (5 of 6) => Error Logging ON");
         Log.ForContext("SourceContext", _sourceContext).Fatal($"POST (6 of 6) => Fatal Logging ON");
+
+        Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.UtcNow}");
+        Log.ForContext("SourceContext", _sourceContext).Information($"OK");
 
         Log.ForContext("SourceContext", _sourceContext).Debug($"Creating Service Collection");
         var serviceCollection = new ServiceCollection();
@@ -124,7 +127,7 @@ public sealed class MyTest
 
     [TestMethod]
     [TestCategory("IntegrationTest")]
-    public async Task MyWebApplicationTest()
+    public async Task WebApplicationHostTests()
     {
         Debug.WriteLine($"Building Configuration");
         var configurationSettings = new Dictionary<string, string?>
@@ -161,7 +164,7 @@ public sealed class MyTest
     [DataTestMethod]
     [DataRow(true)]
     [DataRow(false)]
-    public void MyMethodTest(bool value)
+    public void MockHostTests(bool value)
     {
         Debug.WriteLine($"Mocking {nameof(ILogger<MyService>)}");
         var mockLogger = new Mock<ILogger<MyService>>();
@@ -215,6 +218,8 @@ public sealed class MyTest
     public void TestInitialize()
     {
         Debug.WriteLine($"/{new string('*', 79)}");
+        Debug.WriteLine($"{DateTime.UtcNow}");
+        Debug.WriteLine($"OK");
         Debug.WriteLine($"Initializing Test");
     }
 }

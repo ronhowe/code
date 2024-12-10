@@ -20,11 +20,11 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         CONFIGURATION
         *******************************************************************************/
 
-        string message = string.Empty;
+        string myMessage = string.Empty;
         try
         {
             logger.LogDebug("Getting MyMessage from Configuration");
-            message = configuration["MyMessage"] ?? string.Empty;
+            myMessage = configuration["MyMessage"] ?? string.Empty;
         }
         catch (Exception ex)
         {
@@ -34,7 +34,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
         finally
         {
-            logger.LogTrace("message = {message}", message);
+            logger.LogTrace("myMessage = {myMessage}", myMessage);
         }
 
         /*******************************************************************************
