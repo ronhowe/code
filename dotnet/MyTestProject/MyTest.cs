@@ -81,7 +81,7 @@ public sealed class MyTest
         {
             { "ConnectionStrings:MyDatabase", "Application Name=TestProjectHost;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
             { "FeatureManagement:MyFeature", "true" },
-            { "MyMessage", "TestProjectHost" },
+            { "MyConfiguration", "TestProjectHost" },
             { "MySecret", "TestProjectHost" }
         };
         var configuration = new ConfigurationBuilder()
@@ -136,7 +136,7 @@ public sealed class MyTest
         //{
         //    { "ConnectionStrings:MyDatabase", "Application Name=WebApplicationHost;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
         //    { "FeatureManagement:MyFeature", "true" },
-        //    { "MyMessage", "WebApplicationHost" },
+        //    { "MyConfiguration", "WebApplicationHost" },
         //    { "MySecret", "WebApplicationHost" }
         //};
 

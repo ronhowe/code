@@ -20,21 +20,21 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         CONFIGURATION
         *******************************************************************************/
 
-        string myMessage = string.Empty;
+        string myConfiguration = string.Empty;
         try
         {
-            logger.LogDebug("Getting MyMessage from Configuration");
-            myMessage = configuration["MyMessage"] ?? string.Empty;
+            logger.LogDebug("Getting MyConfiguration from Configuration");
+            myConfiguration = configuration["MyConfiguration"] ?? string.Empty;
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting MyMessage from Configuration");
+            logger.LogError("Error Getting MyConfiguration from Configuration");
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }
         finally
         {
-            logger.LogTrace("myMessage = {myMessage}", myMessage);
+            logger.LogTrace("myConfiguration = {myConfiguration}", myConfiguration);
         }
 
         /*******************************************************************************
