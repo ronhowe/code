@@ -73,6 +73,18 @@ New-Alias -Name "upgrade" -Value Get-UpgradeStatus -Force
 
 #endregion Get-UpgradeStatus (aka upgrade)
 
+#region Set-LocationCode (aka go)
+
+function Set-LocationCode {
+    if (Test-Path -Path "$HOME\repos\ronhowe\code") {
+        Set-Location -Path "$HOME\repos\ronhowe\code"
+    }
+}
+
+New-Alias -Name "go" -Value Set-LocationCode -Force
+
+#endregion Set-LocationHome (aka home)
+
 #region Set-LocationHome (aka home)
 
 function Set-LocationHome {
