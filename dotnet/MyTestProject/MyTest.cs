@@ -79,9 +79,10 @@ public sealed class MyTest
         Log.ForContext("SourceContext", _sourceContext).Debug($"Adding Configuration");
         var configurationSettings = new Dictionary<string, string?>
         {
-            { "MyMessage", "TestProjectHost" },
             { "ConnectionStrings:MyDatabase", "Application Name=TestProjectHost;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
-            { "FeatureManagement:MyFeature", "true" }
+            { "FeatureManagement:MyFeature", "true" },
+            { "MyMessage", "TestProjectHost" },
+            { "MySecret", "TestProjectHost" }
         };
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(configurationSettings)
@@ -131,20 +132,21 @@ public sealed class MyTest
     public async Task WebApplicationHostTests()
     {
         Debug.WriteLine($"Building Configuration");
-        var configurationSettings = new Dictionary<string, string?>
-        {
-            { "MyMessage", "WebApplicationHost" },
-            { "ConnectionStrings:MyDatabase", "Application Name=WebApplicationHost;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
-            { "FeatureManagement:MyFeature", "true" }
-        };
+        //var configurationSettings = new Dictionary<string, string?>
+        //{
+        //    { "ConnectionStrings:MyDatabase", "Application Name=WebApplicationHost;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
+        //    { "FeatureManagement:MyFeature", "true" },
+        //    { "MyMessage", "WebApplicationHost" },
+        //    { "MySecret", "WebApplicationHost" }
+        //};
 
         Debug.WriteLine($"Building Web Application");
         using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {
-            builder.ConfigureAppConfiguration((context, configBuilder) =>
-            {
-                configBuilder.AddInMemoryCollection(configurationSettings);
-            });
+            //builder.ConfigureAppConfiguration((context, configBuilder) =>
+            //{
+            //    configBuilder.AddInMemoryCollection(configurationSettings);
+            //});
         });
 
         Debug.WriteLine($"Creating Web Application Client");
@@ -173,6 +175,7 @@ public sealed class MyTest
         Debug.WriteLine($"Mocking {nameof(IConfiguration)}");
         var mockConfiguration = new Mock<IConfiguration>();
         mockConfiguration.Setup(x => x["ConnectionStrings.MyDatabase"]).Returns("_MOCK_CONNECTION_STRING_");
+        mockConfiguration.Setup(x => x["MySecret"]).Returns("_MOCK_SECRET_");
 
         Debug.WriteLine($"Mocking {nameof(IFeatureManager)}");
         var mockFeatureManager = new Mock<IFeatureManager>();
