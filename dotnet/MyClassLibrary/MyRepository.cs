@@ -31,6 +31,8 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
             logger.LogTrace("connectionString = {connectionString}", connectionString);
         }
 
+        logger.LogDebug("Saving Input");
+
         try
         {
             logger.LogDebug("Opening Connection");
@@ -41,6 +43,8 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
             using SqlCommand command = new("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);", connection);
             command.Parameters.AddWithValue("@Value", input);
             command.ExecuteNonQuery();
+
+            logger.LogDebug("Save Succeeded");
         }
         catch (SqlException ex)
         {
