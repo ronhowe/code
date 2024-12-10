@@ -22,30 +22,6 @@ public sealed class MyTest
 {
     [TestMethod]
     [TestCategory("IntegrationTest")]
-    public async Task MyWebApplicationTest()
-    {
-        var configurationSettings = new Dictionary<string, string?>
-        {
-            { "MyMessage", "HELLO THERE" },
-            { "ConnectionStrings:MyDatabase", "Application Name=MyTestProject;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
-            { "FeatureManagement:MyFeature", "true" }
-        };
-        //using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => { });
-        using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureAppConfiguration((context, configBuilder) =>
-            {
-                configBuilder.AddInMemoryCollection(configurationSettings);
-            });
-        });
-        using var client = application.CreateClient();
-        using var response = await client.GetAsync($"/api/{nameof(MyService)}?input={Boolean.TrueString}");
-
-        Boolean.Parse(response.Content.ReadAsStringAsync().Result).Should().BeTrue();
-    }
-
-    [TestMethod]
-    [TestCategory("IntegrationTest")]
     public void MyServiceTest()
     {
         /*******************************************************************************
@@ -54,11 +30,9 @@ public sealed class MyTest
 
         const string _sourceContext = nameof(MyTest);
         const string _outputTemplate = "{Message}{NewLine}{Exception}";
-        //const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}"
 
         Log.Logger = new LoggerConfiguration()
-            //.MinimumLevel.Verbose()
-            .MinimumLevel.Debug()
+            .MinimumLevel.Verbose()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .Enrich.WithMachineName()
@@ -142,6 +116,29 @@ public sealed class MyTest
 
         Log.ForContext("SourceContext", _sourceContext).Debug("Calling MyService");
         myService?.MyMethod(true).Should().BeTrue();
+    }
+
+    [TestMethod]
+    [TestCategory("IntegrationTest")]
+    public async Task MyWebApplicationTest()
+    {
+        var configurationSettings = new Dictionary<string, string?>
+        {
+            { "MyMessage", "MyWebApplicationTest" },
+            { "ConnectionStrings:MyDatabase", "Application Name=MyTestProject;Server=localhost;Database=MyDatabase;Connect Timeout=1;Trusted_Connection=True;Encrypt=Optional;" },
+            { "FeatureManagement:MyFeature", "true" }
+        };
+        using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureAppConfiguration((context, configBuilder) =>
+            {
+                configBuilder.AddInMemoryCollection(configurationSettings);
+            });
+        });
+        using var client = application.CreateClient();
+        using var response = await client.GetAsync($"/api/{nameof(MyService)}?input={Boolean.TrueString}");
+
+        Boolean.Parse(response.Content.ReadAsStringAsync().Result).Should().BeTrue();
     }
 
     [TestMethod]

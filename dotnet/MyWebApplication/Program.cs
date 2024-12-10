@@ -14,8 +14,7 @@ POST
 *******************************************************************************/
 
 const string _sourceContext = nameof(Program);
-const string _outputTemplate = "{Message}{NewLine}{Exception}";
-//const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
+const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
@@ -78,8 +77,6 @@ try
     Log.ForContext("SourceContext", _sourceContext).Information("Adding {0}", nameof(MyService));
     builder.Services.AddSingleton<IMyService, MyService>();
 
-    //builder.Services.AddOpenApi();
-
     /*******************************************************************************
     APPLICATION
     *******************************************************************************/
@@ -97,18 +94,12 @@ try
     app.Logger.LogInformation("Using Request Logging Middleware");
     app.UseMiddleware<RequestLoggingMiddleware>();
 
-    // TODO - Learn and re-add.
-    //if (app.Environment.IsDevelopment())
-    //{
-    //    app.MapOpenApi();
-    //}
-
     app.UseHttpsRedirection();
 
     app.Logger.LogInformation("Using Serilog Request Logging");
     app.UseSerilogRequestLogging();
 
-    app.MapGet($"/api/{nameof(MyService)}", (/*[FromRoute]*/ bool input, [FromServices] IMyService myService) =>
+    app.MapGet($"/api/{nameof(MyService)}", (bool input, [FromServices] IMyService myService) =>
     {
         app.Logger.LogInformation("Routing to MyService");
         return myService.MyMethod(input);

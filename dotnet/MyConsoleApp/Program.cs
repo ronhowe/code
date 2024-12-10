@@ -6,7 +6,7 @@ using FluentAssertions;
 using System.Diagnostics;
 using System.Net;
 
-namespace ConsoleApp1;
+namespace MyConsoleApp;
 
 public class Program
 {
@@ -40,7 +40,7 @@ public class Program
                 {
                     if (header.Key == "CustomHeader")
                     {
-                        Console.WriteLine($"{header.Key} = {header.Value.FirstOrDefault<string>()}");
+                        Console.WriteLine($"{header.Key} = {header.Value.FirstOrDefault()}");
                     }
                 }
             }
