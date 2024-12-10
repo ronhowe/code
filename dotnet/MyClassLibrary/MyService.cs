@@ -14,8 +14,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
     {
         logger.LogDebug("Entering {name}", nameof(MyService));
 
-        logger.LogDebug("Logging Input");
-        logger.LogTrace("$input = {input}", input);
+        logger.LogTrace("input = {input}", input);
 
         /*******************************************************************************
         CONFIGURATION
@@ -24,18 +23,18 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         string message = string.Empty;
         try
         {
-            logger.LogDebug("Getting Message");
+            logger.LogDebug("Getting MyMessage from Configuration");
             message = configuration["MyMessage"] ?? string.Empty;
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting Message");
+            logger.LogError("Error Getting MyMessage from Configuration");
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }
         finally
         {
-            logger.LogTrace("$message = {message}", message);
+            logger.LogTrace("message = {message}", message);
         }
 
         /*******************************************************************************
@@ -45,17 +44,17 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         bool myFeature = false;
         try
         {
-            logger.LogDebug("Getting MyFeature Toggle");
+            logger.LogDebug("Getting MyFeature from Configuration");
             myFeature = featureManager.IsEnabledAsync("MyFeature").Result;
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting MyFeature Toggle");
+            logger.LogError("Error Getting MyFeature from Configuration");
             logger.LogError(ex, "{Message}", ex.Message);
         }
         finally
         {
-            logger.LogTrace("$myFeature = {myFeature}", myFeature);
+            logger.LogTrace("myFeature = {myFeature}", myFeature);
         }
 
         if (myFeature)

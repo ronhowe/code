@@ -14,7 +14,7 @@ POST
 *******************************************************************************/
 
 const string _sourceContext = nameof(Program);
-const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
+const string _outputTemplate = "[{Level:u3}] {Message}{NewLine}{Exception}";
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
@@ -24,25 +24,23 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console(outputTemplate: _outputTemplate)
     .CreateLogger();
 
-Log.ForContext("SourceContext", _sourceContext).Verbose("POST (1 of 6) => Verbose Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Debug("POST (2 of 6) => Debug Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Information("POST (3 of 6) => Information Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Warning("POST (4 of 6) => Warning Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Error("POST (5 of 6) => Error Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Fatal("POST (6 of 6) => Fatal Logging ON");
-
-Log.ForContext("SourceContext", _sourceContext).Information("Program Running");
+Log.ForContext("SourceContext", _sourceContext).Verbose($"POST (1 of 6) => Verbose Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Debug($"POST (2 of 6) => Debug Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Information($"POST (3 of 6) => Information Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Warning($"POST (4 of 6) => Warning Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Error($"POST (5 of 6) => Error Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Fatal($"POST (6 of 6) => Fatal Logging ON");
 
 try
 {
-    Log.ForContext("SourceContext", _sourceContext).Information("Creating Web Application Builder");
+    Log.ForContext("SourceContext", _sourceContext).Information("$Creating Web Application Builder");
     var builder = WebApplication.CreateBuilder(args);
 
     /*******************************************************************************
     LOGGING
     *******************************************************************************/
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Using Serilog");
+    Log.ForContext("SourceContext", _sourceContext).Information($"Using Serilog");
     builder.Host.UseSerilog((hostContext, loggerConfiguration) =>
     {
         loggerConfiguration.ReadFrom.Configuration(hostContext.Configuration);
@@ -52,9 +50,9 @@ try
     CONFIGURATION
     *******************************************************************************/
 
-    Log.ForContext("SourceContext", _sourceContext).Debug("Logging Environment Name");
+    Log.ForContext("SourceContext", _sourceContext).Debug($"Getting Environment Name from Environment");
     var environmentName = builder.Environment.EnvironmentName;
-    Log.ForContext("SourceContext", _sourceContext).Debug("$environmentName = {environmentName}", environmentName);
+    Log.ForContext("SourceContext", _sourceContext).Debug($"environmentName = {environmentName}");
 
     /*******************************************************************************
     FEATURE MANAGEMENT
@@ -67,41 +65,43 @@ try
     REPOSITORY
     *******************************************************************************/
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding {0}", nameof(MyRepository));
+    Log.ForContext("SourceContext", _sourceContext).Information($"Adding {nameof(MyRepository)}");
     builder.Services.AddSingleton<IMyRepository, MyRepository>();
 
     /*******************************************************************************
     SERVICE
     *******************************************************************************/
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding {0}", nameof(MyService));
+    Log.ForContext("SourceContext", _sourceContext).Information($"Adding {nameof(MyService)}");
     builder.Services.AddSingleton<IMyService, MyService>();
 
     /*******************************************************************************
     APPLICATION
     *******************************************************************************/
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Building Web Application");
+    Log.ForContext("SourceContext", _sourceContext).Information($"Building Web Application");
     var app = builder.Build();
 
-    app.Logger.LogTrace("POST (1 of 6) => Trace Logging ON");
-    app.Logger.LogDebug("POST (2 of 6) => Debug Logging ON");
-    app.Logger.LogInformation("POST (3 of 6) => Information Logging ON");
-    app.Logger.LogWarning("POST (4 of 6) => Warning Logging ON");
-    app.Logger.LogError("POST (5 of 6) => Error Logging ON");
-    app.Logger.LogCritical("POST (6 of 6) => Critical Logging ON");
+    app.Logger.LogTrace($"POST (1 of 6) => Trace Logging ON");
+    app.Logger.LogDebug($"POST (2 of 6) => Debug Logging ON");
+    app.Logger.LogInformation($"POST (3 of 6) => Information Logging ON");
+    app.Logger.LogWarning($"POST (4 of 6) => Warning Logging ON");
+    app.Logger.LogError($"POST (5 of 6) => Error Logging ON");
+    app.Logger.LogCritical($"POST (6 of 6) => Critical Logging ON");
 
-    app.Logger.LogInformation("Using Request Logging Middleware");
+    app.Logger.LogInformation($"Using Request Logging Middleware");
     app.UseMiddleware<RequestLoggingMiddleware>();
 
+    app.Logger.LogInformation($"Using HTTPS Redirection");
     app.UseHttpsRedirection();
 
-    app.Logger.LogInformation("Using Serilog Request Logging");
+    app.Logger.LogInformation($"Using Serilog Request Logging");
     app.UseSerilogRequestLogging();
 
+    app.Logger.LogInformation($"Mapping Get Route to {nameof(MyService)}");
     app.MapGet($"/api/{nameof(MyService)}", (bool input, [FromServices] IMyService myService) =>
     {
-        app.Logger.LogInformation("Routing to MyService");
+        app.Logger.LogInformation($"Routing to {nameof(MyService)}");
         return myService.MyMethod(input);
     });
 
@@ -109,7 +109,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Fatal Exception in Program");
+    Log.Fatal(ex, $"Program Failed =(");
 }
 finally
 {

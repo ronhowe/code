@@ -17,18 +17,18 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         string connectionString = string.Empty;
         try
         {
-            logger.LogDebug("Getting Connection String");
+            logger.LogDebug("Getting Connection String from Configuration");
             connectionString = configuration["ConnectionStrings:MyDatabase"] ?? string.Empty;
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting Connection String");
+            logger.LogError("Error Getting Connection String from Configuration");
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }
         finally
         {
-            logger.LogTrace("$connectionString = {connectionString}", connectionString);
+            logger.LogTrace("connectionString = {connectionString}", connectionString);
         }
 
         try
@@ -44,7 +44,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         }
         catch (SqlException ex)
         {
-            logger.LogCritical("Feature Failed");
+            logger.LogCritical("Save Failed");
             logger.LogCritical(ex, "{Message}", ex.Message);
         }
 
