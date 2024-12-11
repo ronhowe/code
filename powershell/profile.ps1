@@ -60,7 +60,6 @@ else {
 
 #endregion imports
 
-
 if ($host.Name -eq "Windows PowerShell ISE Host") {
     # legacy build machine support
     New-Variable -Name "Root" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
