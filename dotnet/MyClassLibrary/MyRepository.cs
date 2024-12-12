@@ -5,6 +5,7 @@ https://github.com/ronhowe
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Polly;
 
 namespace MyClassLibrary;
 
@@ -33,23 +34,36 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
 
         logger.LogDebug("Saving Input");
 
+        const int maxRetries = 2;
+
         try
         {
-            logger.LogDebug("Opening Connection");
-            using SqlConnection connection = new(connectionString);
-            connection.Open();
+            var retryPolicy = Policy
+                .Handle<SqlException>()
+                .WaitAndRetry(maxRetries, retryAttempt => TimeSpan.FromMilliseconds(1),
+                    (ex, timeSpan, retryAttempt, context) =>
+                    {
+                        logger.LogWarning("Save Failed Because {message}", ex.Message);
+                        logger.LogWarning("Retry Attempt # {retryAttempt} of {maxRetries}", retryAttempt, maxRetries);
+                    });
 
-            logger.LogDebug("Executing Command");
-            using SqlCommand command = new("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);", connection);
-            command.Parameters.AddWithValue("@Value", input);
-            command.ExecuteNonQuery();
+            retryPolicy.Execute(() =>
+            {
+                logger.LogDebug("Opening Connection");
+                using SqlConnection connection = new(connectionString);
+                connection.Open();
 
-            logger.LogDebug("Save Succeeded");
+                logger.LogDebug("Executing Command");
+                using SqlCommand command = new("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);", connection);
+                command.Parameters.AddWithValue("@Value", input);
+                command.ExecuteNonQuery();
+
+                logger.LogDebug("Save Succeeded");
+            });
         }
         catch (SqlException ex)
         {
-            logger.LogCritical("Save Failed");
-            logger.LogCritical(ex, "{Message}", ex.Message);
+            logger.LogCritical("Save Failed Because {message}", ex.Message);
         }
 
         logger.LogDebug("Exiting {name}", nameof(MyRepository));
