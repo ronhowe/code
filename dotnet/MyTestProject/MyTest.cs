@@ -3,6 +3,7 @@ https://github.com/ronhowe
 *******************************************************************************/
 
 using FluentAssertions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -129,7 +130,10 @@ public sealed class MyTest
 
     [TestMethod]
     [TestCategory("IntegrationTest")]
-    public async Task WebApplicationHostTests()
+    [DataTestMethod]
+    [DataRow("Development")]
+    [DataRow("Production")]
+    public async Task WebApplicationHostTests(string environmentName)
     {
         Debug.WriteLine($"Building Configuration");
         //var configurationSettings = new Dictionary<string, string?>
@@ -143,6 +147,7 @@ public sealed class MyTest
         Debug.WriteLine($"Building Web Application");
         using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {
+            builder.UseEnvironment(environmentName);
             //builder.ConfigureAppConfiguration((context, configBuilder) =>
             //{
             //    configBuilder.AddInMemoryCollection(configurationSettings);
