@@ -26,6 +26,8 @@ powershell/module/Output/*
 # Mono auto generated files
 mono_crash.*
 
+dotnet/.NCrunch*
+
 # Build results
 dotnet/[Dd]ebug/
 [Dd]ebugPublic/

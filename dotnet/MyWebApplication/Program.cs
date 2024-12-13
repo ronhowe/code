@@ -54,7 +54,7 @@ try
     CONFIGURATION
     *******************************************************************************/
 
-    Log.ForContext("SourceContext", _sourceContext).Debug($"Getting Environment Name from Environment");
+    Log.ForContext("SourceContext", _sourceContext).Debug($"Getting Environment Name From Environment");
     var environmentName = builder.Environment.EnvironmentName;
     Log.ForContext("SourceContext", _sourceContext).Debug($"environmentName = {environmentName}");
 
@@ -106,10 +106,10 @@ try
     app.Logger.LogInformation("Using Serilog Request Logging");
     app.UseSerilogRequestLogging();
 
-    app.Logger.LogInformation("Mapping Get Route to {name}", nameof(MyService));
+    app.Logger.LogInformation("Mapping Get Route To {name}", nameof(MyService));
     app.MapGet($"/api/{nameof(MyService)}", (bool input, [FromServices] IMyService myService) =>
     {
-        app.Logger.LogInformation("Routing to {name}", nameof(MyService));
+        app.Logger.LogInformation("Routing To {name}", nameof(MyService));
         return myService.MyMethod(input);
     });
 
