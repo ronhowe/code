@@ -77,6 +77,7 @@ function Get-UpgradeStatus {
     winget upgrade
 }
 
+New-Alias -Name "ok" -Value Get-UpgradeStatus -Force
 New-Alias -Name "upgrade" -Value Get-UpgradeStatus -Force
 
 #endregion Get-UpgradeStatus (aka upgrade)
