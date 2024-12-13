@@ -10,7 +10,7 @@ FROM
     [dbo].[MyTable]
 ;
 
-SELECT TOP (10)
+SELECT TOP (1)
     [Id]
     ,[Value]
     ,[Inserted]
