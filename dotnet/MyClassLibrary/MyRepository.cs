@@ -52,7 +52,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
             const int _maxRetries = 2;
             const int _retryMilliseconds = 1;
 
-            logger.LogDebug("Creating Retry Policy Database");
+            logger.LogDebug("Creating Retry Policy");
             var retryPolicy = Policy
                 .Handle<SqlException>()
                 .WaitAndRetry(_maxRetries, retryAttempt => TimeSpan.FromMilliseconds(_retryMilliseconds),
