@@ -1,5 +1,8 @@
 # Azure (azure)
 
+https://github.com/Azure
+https://github.com/Azure/azure-sdk-for-net/tree/main/sdk/tables/Azure.Data.Tables
+
 # DevOps (devops)
 
 https://learn.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops&tabs=yaml-editor
@@ -10,6 +13,9 @@ https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/powersh
 https://semver.org/
 
 # .NET (dotnet)
+
+https://www.thepollyproject.org/
+https://github.com/App-vNext/Polly
 
 # PowerShell (powershell)
 
