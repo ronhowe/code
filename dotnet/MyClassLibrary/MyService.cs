@@ -20,11 +20,12 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         CONFIGURATION
         *******************************************************************************/
 
-        string myConfiguration = string.Empty;
+        string? myConfiguration;
         try
         {
             logger.LogDebug("Getting MyConfiguration From Configuration");
-            myConfiguration = configuration["MyConfiguration"] ?? string.Empty;
+            myConfiguration = configuration["MyConfiguration"];
+            logger.LogTrace("myConfiguration = {myConfiguration}", myConfiguration);
         }
         catch (Exception ex)
         {
@@ -32,20 +33,17 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }
-        finally
-        {
-            logger.LogTrace("myConfiguration = {myConfiguration}", myConfiguration);
-        }
 
         /*******************************************************************************
         SECRETS
         *******************************************************************************/
 
-        string mySecret = string.Empty;
+        string? mySecret;
         try
         {
             logger.LogDebug("Getting MySecret From Configuration");
-            mySecret = configuration["MySecret"] ?? string.Empty;
+            mySecret = configuration["MySecret"];
+            logger.LogTrace("mySecret = {mySecret}", mySecret);
         }
         catch (Exception ex)
         {
@@ -53,44 +51,30 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }
-        finally
-        {
-            logger.LogTrace("mySecret = {mySecret}", mySecret);
-        }
 
         /*******************************************************************************
         FEATURE MANAGER
         *******************************************************************************/
 
-        bool myFeature = false;
+        bool? myFeature;
         try
         {
             logger.LogDebug("Getting MyFeature From Configuration");
             myFeature = featureManager.IsEnabledAsync("MyFeature").Result;
+            logger.LogTrace("myFeature = {myFeature}", myFeature);
         }
         catch (Exception ex)
         {
             logger.LogError("Error Getting MyFeature From Configuration");
             logger.LogError(ex, "{Message}", ex.Message);
-        }
-        finally
-        {
-            logger.LogTrace("myFeature = {myFeature}", myFeature);
-        }
-
-        if (myFeature)
-        {
-            logger.LogDebug("MyFeature Enabled");
-        }
-        else
-        {
-            logger.LogWarning("Feature Disabled");
+            throw;
         }
 
         /*******************************************************************************
         REPOSITORY
         *******************************************************************************/
 
+        logger.LogInformation("Saving Input To Repository");
         repository.Save(input);
 
         logger.LogInformation("Returning {result}", input);

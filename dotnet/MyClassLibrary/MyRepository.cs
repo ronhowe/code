@@ -17,11 +17,11 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         logger.LogDebug("Entering {name}", nameof(MyRepository));
 
         const string _dbConnection = "MyDatabase";
-        string dbConnectionString = string.Empty;
+        string? dbConnectionString;
         try
         {
             logger.LogDebug("Getting Database Connection String From Configuration");
-            dbConnectionString = configuration[$"ConnectionStrings:{_dbConnection}"] ?? string.Empty;
+            dbConnectionString = configuration[$"ConnectionStrings:{_dbConnection}"];
             logger.LogTrace("dbConnectionString = {dbConnectionString}", dbConnectionString);
         }
         catch (Exception ex)
@@ -32,11 +32,11 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         }
 
         const string _azConnection = "MyAzureStorage";
-        string azConnectionString = string.Empty;
+        string? azConnectionString;
         try
         {
             logger.LogDebug("Getting Azure Storage Connection String From Configuration");
-            azConnectionString = configuration[$"ConnectionStrings:{_azConnection}"] ?? string.Empty;
+            azConnectionString = configuration[$"ConnectionStrings:{_azConnection}"];
             logger.LogTrace("azConnectionString = {azConnectionString}", azConnectionString);
         }
         catch (Exception ex)
