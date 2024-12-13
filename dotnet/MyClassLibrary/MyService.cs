@@ -23,12 +23,12 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         string myConfiguration = string.Empty;
         try
         {
-            logger.LogDebug("Getting MyConfiguration from Configuration");
+            logger.LogDebug("Getting MyConfiguration From Configuration");
             myConfiguration = configuration["MyConfiguration"] ?? string.Empty;
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting MyConfiguration from Configuration");
+            logger.LogError("Error Getting MyConfiguration From Configuration");
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }
@@ -44,12 +44,12 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         string mySecret = string.Empty;
         try
         {
-            logger.LogDebug("Getting MySecret from Configuration");
+            logger.LogDebug("Getting MySecret From Configuration");
             mySecret = configuration["MySecret"] ?? string.Empty;
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting MySecret from Configuration");
+            logger.LogError("Error Getting MySecret From Configuration");
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }
@@ -65,12 +65,12 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         bool myFeature = false;
         try
         {
-            logger.LogDebug("Getting MyFeature from Configuration");
+            logger.LogDebug("Getting MyFeature From Configuration");
             myFeature = featureManager.IsEnabledAsync("MyFeature").Result;
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting MyFeature from Configuration");
+            logger.LogError("Error Getting MyFeature From Configuration");
             logger.LogError(ex, "{Message}", ex.Message);
         }
         finally
@@ -81,29 +81,22 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         if (myFeature)
         {
             logger.LogDebug("MyFeature Enabled");
-
-            /*******************************************************************************
-            REPOSITORY
-            *******************************************************************************/
-
-            repository.Save(input);
         }
         else
         {
-            logger.LogWarning("Feature Not Enabled");
+            logger.LogWarning("Feature Disabled");
         }
 
         /*******************************************************************************
-        APPLICATION
+        REPOSITORY
         *******************************************************************************/
 
-        // important business logic =)
-        bool result = input;
+        repository.Save(input);
 
-        logger.LogInformation("Returning {result}", result);
+        logger.LogInformation("Returning {result}", input);
 
         logger.LogDebug("Exiting {name}", nameof(MyService));
 
-        return result;
+        return input;
     }
 }

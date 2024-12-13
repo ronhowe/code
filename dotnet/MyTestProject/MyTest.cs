@@ -24,7 +24,10 @@ public sealed class MyTest
 {
     [TestMethod]
     [TestCategory("IntegrationTest")]
-    public void TestProjectHostTests()
+    [DataTestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void TestProjectHostTests(bool value)
     {
         /*******************************************************************************
         POST
@@ -80,10 +83,11 @@ public sealed class MyTest
         Log.ForContext("SourceContext", _sourceContext).Debug($"Adding Configuration");
         var configurationSettings = new Dictionary<string, string?>
         {
+            { "ConnectionStrings:MyAzureStorage", "UseDevelopmentStorage=true;" },
             { "ConnectionStrings:MyDatabase", "Server=LOCALHOST;Database=MyDatabase;Integrated Security=True;Application Name=MyTestProject;Encrypt=False;Connect Timeout=1;Command Timeout=0;" },
-            { "FeatureManagement:MyFeature", "true" },
-            { "MyConfiguration", "TestProjectHost" },
-            { "MySecret", "TestProjectHost" }
+            { "FeatureManagement:MyFeature", $"{value}" },
+            { "MyConfiguration", "MyTestProject" },
+            { "MySecret", "MyTestProject" }
         };
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(configurationSettings)
@@ -122,18 +126,20 @@ public sealed class MyTest
         var myService = serviceProvider.GetService<MyService>();
 
         Log.ForContext("SourceContext", _sourceContext).Debug($"Calling {nameof(MyService)} with {Boolean.TrueString}");
-        var result = myService?.MyMethod(true);
+        var result = myService?.MyMethod(value);
 
-        Debug.WriteLine($"Asserting Result is {Boolean.TrueString}");
-        result.Should().BeTrue();
+        Debug.WriteLine($"Asserting Result Is {value}");
+        result.Should().Be(value);
     }
 
     [TestMethod]
     [TestCategory("IntegrationTest")]
     [DataTestMethod]
-    [DataRow("Development")]
-    [DataRow("Production")]
-    public async Task WebApplicationHostTests(string environmentName)
+    [DataRow(false, "Development")]
+    [DataRow(true, "Development")]
+    [DataRow(false, "Production")]
+    [DataRow(true, "Production")]
+    public async Task WebApplicationHostTests(bool value, string environmentName)
     {
         Debug.WriteLine($"Building Configuration");
         var configurationSettings = new Dictionary<string, string?>
@@ -158,13 +164,13 @@ public sealed class MyTest
         using var client = application.CreateClient();
 
         Debug.WriteLine($"Calling Web Application with {Boolean.TrueString}");
-        using var response = await client.GetAsync($"/api/{nameof(MyService)}?input={Boolean.TrueString}");
+        using var response = await client.GetAsync($"/api/{nameof(MyService)}?input={value}");
 
         Debug.WriteLine($"Asserting Response Status Code is {HttpStatusCode.OK}");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        Debug.WriteLine($"Asserting Result is {Boolean.TrueString}");
-        Boolean.Parse(response.Content.ReadAsStringAsync().Result).Should().BeTrue();
+        Debug.WriteLine($"Asserting Result is {value}");
+        Boolean.Parse(response.Content.ReadAsStringAsync().Result).Should().Be(value);
     }
 
     [TestMethod]

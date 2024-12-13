@@ -2,6 +2,7 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
+using Azure.Data.Tables;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -15,55 +16,91 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
     {
         logger.LogDebug("Entering {name}", nameof(MyRepository));
 
-        string connectionString = string.Empty;
+        const string _dbConnection = "MyDatabase";
+        string dbConnectionString = string.Empty;
         try
         {
-            logger.LogDebug("Getting Connection String from Configuration");
-            connectionString = configuration["ConnectionStrings:MyDatabase"] ?? string.Empty;
+            logger.LogDebug("Getting Database Connection String From Configuration");
+            dbConnectionString = configuration[$"ConnectionStrings:{_dbConnection}"] ?? string.Empty;
+            logger.LogTrace("dbConnectionString = {dbConnectionString}", dbConnectionString);
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting Connection String from Configuration");
+            logger.LogError("Error Getting Database Connection String From Configuration");
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }
-        finally
+
+        const string _azConnection = "MyAzureStorage";
+        string azConnectionString = string.Empty;
+        try
         {
-            logger.LogTrace("connectionString = {connectionString}", connectionString);
+            logger.LogDebug("Getting Azure Storage Connection String From Configuration");
+            azConnectionString = configuration[$"ConnectionStrings:{_azConnection}"] ?? string.Empty;
+            logger.LogTrace("azConnectionString = {azConnectionString}", azConnectionString);
         }
-
-        logger.LogDebug("Saving Input");
-
-        const int maxRetries = 2;
+        catch (Exception ex)
+        {
+            logger.LogError("Error Getting Azure Storage Connection String From Configuration");
+            logger.LogError(ex, "{Message}", ex.Message);
+            throw;
+        }
 
         try
         {
+            // TODO - read from configuration
+            const int _maxRetries = 2;
+            const int _retryMilliseconds = 1;
+
+            logger.LogDebug("Creating Retry Policy Database");
             var retryPolicy = Policy
                 .Handle<SqlException>()
-                .WaitAndRetry(maxRetries, retryAttempt => TimeSpan.FromMilliseconds(1),
+                .WaitAndRetry(_maxRetries, retryAttempt => TimeSpan.FromMilliseconds(_retryMilliseconds),
                     (ex, timeSpan, retryAttempt, context) =>
                     {
-                        logger.LogWarning("Save Failed Because {message}", ex.Message);
-                        logger.LogWarning("Retry Attempt # {retryAttempt} of {maxRetries}", retryAttempt, maxRetries);
+                        logger.LogError("Save Failed Because {message}", ex.Message);
+                        logger.LogWarning("Retry Attempt # {retryAttempt} Of {maxRetries}", retryAttempt, _maxRetries);
                     });
 
+            logger.LogDebug("Executing With Retry Policy");
             retryPolicy.Execute(() =>
-            {
-                logger.LogDebug("Opening Connection");
-                using SqlConnection connection = new(connectionString);
-                connection.Open();
+                {
+                    logger.LogDebug("Saving Input To Database");
 
-                logger.LogDebug("Executing Command");
-                using SqlCommand command = new("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);", connection);
-                command.Parameters.AddWithValue("@Value", input);
-                command.ExecuteNonQuery();
+                    logger.LogDebug("Opening Connection");
+                    using SqlConnection connection = new(dbConnectionString);
+                    connection.Open();
 
-                logger.LogDebug("Save Succeeded");
-            });
+                    logger.LogDebug("Executing Command");
+                    using SqlCommand command = new("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);", connection);
+                    command.Parameters.AddWithValue("@Value", input);
+                    command.ExecuteNonQuery();
+
+                    logger.LogDebug("Save To Database Succeeded");
+
+                    logger.LogDebug("Saving Input To Azure Storage");
+
+                    logger.LogDebug("Creating Table");
+                    var tableClient = new TableClient(azConnectionString, "MyCloudTable");
+                    tableClient.CreateIfNotExists();
+
+                    // TODO - choose better rowkey
+                    logger.LogDebug("Adding Entity");
+                    var tableEntity = new TableEntity(DateTime.UtcNow.ToString("yyyy-MM-dd"), Guid.NewGuid().ToString())
+                    {
+                        { "input", input }
+                    };
+                    tableClient.AddEntity(tableEntity);
+
+                    logger.LogDebug("Save To Azure Storage Succeeded");
+                }
+            );
         }
-        catch (SqlException ex)
+        catch (Exception ex)
         {
-            logger.LogCritical("Save Failed Because {message}", ex.Message);
+            logger.LogError("Save Failed Because {message}", ex.Message);
+            logger.LogCritical("CRITICAL DATA LOSS!");
+            throw;
         }
 
         logger.LogDebug("Exiting {name}", nameof(MyRepository));

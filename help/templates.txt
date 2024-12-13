@@ -1,4 +1,4 @@
-"Server=LOCALHOST;Database=MyDatabase;Integrated Security=True;Application Name=MyDatabase;Encrypt=False;Connect Timeout=1;Command Timeout=0;"
+Server=LOCALHOST;Database=MyDatabase;Integrated Security=True;Application Name=MyDatabase;Encrypt=False;Connect Timeout=1;Command Timeout=0;
 
 /*******************************************************************************
 C#
