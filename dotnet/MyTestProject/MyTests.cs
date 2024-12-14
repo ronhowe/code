@@ -14,6 +14,9 @@ public sealed class MyTests : TestBase
     [TestMethod]
     public void MyTest()
     {
+        // LINK: MyLink
+        // NOTE: MyNote
+        // TODO: MyToDo
         Debug.WriteLine("Debugging");
     }
 }
