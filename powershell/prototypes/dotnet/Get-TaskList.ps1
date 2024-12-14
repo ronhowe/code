@@ -11,7 +11,7 @@ param (
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
-    [string]$Pattern = "(//help|//link|//todo)"
+    [string]$Pattern = "(@LINK|@NOTE|@TODO)"
 )
 Get-ChildItem -Path $Path -Include @("*.cs", "*.json") -Recurse |
 Where-Object { $_.FullName -notlike "*\bin\*" -and $_.FullName -notlike "*\obj\*" } |
