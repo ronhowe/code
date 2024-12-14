@@ -90,7 +90,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
                     logger.LogDebug("Adding Entity");
                     var tableEntity = new TableEntity(DateTime.UtcNow.ToString("yyyy-MM-dd"), Guid.NewGuid().ToString())
                     {
-                        { "myInput", myInput }
+                        { "MyInput", myInput }
                     };
                     tableClient.AddEntity(tableEntity);
 
