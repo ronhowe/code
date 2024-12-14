@@ -16,10 +16,6 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
 
         logger.LogTrace("input = {input}", input);
 
-        /*******************************************************************************
-        CONFIGURATION
-        *******************************************************************************/
-
         string? myConfiguration;
         try
         {
@@ -33,10 +29,6 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }
-
-        /*******************************************************************************
-        SECRETS
-        *******************************************************************************/
 
         string? mySecret;
         try
@@ -52,10 +44,6 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
             throw;
         }
 
-        /*******************************************************************************
-        FEATURE MANAGER
-        *******************************************************************************/
-
         bool? myFeature;
         try
         {
@@ -69,10 +57,6 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }
-
-        /*******************************************************************************
-        REPOSITORY
-        *******************************************************************************/
 
         logger.LogInformation("Saving Input To Repository");
         repository.Save(input);

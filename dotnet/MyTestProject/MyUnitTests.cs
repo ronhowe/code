@@ -14,7 +14,7 @@ using System.Diagnostics;
 namespace MyTestProject;
 
 [TestClass]
-public sealed class UnitTests : TestBase
+public sealed class MyUnitTests : TestBase
 {
     [TestMethod]
     [TestCategory("UnitTest")]

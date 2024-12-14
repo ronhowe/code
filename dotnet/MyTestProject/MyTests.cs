@@ -8,11 +8,12 @@ using System.Diagnostics;
 namespace MyTestProject;
 
 [TestClass]
-public sealed class MyTest : TestBase
+[TestCategory("DebuggerTests")]
+public sealed class MyTests : TestBase
 {
     [TestMethod]
-    public void MyTestMethod()
+    public void MyTest()
     {
-        Debug.WriteLine("Test");
+        Debug.WriteLine("Debugging");
     }
 }

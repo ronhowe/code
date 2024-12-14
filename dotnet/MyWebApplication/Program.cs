@@ -9,10 +9,6 @@ using MyWebApplication;
 using Serilog;
 using Serilog.Events;
 
-/*******************************************************************************
-POST
-*******************************************************************************/
-
 const string _sourceContext = nameof(Program);
 const string _outputTemplate = "[{Level:u3}] {Message}{NewLine}{Exception}";
 
@@ -30,7 +26,6 @@ Log.ForContext("SourceContext", _sourceContext).Information($"POST (3 of 6) => I
 Log.ForContext("SourceContext", _sourceContext).Warning($"POST (4 of 6) => Warning Logging ON");
 Log.ForContext("SourceContext", _sourceContext).Error($"POST (5 of 6) => Error Logging ON");
 Log.ForContext("SourceContext", _sourceContext).Fatal($"POST (6 of 6) => Fatal Logging ON");
-
 Log.ForContext("SourceContext", _sourceContext).Information($"OK");
 Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.Now} LOCAL");
 Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.UtcNow} UTC");
@@ -40,48 +35,24 @@ try
     Log.ForContext("SourceContext", _sourceContext).Information($"Creating Web Application Builder");
     var builder = WebApplication.CreateBuilder(args);
 
-    /*******************************************************************************
-    LOGGING
-    *******************************************************************************/
-
     Log.ForContext("SourceContext", _sourceContext).Information($"Using Serilog");
     builder.Host.UseSerilog((hostContext, loggerConfiguration) =>
     {
         loggerConfiguration.ReadFrom.Configuration(hostContext.Configuration);
     });
 
-    /*******************************************************************************
-    CONFIGURATION
-    *******************************************************************************/
-
     Log.ForContext("SourceContext", _sourceContext).Debug($"Getting Environment Name From Environment");
     var environmentName = builder.Environment.EnvironmentName;
     Log.ForContext("SourceContext", _sourceContext).Debug($"environmentName = {environmentName}");
 
-    /*******************************************************************************
-    FEATURE MANAGEMENT
-    *******************************************************************************/
-
     Log.ForContext("SourceContext", _sourceContext).Information("Adding Feature Management");
     builder.Services.AddFeatureManagement();
-
-    /*******************************************************************************
-    REPOSITORY
-    *******************************************************************************/
 
     Log.ForContext("SourceContext", _sourceContext).Information($"Adding {nameof(MyRepository)}");
     builder.Services.AddSingleton<IMyRepository, MyRepository>();
 
-    /*******************************************************************************
-    SERVICE
-    *******************************************************************************/
-
     Log.ForContext("SourceContext", _sourceContext).Information($"Adding {nameof(MyService)}");
     builder.Services.AddSingleton<IMyService, MyService>();
-
-    /*******************************************************************************
-    APPLICATION
-    *******************************************************************************/
 
     Log.ForContext("SourceContext", _sourceContext).Information($"Building Web Application");
     var app = builder.Build();
@@ -92,7 +63,6 @@ try
     app.Logger.LogWarning("POST (4 of 6) => Warning Logging ON");
     app.Logger.LogError("POST (5 of 6) => Error Logging ON");
     app.Logger.LogCritical("POST (6 of 6) => Critical Logging ON");
-
     app.Logger.LogInformation("OK");
     app.Logger.LogInformation("{now} LOCAL", DateTime.Now);
     app.Logger.LogInformation("{now} UTC", DateTime.UtcNow);
@@ -117,7 +87,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, $"Program Failed =(");
+    Log.Fatal(ex, $"FATAL EXCEPTION - APPLICATION CRASH");
 }
 finally
 {

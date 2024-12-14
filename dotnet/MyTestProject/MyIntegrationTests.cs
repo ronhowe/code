@@ -19,20 +19,16 @@ using System.Net;
 namespace MyTestProject;
 
 [TestClass]
-public sealed class IntegrationTests : TestBase
+public sealed class MyIntegrationTests : TestBase
 {
     [TestMethod]
     [TestCategory("IntegrationTest")]
     [DataTestMethod]
     [DataRow(false)]
     [DataRow(true)]
-    public void MyTestProjectTests(bool value)
+    public void TestHostTests(bool value)
     {
-        /*******************************************************************************
-        POST
-        *******************************************************************************/
-
-        const string _sourceContext = nameof(MyTest);
+        const string _sourceContext = nameof(MyTests);
         const string _outputTemplate = "[{Level:u3}] {Message}{NewLine}{Exception}";
 
         Log.Logger = new LoggerConfiguration()
@@ -49,17 +45,12 @@ public sealed class IntegrationTests : TestBase
         Log.ForContext("SourceContext", _sourceContext).Warning($"POST (4 of 6) => Warning Logging ON");
         Log.ForContext("SourceContext", _sourceContext).Error($"POST (5 of 6) => Error Logging ON");
         Log.ForContext("SourceContext", _sourceContext).Fatal($"POST (6 of 6) => Fatal Logging ON");
-
         Log.ForContext("SourceContext", _sourceContext).Information($"OK");
         Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.Now} LOCAL");
         Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.UtcNow} UTC");
 
         Log.ForContext("SourceContext", _sourceContext).Debug($"Creating Service Collection");
         var serviceCollection = new ServiceCollection();
-
-        /*******************************************************************************
-        LOGGING
-        *******************************************************************************/
 
         Log.ForContext("SourceContext", _sourceContext).Debug($"Adding Logging");
         serviceCollection.AddLogging(configure =>
@@ -75,10 +66,6 @@ public sealed class IntegrationTests : TestBase
             configure.SetMinimumLevel(logLevel);
         });
 
-        /*******************************************************************************
-        CONFIGURATION
-        *******************************************************************************/
-
         Log.ForContext("SourceContext", _sourceContext).Debug($"Adding Configuration");
         var configurationSettings = new Dictionary<string, string?>
         {
@@ -93,30 +80,14 @@ public sealed class IntegrationTests : TestBase
             .Build();
         serviceCollection.AddSingleton<IConfiguration>(configuration);
 
-        /*******************************************************************************
-        FEATURE MANAGEMENT
-        *******************************************************************************/
-
         Log.ForContext("SourceContext", _sourceContext).Debug($"Adding Feature Management");
         serviceCollection.AddFeatureManagement();
-
-        /*******************************************************************************
-        REPOSITORY
-        *******************************************************************************/
 
         Log.ForContext("SourceContext", _sourceContext).Debug($"Adding {nameof(MyRepository)}");
         serviceCollection.AddTransient<IMyRepository, MyRepository>();
 
-        /*******************************************************************************
-        SERVICE
-        *******************************************************************************/
-
         Log.ForContext("SourceContext", _sourceContext).Debug($"Adding {nameof(MyService)}");
         serviceCollection.AddTransient<MyService>();
-
-        /*******************************************************************************
-        APPLICATION
-        *******************************************************************************/
 
         Log.ForContext("SourceContext", _sourceContext).Debug($"Building Service Provider");
         var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -138,25 +109,12 @@ public sealed class IntegrationTests : TestBase
     [DataRow(true, "Development")]
     [DataRow(false, "Production")]
     [DataRow(true, "Production")]
-    public async Task MyWebApplicationTests(bool value, string environmentName)
+    public async Task WebHostTests(bool value, string environmentName)
     {
-        Debug.WriteLine($"Building Configuration");
-        var configurationSettings = new Dictionary<string, string?>
-        {
-            //{ "ConnectionStrings:MyDatabase", "AS NEEDED" },
-            //{ "FeatureManagement:MyFeature", "AS NEEDED" },
-            //{ "MyConfiguration", "AS NEEDED" },
-            //{ "MySecret", "AS NEEDED" }
-        };
-
         Debug.WriteLine($"Building Web Application");
         using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {
             builder.UseEnvironment(environmentName);
-            builder.ConfigureAppConfiguration((context, configBuilder) =>
-            {
-                configBuilder.AddInMemoryCollection(configurationSettings);
-            });
         });
 
         Debug.WriteLine($"Creating Web Application Client");
