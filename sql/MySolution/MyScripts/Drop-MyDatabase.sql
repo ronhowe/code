@@ -2,9 +2,18 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
+USE [master];
+
+GO
+
 ALTER DATABASE [MyDatabase] SET OFFLINE WITH ROLLBACK IMMEDIATE;
+
 GO
+
 ALTER DATABASE [MyDatabase] SET ONLINE;
+
 GO
+
 DROP DATABASE [MyDatabase];
+
 GO

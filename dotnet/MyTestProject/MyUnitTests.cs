@@ -57,7 +57,7 @@ public sealed class MyUnitTests : TestBase
         mockLogger.VerifyLogMessage($"Entering {nameof(MyService)}", LogLevel.Debug);
 
         Debug.WriteLine($"Asserting Log Message Exists For Input");
-        mockLogger.VerifyLogMessage($"input = {value}", LogLevel.Trace);
+        mockLogger.VerifyLogMessage($"myInput = {value}", LogLevel.Trace);
 
         Debug.WriteLine($"Asserting Log Message Exists For Returning");
         mockLogger.VerifyLogMessage($"Returning {value}", LogLevel.Information);

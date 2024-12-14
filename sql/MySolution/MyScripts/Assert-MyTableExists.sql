@@ -2,19 +2,13 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
-IF EXISTS
-(
-    SELECT
-        [name]
-    FROM
-        [sys].[tables]
-    WHERE
-        [name] = N'MyTable'
-)
-BEGIN
-    SELECT 1 AS [result];
-END;
-ELSE
-BEGIN
-    SELECT 0 AS [result];
-END;
+SET NOCOUNT ON;
+
+SELECT
+    CASE
+        WHEN OBJECT_ID(N'dbo.MyTable') IS NOT NULL THEN 1
+        ELSE 0
+    END AS [MyTableExists]
+;
+
+GO

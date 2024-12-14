@@ -10,11 +10,11 @@ namespace MyClassLibrary;
 
 public class MyService(ILogger<MyService> logger, IConfiguration configuration, IFeatureManager featureManager, IMyRepository repository) : IMyService
 {
-    public bool MyMethod(bool input)
+    public bool MyMethod(bool myInput)
     {
         logger.LogDebug("Entering {name}", nameof(MyService));
 
-        logger.LogTrace("input = {input}", input);
+        logger.LogTrace("myInput = {myInput}", myInput);
 
         string? myConfiguration;
         try
@@ -59,12 +59,12 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
 
         logger.LogInformation("Saving Input To Repository");
-        repository.Save(input);
+        repository.Save(myInput);
 
-        logger.LogInformation("Returning {result}", input);
+        logger.LogInformation("Returning {result}", myInput);
 
         logger.LogDebug("Exiting {name}", nameof(MyService));
 
-        return input;
+        return myInput;
     }
 }

@@ -6,5 +6,5 @@ namespace MyClassLibrary;
 
 public interface IMyService
 {
-    public bool MyMethod(bool input);
+    public bool MyMethod(bool myInput);
 }

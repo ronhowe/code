@@ -11,11 +11,13 @@ FROM
 ;
 
 SELECT TOP (1)
-    [Id]
-    ,[Value]
-    ,[Inserted]
+    [RowKey]
+    ,[Timestamp]
+    ,[MyInput]
 FROM
     [dbo].[MyTable]
 ORDER BY
-    [Id] DESC
+    [RowKey] DESC
 ;
+
+GO

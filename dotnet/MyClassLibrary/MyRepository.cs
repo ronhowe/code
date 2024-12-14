@@ -12,9 +12,11 @@ namespace MyClassLibrary;
 
 public class MyRepository(ILogger<MyService> logger, IConfiguration configuration) : IMyRepository
 {
-    public void Save(bool input)
+    public void Save(bool myInput)
     {
         logger.LogDebug("Entering {name}", nameof(MyRepository));
+
+        logger.LogTrace("myInput = {myInput}", myInput);
 
         const string _dbConnection = "MyDatabase";
         string? dbConnectionString;
@@ -65,20 +67,20 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
             logger.LogDebug("Executing With Retry Policy");
             retryPolicy.Execute(() =>
                 {
-                    logger.LogDebug("Saving Input To Database");
+                    logger.LogDebug("Saving To Database");
 
                     logger.LogDebug("Opening Connection");
                     using SqlConnection connection = new(dbConnectionString);
                     connection.Open();
 
                     logger.LogDebug("Executing Command");
-                    using SqlCommand command = new("INSERT [dbo].[MyTable] ([Value]) VALUES (@Value);", connection);
-                    command.Parameters.AddWithValue("@Value", input);
+                    using SqlCommand command = new("INSERT [dbo].[MyTable] ([MyInput]) VALUES (@MyInput);", connection);
+                    command.Parameters.AddWithValue("@MyInput", myInput);
                     command.ExecuteNonQuery();
 
                     logger.LogDebug("Save To Database Succeeded");
 
-                    logger.LogDebug("Saving Input To Azure Storage");
+                    logger.LogDebug("Saving To Azure Storage");
 
                     logger.LogDebug("Creating Table");
                     var tableClient = new TableClient(azConnectionString, "MyCloudTable");
@@ -88,7 +90,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
                     logger.LogDebug("Adding Entity");
                     var tableEntity = new TableEntity(DateTime.UtcNow.ToString("yyyy-MM-dd"), Guid.NewGuid().ToString())
                     {
-                        { "input", input }
+                        { "myInput", myInput }
                     };
                     tableClient.AddEntity(tableEntity);
 

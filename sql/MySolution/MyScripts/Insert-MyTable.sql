@@ -2,18 +2,18 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
-:setvar BATCH_SIZE 1000
-:setvar VALUE 1
+:setvar COUNT 1000
+:setvar MYINPUT 1
 
 SET NOCOUNT ON;
 
 INSERT [dbo].[MyTable]
 (
-    [Value]
+    [MyInput]
 )
 VALUES
 (
-    $(VALUE)
+    $(MYINPUT)
 );
 
-GO $(BATCH_SIZE)
+GO $(COUNT)

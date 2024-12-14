@@ -2,4 +2,8 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
+SET NOCOUNT ON;
+
 TRUNCATE TABLE [dbo].[MyTable];
+
+GO
