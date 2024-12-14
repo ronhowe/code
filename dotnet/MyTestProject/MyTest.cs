@@ -125,7 +125,7 @@ public sealed class MyTest
         Log.ForContext("SourceContext", _sourceContext).Debug($"Getting {nameof(MyService)}");
         var myService = serviceProvider.GetService<MyService>();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug($"Calling {nameof(MyService)} with {Boolean.TrueString}");
+        Log.ForContext("SourceContext", _sourceContext).Debug($"Calling {nameof(MyService)} With {Boolean.TrueString}");
         var result = myService?.MyMethod(value);
 
         Debug.WriteLine($"Asserting Result Is {value}");
@@ -163,21 +163,21 @@ public sealed class MyTest
         Debug.WriteLine($"Creating Web Application Client");
         using var client = application.CreateClient();
 
-        Debug.WriteLine($"Calling Web Application with {Boolean.TrueString}");
+        Debug.WriteLine($"Calling Web Application With {value}");
         using var response = await client.GetAsync($"/api/{nameof(MyService)}?input={value}");
 
-        Debug.WriteLine($"Asserting Response Status Code is {HttpStatusCode.OK}");
+        Debug.WriteLine($"Asserting Response Status Code Is {HttpStatusCode.OK}");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        Debug.WriteLine($"Asserting Result is {value}");
+        Debug.WriteLine($"Asserting Result Is {value}");
         Boolean.Parse(response.Content.ReadAsStringAsync().Result).Should().Be(value);
     }
 
     [TestMethod]
     [TestCategory("UnitTest")]
     [DataTestMethod]
-    [DataRow(true)]
     [DataRow(false)]
+    [DataRow(true)]
     public void MockHostTests(bool value)
     {
         Debug.WriteLine($"Mocking {nameof(ILogger<MyService>)}");
@@ -185,7 +185,8 @@ public sealed class MyTest
 
         Debug.WriteLine($"Mocking {nameof(IConfiguration)}");
         var mockConfiguration = new Mock<IConfiguration>();
-        mockConfiguration.Setup(x => x["ConnectionStrings.MyDatabase"]).Returns("MYMOCKCONNECTIONSTRING");
+        mockConfiguration.Setup(x => x["ConnectionStrings.MyDatabase"]).Returns("MYMOCKDATABASECONNECTIONSTRING");
+        mockConfiguration.Setup(x => x["ConnectionStrings.MyAzureStorage"]).Returns("MYMOCKAZURESTORAGECONNECTIONSTRING;");
         mockConfiguration.Setup(x => x["MySecret"]).Returns("MYMOCKSECRET");
 
         Debug.WriteLine($"Mocking {nameof(IFeatureManager)}");
@@ -203,22 +204,22 @@ public sealed class MyTest
             mockRepository.Object
         );
 
-        Debug.WriteLine($"Calling {nameof(MyService)} with {value}");
+        Debug.WriteLine($"Calling {nameof(MyService)} With {value}");
         bool result = myService.MyMethod(value);
 
-        Debug.WriteLine($"Asserting Result is {value}");
+        Debug.WriteLine($"Asserting Result Is {value}");
         result.Should().Be(value);
 
-        Debug.WriteLine($"Asserting Log Message Exists for Enter");
+        Debug.WriteLine($"Asserting Log Message Exists For Enter");
         mockLogger.VerifyLogMessage($"Entering {nameof(MyService)}", LogLevel.Debug);
 
-        Debug.WriteLine($"Asserting Log Message Exists for Input");
+        Debug.WriteLine($"Asserting Log Message Exists For Input");
         mockLogger.VerifyLogMessage($"input = {value}", LogLevel.Trace);
 
-        Debug.WriteLine($"Asserting Log Message Exists for Returning");
+        Debug.WriteLine($"Asserting Log Message Exists For Returning");
         mockLogger.VerifyLogMessage($"Returning {value}", LogLevel.Information);
 
-        Debug.WriteLine($"Asserting Log Message Exists for Exiting");
+        Debug.WriteLine($"Asserting Log Message Exists For Exiting");
         mockLogger.VerifyLogMessage($"Exiting {nameof(MyService)}", LogLevel.Debug);
     }
 
