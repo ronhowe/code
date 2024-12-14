@@ -18,7 +18,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="TrafficLight.ico" />
+    <None Remove="MyConsoleApp.v3.ncrunchproject" />
+    <None Remove="TrafficLight.ico" />
+    <None Remove="TrafficLight.png" />
   </ItemGroup>
 
   <ItemGroup>
