@@ -12,8 +12,7 @@ public class Program
 {
     static void Main(string[] args)
     {
-        Uri? uri;
-        if (args.Length == 0 || !Uri.TryCreate(args[0], UriKind.Absolute, out uri))
+        if (args.Length == 0 || !Uri.TryCreate(args[0], UriKind.Absolute, out Uri? uri))
         {
             uri = new Uri("https://LOCALHOST:444/api/MyService?input=false");
         }
