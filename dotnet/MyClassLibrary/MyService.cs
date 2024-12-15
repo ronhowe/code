@@ -19,13 +19,13 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         string? myConfiguration;
         try
         {
-            logger.LogDebug("Getting MyConfiguration From Configuration");
+            logger.LogDebug("Getting MyConfiguration");
             myConfiguration = configuration["MyConfiguration"];
             logger.LogTrace("myConfiguration = {myConfiguration}", myConfiguration);
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting MyConfiguration From Configuration");
+            logger.LogError("Error Getting MyConfiguration");
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }
@@ -47,13 +47,13 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         bool? myFeature;
         try
         {
-            logger.LogDebug("Getting MyFeature From Configuration");
+            logger.LogDebug("Getting MyFeature");
             myFeature = featureManager.IsEnabledAsync("MyFeature").Result;
             logger.LogTrace("myFeature = {myFeature}", myFeature);
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting MyFeature From Configuration");
+            logger.LogError("Error Getting MyFeature");
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }

@@ -22,13 +22,13 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         string? dbConnectionString;
         try
         {
-            logger.LogDebug("Getting Database Connection String From Configuration");
+            logger.LogDebug("Getting Database Connection String");
             dbConnectionString = configuration[$"ConnectionStrings:{_dbConnection}"];
             logger.LogTrace("dbConnectionString = {dbConnectionString}", dbConnectionString);
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting Database Connection String From Configuration");
+            logger.LogError("Error Getting Database Connection String");
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }
@@ -37,13 +37,13 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         string? azConnectionString;
         try
         {
-            logger.LogDebug("Getting Azure Storage Connection String From Configuration");
+            logger.LogDebug("Getting Azure Storage Connection String");
             azConnectionString = configuration[$"ConnectionStrings:{_azConnection}"];
             logger.LogTrace("azConnectionString = {azConnectionString}", azConnectionString);
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting Azure Storage Connection String From Configuration");
+            logger.LogError("Error Getting Azure Storage Connection String");
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }

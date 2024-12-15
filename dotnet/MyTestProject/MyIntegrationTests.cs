@@ -28,8 +28,7 @@ public sealed class MyIntegrationTests : TestBase
     [DataRow(true)]
     public void DebugHostTests(bool value)
     {
-        // NOTE: Ideally should match appsettings.Development.json.
-        const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] {Message}{NewLine}{Exception}";
+        const string _outputTemplate = "[{Level:u3}] [{SourceContext}] {Message}{NewLine}{Exception}";
         const string _sourceContext = nameof(MyTests);
 
         Log.Logger = new LoggerConfiguration()
@@ -95,7 +94,7 @@ public sealed class MyIntegrationTests : TestBase
         Log.ForContext("SourceContext", _sourceContext).Debug($"Getting {nameof(MyService)}");
         var myService = serviceProvider.GetService<MyService>();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug($"Calling {nameof(MyService)} With {Boolean.TrueString}");
+        Log.ForContext("SourceContext", _sourceContext).Debug($"Calling {nameof(MyService)} With {value}");
         var result = myService?.MyMethod(value);
 
         Debug.WriteLine($"Asserting Result Is {value}");

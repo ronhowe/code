@@ -9,8 +9,7 @@ using MyWebApplication;
 using Serilog;
 using Serilog.Events;
 
-// NOTE: Ideally should match appsettings.json.
-const string _outputTemplate = "[{Level:u3}] {Message}{NewLine}{Exception}";
+const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
 const string _sourceContext = nameof(Program);
 
 Log.Logger = new LoggerConfiguration()
@@ -75,10 +74,10 @@ try
     app.Logger.LogInformation("Using Serilog Request Logging");
     app.UseSerilogRequestLogging();
 
-    app.Logger.LogInformation("Mapping Get Route To {name}", nameof(MyService));
+    app.Logger.LogInformation("Mapping GET Requests To {name}", nameof(MyService));
     app.MapGet($"/api/{nameof(MyService)}", (bool input, [FromServices] IMyService myService) =>
     {
-        app.Logger.LogInformation("Routing To {name}", nameof(MyService));
+        app.Logger.LogInformation("Calling {name} With {input}", nameof(MyService), input);
         return myService.MyMethod(input);
     });
 
