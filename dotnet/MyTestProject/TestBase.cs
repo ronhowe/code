@@ -13,16 +13,16 @@ public class TestBase
     public void TestCleanup()
     {
         Debug.WriteLine($"Cleaning Test");
-        Debug.WriteLine($"{new string('*', 79)}/ ");
     }
 
     [TestInitialize]
     public void TestInitialize()
     {
         Debug.WriteLine($"/{new string('*', 79)}");
-        Debug.WriteLine($"OK");
-        Debug.WriteLine($"{DateTime.Now} LOCAL");
-        Debug.WriteLine($"{DateTime.UtcNow} UTC");
+        Debug.WriteLine("https://github.com/ronhowe");
+        Debug.WriteLine($"{new string('*', 79)}/");
+        Debug.WriteLine($"{DateTime.Now} (LOCAL)");
+        Debug.WriteLine($"{DateTime.UtcNow} (UTC)");
         Debug.WriteLine($"Initializing Test");
     }
 }

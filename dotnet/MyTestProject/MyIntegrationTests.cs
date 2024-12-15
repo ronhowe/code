@@ -26,10 +26,11 @@ public sealed class MyIntegrationTests : TestBase
     [DataTestMethod]
     [DataRow(false)]
     [DataRow(true)]
-    public void TestHostTests(bool value)
+    public void DebugHostTests(bool value)
     {
+        // NOTE: Ideally should match appsettings.Development.json.
+        const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] {Message}{NewLine}{Exception}";
         const string _sourceContext = nameof(MyTests);
-        const string _outputTemplate = "[{Level:u3}] {Message}{NewLine}{Exception}";
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()
@@ -45,9 +46,8 @@ public sealed class MyIntegrationTests : TestBase
         Log.ForContext("SourceContext", _sourceContext).Warning($"POST (4 of 6) => Warning Logging ON");
         Log.ForContext("SourceContext", _sourceContext).Error($"POST (5 of 6) => Error Logging ON");
         Log.ForContext("SourceContext", _sourceContext).Fatal($"POST (6 of 6) => Fatal Logging ON");
-        Log.ForContext("SourceContext", _sourceContext).Information($"OK");
-        Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.Now} LOCAL");
-        Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.UtcNow} UTC");
+        Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.Now} (LOCAL)");
+        Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.UtcNow} (UTC)");
 
         Log.ForContext("SourceContext", _sourceContext).Debug($"Creating Service Collection");
         var serviceCollection = new ServiceCollection();
@@ -111,19 +111,19 @@ public sealed class MyIntegrationTests : TestBase
     [DataRow(true, "Production")]
     public async Task WebHostTests(bool value, string environmentName)
     {
-        Debug.WriteLine($"Building Web Application");
+        Debug.WriteLine($"Building Web Host");
         using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {
             builder.UseEnvironment(environmentName);
         });
 
-        Debug.WriteLine($"Creating Web Application Client");
+        Debug.WriteLine($"Creating Client");
         using var client = application.CreateClient();
 
-        Debug.WriteLine($"Calling Web Application With {value}");
+        Debug.WriteLine($"Sending GET Request With {value}");
         using var response = await client.GetAsync($"/api/{nameof(MyService)}?input={value}");
 
-        Debug.WriteLine($"Asserting Response Status Code Is {HttpStatusCode.OK}");
+        Debug.WriteLine($"Asserting HTTP Status Code Is {HttpStatusCode.OK}");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         Debug.WriteLine($"Asserting Result Is {value}");

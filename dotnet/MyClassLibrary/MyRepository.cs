@@ -101,7 +101,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         catch (Exception ex)
         {
             logger.LogError("Save Failed Because {message}", ex.Message);
-            logger.LogCritical("CRITICAL ERROR - DATA LOSS!");
+            logger.LogCritical("CRITICAL ERROR");
             throw;
         }
 

@@ -9,8 +9,9 @@ using MyWebApplication;
 using Serilog;
 using Serilog.Events;
 
-const string _sourceContext = nameof(Program);
+// NOTE: Ideally should match appsettings.json.
 const string _outputTemplate = "[{Level:u3}] {Message}{NewLine}{Exception}";
+const string _sourceContext = nameof(Program);
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
@@ -26,9 +27,8 @@ Log.ForContext("SourceContext", _sourceContext).Information($"POST (3 of 6) => I
 Log.ForContext("SourceContext", _sourceContext).Warning($"POST (4 of 6) => Warning Logging ON");
 Log.ForContext("SourceContext", _sourceContext).Error($"POST (5 of 6) => Error Logging ON");
 Log.ForContext("SourceContext", _sourceContext).Fatal($"POST (6 of 6) => Fatal Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Information($"OK");
-Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.Now} LOCAL");
-Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.UtcNow} UTC");
+Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.Now} (LOCAL)");
+Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.UtcNow} (UTC)");
 
 try
 {
@@ -63,9 +63,8 @@ try
     app.Logger.LogWarning("POST (4 of 6) => Warning Logging ON");
     app.Logger.LogError("POST (5 of 6) => Error Logging ON");
     app.Logger.LogCritical("POST (6 of 6) => Critical Logging ON");
-    app.Logger.LogInformation("OK");
-    app.Logger.LogInformation("{now} LOCAL", DateTime.Now);
-    app.Logger.LogInformation("{now} UTC", DateTime.UtcNow);
+    app.Logger.LogInformation("{now} (LOCAL)", DateTime.Now);
+    app.Logger.LogInformation("{now} (UTC)", DateTime.UtcNow);
 
     app.Logger.LogInformation("Using Request Logging Middleware");
     app.UseMiddleware<RequestLoggingMiddleware>();
@@ -87,7 +86,8 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, $"FATAL EXCEPTION - APPLICATION CRASH");
+    Log.Error("Program Failed Because {message}", ex.Message);
+    Log.Fatal(ex, $"FATAL ERROR");
 }
 finally
 {

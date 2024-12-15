@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace MyTestProject;
 
 [TestClass]
-[TestCategory("DebuggerTests")]
+[TestCategory("DebugTests")]
 public sealed class MyTests : TestBase
 {
     [TestMethod]
