@@ -10,7 +10,9 @@
 *.userosscache
 *.sln.docstates
 
-# TODO - Eventually ignore VS Code settings?
+logs
+
+# TODO: Eventually ignore VS Code settings?
 # @COPILOT
 # This folder contains workspace settings and extensions for Visual Studio Code.
 # While there are some situations where you might want to share specific settings with your team,
