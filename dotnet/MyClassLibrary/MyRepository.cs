@@ -50,7 +50,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
 
         try
         {
-            // @TODO: Read from configuration.
+            // TODO: Read from configuration.
             const int _maxRetries = 2;
             const int _retryMilliseconds = 1;
 
@@ -86,7 +86,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
                     var tableClient = new TableClient(azConnectionString, "MyCloudTable");
                     tableClient.CreateIfNotExists();
 
-                    // @TODO: Choose better RowKey.
+                    // TODO: Choose better RowKey.
                     logger.LogDebug("Adding Entity");
                     var tableEntity = new TableEntity(DateTime.UtcNow.ToString("yyyy-MM-dd"), Guid.NewGuid().ToString())
                     {

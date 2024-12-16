@@ -1,0 +1,2 @@
+Nick Chapsas - The New ID To Replace GUIDs and Integers in .NET
+https://www.youtube.com/watch?v=nJ1ppFayHOk&t=276s

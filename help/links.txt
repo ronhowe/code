@@ -15,7 +15,7 @@ https://semver.org/
 # .NET (dotnet)
 
 https://www.thepollyproject.org/
-https://github.com/App-vNext/Polly
+https://benchmarkdotnet.org/
 
 # PowerShell (powershell)
 

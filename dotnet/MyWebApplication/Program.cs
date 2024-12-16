@@ -48,9 +48,11 @@ try
     builder.Services.AddFeatureManagement();
 
     Log.ForContext("SourceContext", _sourceContext).Information($"Adding {nameof(MyRepository)}");
+    // TODO: Learn the difference between AddSingleton and AddTransient.
     builder.Services.AddSingleton<IMyRepository, MyRepository>();
 
     Log.ForContext("SourceContext", _sourceContext).Information($"Adding {nameof(MyService)}");
+    // TODO: Learn the difference between AddSingleton and AddTransient.
     builder.Services.AddSingleton<IMyService, MyService>();
 
     Log.ForContext("SourceContext", _sourceContext).Information($"Building Web Application");
