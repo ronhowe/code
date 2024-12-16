@@ -65,37 +65,42 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
                     });
 
             logger.LogDebug("Executing With Retry Policy");
+            // TODO: Fix redundant saves on retry with _dbUnsaved and _azUnsaved checks.
             retryPolicy.Execute(() =>
-                {
-                    logger.LogDebug("Saving To Database");
+            {
+                logger.LogDebug("Generating Row Key");
+                var rowKey = Guid.CreateVersion7().ToString();
+                logger.LogTrace("rowKey = {rowKey}", rowKey);
 
-                    logger.LogDebug("Opening Connection");
-                    using SqlConnection connection = new(dbConnectionString);
-                    connection.Open();
+                logger.LogDebug("Saving To Database");
 
-                    logger.LogDebug("Executing Command");
-                    using SqlCommand command = new("INSERT [dbo].[MyTable] ([MyInput]) VALUES (@MyInput);", connection);
-                    command.Parameters.AddWithValue("@MyInput", myInput);
-                    command.ExecuteNonQuery();
+                logger.LogDebug("Opening Connection");
+                using SqlConnection connection = new(dbConnectionString);
+                connection.Open();
 
-                    logger.LogDebug("Save To Database Succeeded");
+                logger.LogDebug("Executing Command");
+                using SqlCommand command = new("INSERT [dbo].[MyTable] ([RowKey], [MyInput]) VALUES (@RowKey, @MyInput);", connection);
+                command.Parameters.AddWithValue("@RowKey", rowKey);
+                command.Parameters.AddWithValue("@MyInput", myInput);
+                command.ExecuteNonQuery();
 
-                    logger.LogDebug("Saving To Azure Storage");
+                logger.LogDebug("Save To Database Succeeded");
 
-                    logger.LogDebug("Creating Table");
-                    var tableClient = new TableClient(azConnectionString, "MyCloudTable");
-                    tableClient.CreateIfNotExists();
+                logger.LogDebug("Saving To Azure Storage");
 
-                    // TODO: Choose better RowKey.
-                    logger.LogDebug("Adding Entity");
-                    var tableEntity = new TableEntity(DateTime.UtcNow.ToString("yyyy-MM-dd"), Guid.NewGuid().ToString())
+                logger.LogDebug("Creating Table");
+                var tableClient = new TableClient(azConnectionString, "MyCloudTable");
+                tableClient.CreateIfNotExists();
+
+                logger.LogDebug("Adding Entity");
+                var tableEntity = new TableEntity(DateTime.UtcNow.ToString("yyyy-MM-dd"), rowKey)
                     {
                         { "MyInput", myInput }
                     };
-                    tableClient.AddEntity(tableEntity);
+                tableClient.AddEntity(tableEntity);
 
-                    logger.LogDebug("Save To Azure Storage Succeeded");
-                }
+                logger.LogDebug("Save To Azure Storage Succeeded");
+            }
             );
         }
         catch (Exception ex)
