@@ -83,9 +83,11 @@ public sealed class MyIntegrationTests : TestBase
         serviceCollection.AddFeatureManagement();
 
         Log.ForContext("SourceContext", _sourceContext).Debug($"Adding {nameof(MyRepository)}");
+        // TODO: Learn the difference between AddSingleton and AddTransient.
         serviceCollection.AddTransient<IMyRepository, MyRepository>();
 
         Log.ForContext("SourceContext", _sourceContext).Debug($"Adding {nameof(MyService)}");
+        // TODO: Learn the difference between AddSingleton and AddTransient.
         serviceCollection.AddTransient<MyService>();
 
         Log.ForContext("SourceContext", _sourceContext).Debug($"Building Service Provider");
