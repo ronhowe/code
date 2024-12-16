@@ -20,4 +20,16 @@ ORDER BY
     [RowKey] DESC
 ;
 
+/*
+SELECT
+    [RowKey]
+    ,[Timestamp]
+    ,[MyInput]
+FROM
+    [dbo].[MyTable]
+ORDER BY
+    [RowKey]
+;
+*/
+
 GO
