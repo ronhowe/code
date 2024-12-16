@@ -81,6 +81,7 @@ public class Program
                     .WithOptions(ConfigOptions.DisableOptimizationsValidator)
                     .AddJob(Job.Dry.WithIterationCount(1).WithWarmupCount(1));
 
+                // TODO: Resolve .sln reference error.
                 var summary = BenchmarkRunner.Run<MyBenchmark>(config);
             }
 
