@@ -48,30 +48,31 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
             throw;
         }
 
+        logger.LogDebug("Generating Row Key");
+        var rowKey = Guid.CreateVersion7().ToString();
+
+        logger.LogInformation("Saving {rowKey}", rowKey);
+
+        // TODO: Read from configuration.
+        const int _maxRetries = 2;
+        const int _retryMilliseconds = 1;
+
+        logger.LogDebug("Creating Retry Policy");
+        var retryPolicy = Policy
+            .Handle<SqlException>()
+            .WaitAndRetry(_maxRetries, retryAttempt => TimeSpan.FromMilliseconds(_retryMilliseconds),
+                (ex, timeSpan, retryAttempt, context) =>
+                {
+                    logger.LogError("Save Failed Because {message}", ex.Message);
+                    logger.LogWarning("Retry Attempt # {retryAttempt} Of {maxRetries}", retryAttempt, _maxRetries);
+                });
+
         try
         {
-            // TODO: Read from configuration.
-            const int _maxRetries = 2;
-            const int _retryMilliseconds = 1;
-
-            logger.LogDebug("Creating Retry Policy");
-            var retryPolicy = Policy
-                .Handle<SqlException>()
-                .WaitAndRetry(_maxRetries, retryAttempt => TimeSpan.FromMilliseconds(_retryMilliseconds),
-                    (ex, timeSpan, retryAttempt, context) =>
-                    {
-                        logger.LogError("Save Failed Because {message}", ex.Message);
-                        logger.LogWarning("Retry Attempt # {retryAttempt} Of {maxRetries}", retryAttempt, _maxRetries);
-                    });
-
             logger.LogDebug("Executing With Retry Policy");
             // TODO: Fix redundant saves on retry with _dbUnsaved and _azUnsaved checks.
             retryPolicy.Execute(() =>
             {
-                logger.LogDebug("Generating Row Key");
-                var rowKey = Guid.CreateVersion7().ToString();
-                logger.LogTrace("rowKey = {rowKey}", rowKey);
-
                 logger.LogDebug("Saving To Database");
 
                 logger.LogDebug("Opening Connection");
