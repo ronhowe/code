@@ -5,7 +5,6 @@ https://github.com/ronhowe
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
-using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Running;
 using FluentAssertions;
 using System.Diagnostics;
@@ -15,9 +14,9 @@ namespace MyConsoleApp;
 
 public class Program
 {
-    private static bool _noBenchmark;
-    private static bool _noClear;
-    private static bool _noColor;
+    private static bool _benchmark;
+    private static bool _clear;
+    private static bool _color;
 
     static void Main(string[] args)
     {
@@ -26,19 +25,31 @@ public class Program
             uri = new Uri("https://LOCALHOST:444/api/MyService?input=false");
         }
 
-        _noBenchmark = args.Contains("--nobenchmark");
-        _noClear = args.Contains("--noclear");
-        _noColor = args.Contains("--nocolor");
+        _benchmark = args.Contains("--benchmark");
+        _clear = args.Contains("--clear");
+        _color = args.Contains("--color");
 
         var background = Console.BackgroundColor;
         Console.CancelKeyPress += (sender, e) =>
         {
             Console.BackgroundColor = background;
-            if (!_noClear)
+            if (_clear)
             {
                 Console.Clear();
             }
         };
+
+        if (_benchmark)
+        {
+            // TODO: Resolve .sln reference error.
+            var config = ManualConfig
+                .Create(DefaultConfig.Instance)
+                .WithOptions(ConfigOptions.DisableOptimizationsValidator)
+                .AddJob(Job.Dry.WithIterationCount(1).WithWarmupCount(1));
+
+            Console.WriteLine("Running Benchmark");
+            var summary = BenchmarkRunner.Run<MyBenchmark>(config);
+        }
 
         Stopwatch stopwatch = new();
 
@@ -74,28 +85,17 @@ public class Program
                 client.Dispose();
             }
 
-            if (!_noBenchmark)
-            {
-                var config = ManualConfig
-                    .Create(DefaultConfig.Instance)
-                    .WithOptions(ConfigOptions.DisableOptimizationsValidator)
-                    .AddJob(Job.Dry.WithIterationCount(1).WithWarmupCount(1));
-
-                // TODO: Resolve .sln reference error.
-                var summary = BenchmarkRunner.Run<MyBenchmark>(config);
-            }
-
             Thread.Sleep(1000);
         }
     }
 
     private static void Refresh(string message, long duration, Uri uri, ConsoleColor color)
     {
-        if (!_noColor)
+        if (_color)
         {
             Console.BackgroundColor = color;
         }
-        if (!_noClear)
+        if (_clear)
         {
             Console.Clear();
         }
@@ -107,7 +107,7 @@ public class MyBenchmark
 {
     private readonly bool input;
 
-    MyBenchmark() { input = false; }
+    public MyBenchmark() { input = false; }
 
     [Benchmark]
     public void MyBenchmarkMethod() => Console.WriteLine($"Benchmarking {input}");
