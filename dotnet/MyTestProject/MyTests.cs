@@ -18,7 +18,6 @@ public sealed class MyTests : TestBase
         // NOTE: MyNote
         // TODO: MyToDo
         Debug.WriteLine("Debugging");
-
         Debug.WriteLine(Guid.CreateVersion7());
     }
 }
