@@ -2,6 +2,11 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Loggers;
+using BenchmarkDotNet.Running;
 using FluentAssertions;
 using System.Diagnostics;
 using System.Net;
@@ -10,6 +15,10 @@ namespace MyConsoleApp;
 
 public class Program
 {
+    private static bool _noBenchmark;
+    private static bool _noClear;
+    private static bool _noColor;
+
     static void Main(string[] args)
     {
         if (args.Length == 0 || !Uri.TryCreate(args[0], UriKind.Absolute, out Uri? uri))
@@ -17,11 +26,18 @@ public class Program
             uri = new Uri("https://LOCALHOST:444/api/MyService?input=false");
         }
 
+        _noBenchmark = args.Contains("--nobenchmark");
+        _noClear = args.Contains("--noclear");
+        _noColor = args.Contains("--nocolor");
+
         var background = Console.BackgroundColor;
         Console.CancelKeyPress += (sender, e) =>
         {
             Console.BackgroundColor = background;
-            Console.Clear();
+            if (!_noClear)
+            {
+                Console.Clear();
+            }
         };
 
         Stopwatch stopwatch = new();
@@ -58,14 +74,40 @@ public class Program
                 client.Dispose();
             }
 
+            if (!_noBenchmark)
+            {
+                var config = ManualConfig
+                    .Create(DefaultConfig.Instance)
+                    .WithOptions(ConfigOptions.DisableOptimizationsValidator)
+                    .AddJob(Job.Dry.WithIterationCount(1).WithWarmupCount(1));
+
+                var summary = BenchmarkRunner.Run<MyBenchmark>(config);
+            }
+
             Thread.Sleep(1000);
         }
     }
 
     private static void Refresh(string message, long duration, Uri uri, ConsoleColor color)
     {
-        Console.BackgroundColor = color;
-        Console.Clear();
+        if (!_noColor)
+        {
+            Console.BackgroundColor = color;
+        }
+        if (!_noClear)
+        {
+            Console.Clear();
+        }
         Console.WriteLine($"{DateTime.UtcNow} - {uri} - {message} - {duration} ms");
     }
+}
+
+public class MyBenchmark
+{
+    private readonly bool input;
+
+    MyBenchmark() { input = false; }
+
+    [Benchmark]
+    public void MyBenchmarkMethod() => Console.WriteLine($"Benchmarking {input}");
 }
