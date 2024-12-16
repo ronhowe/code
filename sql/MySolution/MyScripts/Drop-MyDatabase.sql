@@ -6,14 +6,18 @@ USE [master];
 
 GO
 
-ALTER DATABASE [MyDatabase] SET OFFLINE WITH ROLLBACK IMMEDIATE;
+IF (DB_ID(N'MyDatabase') IS NOT NULL)
+BEGIN
 
-GO
+    PRINT N'Setting Database Offline';
+    ALTER DATABASE [MyDatabase] SET OFFLINE WITH ROLLBACK IMMEDIATE;
 
-ALTER DATABASE [MyDatabase] SET ONLINE;
+    PRINT N'Setting Database Online';
+    ALTER DATABASE [MyDatabase] SET ONLINE;
 
-GO
+    PRINT N'Dropping Database';
+    DROP DATABASE [MyDatabase];
 
-DROP DATABASE [MyDatabase];
+END;
 
 GO

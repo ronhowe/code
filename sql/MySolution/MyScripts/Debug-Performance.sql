@@ -2,16 +2,23 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
-DBCC FREEPROCCACHE;
+USE [MyDatabase];
+
 GO
+
+:setvar TOP "TOP (1)"
+--:setvar TOP ""
 
 SET NOCOUNT ON;
 SET STATISTICS IO ON;
 
-SELECT TOP (1)
+PRINT N'Freeing Procedure Cache';
+DBCC FREEPROCCACHE;
+
+SELECT $(TOP)
     [RowKey]
     ,[Timestamp]
-    --,[MyInput]
+    ,[MyInput]
     ,N'[RowKey]' AS [Sort]
 FROM
     [dbo].[MyTable]
@@ -19,10 +26,10 @@ ORDER BY
     [RowKey]
 ;
 
-SELECT TOP (1)
+SELECT $(TOP)
     [RowKey]
     ,[Timestamp]
-    --,[MyInput]
+    ,[MyInput]
     ,N'[RowKey] DESC' AS [Sort]
 FROM
     [dbo].[MyTable]
@@ -30,10 +37,10 @@ ORDER BY
     [RowKey] DESC
 ;
 
-SELECT TOP (1)
+SELECT $(TOP)
     [RowKey]
     ,[Timestamp]
-    --,[MyInput]
+    ,[MyInput]
     ,N'[Timestamp]' AS [Sort]
 FROM
     [dbo].[MyTable]
@@ -41,15 +48,19 @@ ORDER BY
     [Timestamp]
 ;
 
-SELECT TOP (1)
+SELECT $(TOP)
     [RowKey]
     ,[Timestamp]
-    --,[MyInput]
+    ,[MyInput]
     ,N'[Timestamp] DESC' AS [Sort]
 FROM
     [dbo].[MyTable]
 ORDER BY
     [Timestamp] DESC
 ;
+
+GO
+
+USE [master];
 
 GO

@@ -2,15 +2,24 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
+USE [MyDatabase];
+
+GO
+
+:setvar TOP "TOP (1)"
+--:setvar TOP ""
+
 SET NOCOUNT ON;
 
+PRINT N'Selecting Count Of Rows In Table';
 SELECT
     COUNT(*) AS [CountOfMyTable]
 FROM
     [dbo].[MyTable]
 ;
 
-SELECT TOP (1)
+PRINT N'Selecting Rows From Table';
+SELECT $(TOP)
     [RowKey]
     ,[Timestamp]
     ,[MyInput]
@@ -20,16 +29,8 @@ ORDER BY
     [RowKey] DESC
 ;
 
-/*
-SELECT
-    [RowKey]
-    ,[Timestamp]
-    ,[MyInput]
-FROM
-    [dbo].[MyTable]
-ORDER BY
-    [RowKey]
-;
-*/
+GO
+
+USE [master];
 
 GO
