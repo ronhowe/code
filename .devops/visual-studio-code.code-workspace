@@ -1,16 +1,15 @@
 {
 	"folders": [
 		{
-			"path": "."
+			"path": ".."
 		},
 		{
-			"path": "../ronhowe"
+			"path": "../../ronhowe"
 		}
 	],
 	"settings": {
 		"github-actions.workflows.pinned.workflows": [
 			".github/workflows/dotnet.yml"
-		],
-		"powershell.cwd": "code"
+		]
 	}
 }
