@@ -19,5 +19,8 @@ public sealed class MyTests : TestBase
         // TODO: MyToDo
         Debug.WriteLine("Debugging");
         Debug.WriteLine(Guid.CreateVersion7());
+#if DEBUG
+        Debug.WriteLine("DEBUG Defined");
+#endif
     }
 }
