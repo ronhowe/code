@@ -3,6 +3,7 @@ https://github.com/ronhowe
 ###############################################################################>
 
 <#
+## NOTE: This script is intended to be run in a PowerShell Core environment.
 New-Item -Path $profile -Force ;
 '. $HOME\repos\ronhowe\code\powershell\profile.ps1' | Set-Content -Path $profile -Force
 . $profile
@@ -67,6 +68,19 @@ if ($host.Name -eq "Windows PowerShell ISE Host") {
 else {
     New-Variable -Name "root" -Value "$HOME\repos\ronhowe\code" -Scope Global -Force -ErrorAction SilentlyContinue
 }
+
+#region PSReadLine Configuration
+
+## TODO: Create aliases "inlineview" and "listview" to easiliy switch.
+if ($PSVersionTable.PSEdition -eq "Core") {
+    Set-PSReadLineOption -PredictionSource HistoryAndPlugin
+    Set-PSReadLineOption -PredictionViewStyle ListView -WarningAction SilentlyContinue
+}
+else {
+    Set-PSReadLineOption -PredictionViewStyle InlineView -WarningAction SilentlyContinue
+}
+
+#endregion PSReadLine Configuration
 
 #region Get-UpgradeStatus (aka upgrade)
 
@@ -186,16 +200,3 @@ function Invoke-WslCmatrix {
 New-Alias -Name "matrix" -Value Invoke-WslCmatrix -Force
 
 #endregion Push-WslCmatrix (aka matrix)
-
-#region PSReadLine Configuration
-
-## TODO: Choose a prediction view style (static or dynamic).
-## TODO: Create aliases "inlineview" and "listview" to easiliy switch.
-#Set-PSReadLineOption -PredictionViewStyle InlineView -WarningAction SilentlyContinue
-#Set-PSReadLineOption -PredictionViewStyle ListView -WarningAction SilentlyContinue
-
-if ($PSVersionTable.PSEdition -eq "Core") {
-    Set-PSReadLineOption -PredictionSource HistoryAndPlugin
-}
-
-#endregion PSReadLine Configuration
