@@ -4,8 +4,6 @@ https://github.com/ronhowe
 
 USE [master];
 
-GO
-
 IF (DB_ID(N'MyDatabase') IS NOT NULL)
 BEGIN
 
@@ -19,5 +17,3 @@ BEGIN
     DROP DATABASE [MyDatabase];
 
 END;
-
-GO

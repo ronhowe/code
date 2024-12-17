@@ -2,14 +2,8 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
-USE [MyDatabase];
-
-GO
-
 :setvar COUNT 1
 :setvar MYINPUT 1
-
-SET NOCOUNT ON;
 
 PRINT N'Inserting Into Table';
 INSERT [dbo].[MyTable]
@@ -25,7 +19,3 @@ VALUES
 );
 
 GO $(COUNT)
-
-USE [master];
-
-GO
