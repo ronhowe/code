@@ -39,33 +39,33 @@ public sealed class MyIntegrationTests : TestBase
             .WriteTo.Console(outputTemplate: _outputTemplate)
             .CreateLogger();
 
-        Log.ForContext("SourceContext", _sourceContext).Verbose($"POST (1 of 6) => Verbose Logging ON");
-        Log.ForContext("SourceContext", _sourceContext).Debug($"POST (2 of 6) => Debug Logging ON");
-        Log.ForContext("SourceContext", _sourceContext).Information($"POST (3 of 6) => Information Logging ON");
-        Log.ForContext("SourceContext", _sourceContext).Warning($"POST (4 of 6) => Warning Logging ON");
-        Log.ForContext("SourceContext", _sourceContext).Error($"POST (5 of 6) => Error Logging ON");
-        Log.ForContext("SourceContext", _sourceContext).Fatal($"POST (6 of 6) => Fatal Logging ON");
-        Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.Now} (LOCAL)");
-        Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.UtcNow} (UTC)");
+        Log.ForContext("SourceContext", _sourceContext).Verbose("POST (1 of 6) => Verbose Logging ON");
+        Log.ForContext("SourceContext", _sourceContext).Debug("POST (2 of 6) => Debug Logging ON");
+        Log.ForContext("SourceContext", _sourceContext).Information("POST (3 of 6) => Information Logging ON");
+        Log.ForContext("SourceContext", _sourceContext).Warning("POST (4 of 6) => Warning Logging ON");
+        Log.ForContext("SourceContext", _sourceContext).Error("POST (5 of 6) => Error Logging ON");
+        Log.ForContext("SourceContext", _sourceContext).Fatal("POST (6 of 6) => Fatal Logging ON");
+        Log.ForContext("SourceContext", _sourceContext).Information("{now} (LOCAL)", DateTime.Now);
+        Log.ForContext("SourceContext", _sourceContext).Information("{utcNow} (UTC)", DateTime.UtcNow);
 
-        Log.ForContext("SourceContext", _sourceContext).Debug($"Creating Service Collection");
+        Log.ForContext("SourceContext", _sourceContext).Debug("Creating Service Collection");
         var serviceCollection = new ServiceCollection();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug($"Adding Logging");
+        Log.ForContext("SourceContext", _sourceContext).Debug("Adding Logging");
         serviceCollection.AddLogging(configure =>
         {
-            Log.ForContext("SourceContext", _sourceContext).Debug($"Clearing Log Providers");
+            Log.ForContext("SourceContext", _sourceContext).Debug("Clearing Log Providers");
             configure.ClearProviders();
 
-            Log.ForContext("SourceContext", _sourceContext).Debug($"Adding Serilog");
+            Log.ForContext("SourceContext", _sourceContext).Debug("Adding Serilog");
             configure.AddSerilog();
 
             var logLevel = LogLevel.Trace;
-            Log.ForContext("SourceContext", _sourceContext).Debug($"Setting Minimum Log Level = {logLevel}");
+            Log.ForContext("SourceContext", _sourceContext).Debug("Setting Minimum Log Level = {logLevel}", logLevel);
             configure.SetMinimumLevel(logLevel);
         });
 
-        Log.ForContext("SourceContext", _sourceContext).Debug($"Adding Configuration");
+        Log.ForContext("SourceContext", _sourceContext).Debug("Adding Configuration");
         var configurationSettings = new Dictionary<string, string?>
         {
             { "ConnectionStrings:MyAzureStorage", "UseDevelopmentStorage=true;" },
@@ -79,24 +79,24 @@ public sealed class MyIntegrationTests : TestBase
             .Build();
         serviceCollection.AddSingleton<IConfiguration>(configuration);
 
-        Log.ForContext("SourceContext", _sourceContext).Debug($"Adding Feature Management");
+        Log.ForContext("SourceContext", _sourceContext).Debug("Adding Feature Management");
         serviceCollection.AddFeatureManagement();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug($"Adding {nameof(MyRepository)}");
+        Log.ForContext("SourceContext", _sourceContext).Debug("Adding {name}", nameof(MyRepository));
         // TODO: Learn the difference between AddSingleton and AddTransient.
         serviceCollection.AddTransient<IMyRepository, MyRepository>();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug($"Adding {nameof(MyService)}");
+        Log.ForContext("SourceContext", _sourceContext).Debug("Adding {name}", nameof(MyService));
         // TODO: Learn the difference between AddSingleton and AddTransient.
         serviceCollection.AddTransient<MyService>();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug($"Building Service Provider");
+        Log.ForContext("SourceContext", _sourceContext).Debug("Building Service Provider");
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug($"Getting {nameof(MyService)}");
+        Log.ForContext("SourceContext", _sourceContext).Debug("Getting {name}", nameof(MyService));
         var myService = serviceProvider.GetService<MyService>();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug($"Calling {nameof(MyService)} With {value}");
+        Log.ForContext("SourceContext", _sourceContext).Debug("Calling {name} With {value}", nameof(MyService), value);
         var result = myService?.MyMethod(value);
 
         Debug.WriteLine($"Asserting Result Is {value}");
@@ -112,13 +112,13 @@ public sealed class MyIntegrationTests : TestBase
     [DataRow(true, "Production")]
     public async Task WebHostTests(bool value, string environmentName)
     {
-        Debug.WriteLine($"Building Web Host");
+        Debug.WriteLine("Building Web Host");
         using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {
             builder.UseEnvironment(environmentName);
         });
 
-        Debug.WriteLine($"Creating Client");
+        Debug.WriteLine("Creating Client");
         using var client = application.CreateClient();
 
         Debug.WriteLine($"Sending GET Request With {value}");

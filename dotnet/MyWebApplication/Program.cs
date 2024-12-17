@@ -20,42 +20,42 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console(outputTemplate: _outputTemplate)
     .CreateLogger();
 
-Log.ForContext("SourceContext", _sourceContext).Verbose($"POST (1 of 6) => Verbose Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Debug($"POST (2 of 6) => Debug Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Information($"POST (3 of 6) => Information Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Warning($"POST (4 of 6) => Warning Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Error($"POST (5 of 6) => Error Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Fatal($"POST (6 of 6) => Fatal Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.Now} (LOCAL)");
-Log.ForContext("SourceContext", _sourceContext).Information($"{DateTime.UtcNow} (UTC)");
+Log.ForContext("SourceContext", _sourceContext).Verbose("POST (1 of 6) => Verbose Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Debug("POST (2 of 6) => Debug Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Information("POST (3 of 6) => Information Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Warning("POST (4 of 6) => Warning Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Error("POST (5 of 6) => Error Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Fatal("POST (6 of 6) => Fatal Logging ON");
+Log.ForContext("SourceContext", _sourceContext).Information("{now} (LOCAL)", DateTime.Now);
+Log.ForContext("SourceContext", _sourceContext).Information("{utcNow} (UTC)", DateTime.UtcNow);
 
 try
 {
-    Log.ForContext("SourceContext", _sourceContext).Information($"Creating Web Application Builder");
+    Log.ForContext("SourceContext", _sourceContext).Information("Creating Web Application Builder");
     var builder = WebApplication.CreateBuilder(args);
 
-    Log.ForContext("SourceContext", _sourceContext).Information($"Using Serilog");
+    Log.ForContext("SourceContext", _sourceContext).Information("Using Serilog");
     builder.Host.UseSerilog((hostContext, loggerConfiguration) =>
     {
         loggerConfiguration.ReadFrom.Configuration(hostContext.Configuration);
     });
 
-    Log.ForContext("SourceContext", _sourceContext).Debug($"Getting Environment Name From Environment");
+    Log.ForContext("SourceContext", _sourceContext).Debug("Getting Environment Name From Environment");
     var environmentName = builder.Environment.EnvironmentName;
-    Log.ForContext("SourceContext", _sourceContext).Debug($"environmentName = {environmentName}");
+    Log.ForContext("SourceContext", _sourceContext).Debug("environmentName = {environmentName}", environmentName);
 
     Log.ForContext("SourceContext", _sourceContext).Information("Adding Feature Management");
     builder.Services.AddFeatureManagement();
 
-    Log.ForContext("SourceContext", _sourceContext).Information($"Adding {nameof(MyRepository)}");
+    Log.ForContext("SourceContext", _sourceContext).Information("Adding {name}", nameof(MyRepository));
     // TODO: Learn the difference between AddSingleton and AddTransient.
     builder.Services.AddSingleton<IMyRepository, MyRepository>();
 
-    Log.ForContext("SourceContext", _sourceContext).Information($"Adding {nameof(MyService)}");
+    Log.ForContext("SourceContext", _sourceContext).Information("Adding {name}", nameof(MyService));
     // TODO: Learn the difference between AddSingleton and AddTransient.
     builder.Services.AddSingleton<IMyService, MyService>();
 
-    Log.ForContext("SourceContext", _sourceContext).Information($"Building Web Application");
+    Log.ForContext("SourceContext", _sourceContext).Information("Building Web Application");
     var app = builder.Build();
 
     app.Logger.LogTrace("POST (1 of 6) => Trace Logging ON");
@@ -65,7 +65,7 @@ try
     app.Logger.LogError("POST (5 of 6) => Error Logging ON");
     app.Logger.LogCritical("POST (6 of 6) => Critical Logging ON");
     app.Logger.LogInformation("{now} (LOCAL)", DateTime.Now);
-    app.Logger.LogInformation("{now} (UTC)", DateTime.UtcNow);
+    app.Logger.LogInformation("{utcNow} (UTC)", DateTime.UtcNow);
 
     app.Logger.LogInformation("Using Request Logging Middleware");
     app.UseMiddleware<RequestLoggingMiddleware>();
@@ -88,7 +88,7 @@ try
 catch (Exception ex)
 {
     Log.Error("Program Failed Because {message}", ex.Message);
-    Log.Fatal(ex, $"FATAL ERROR");
+    Log.Fatal(ex, "FATAL ERROR");
 }
 finally
 {
