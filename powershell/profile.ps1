@@ -82,76 +82,75 @@ New-Alias -Name "upgrade" -Value Get-UpgradeStatus -Force
 
 #endregion Get-UpgradeStatus (aka upgrade)
 
-#region Set-LocationCode (aka go)
+#region Push-LocationCode (aka go)
 
-function Set-LocationCode {
+function Push-LocationCode {
     if (Test-Path -Path "$HOME\repos\ronhowe\code") {
-        Set-Location -Path "$HOME\repos\ronhowe\code"
+        Push-Location -Path "$HOME\repos\ronhowe\code"
     }
 }
 
-New-Alias -Name "go" -Value Set-LocationCode -Force
+New-Alias -Name "go" -Value Push-LocationCode -Force
 
-#endregion Set-LocationHome (aka home)
+#endregion Push-LocationHome (aka home)
 
-#region Set-LocationHome (aka home)
+#region Push-LocationHome (aka home)
 
-function Set-LocationHome {
-    Set-Location -Path $HOME
+function Push-LocationHome {
+    Push-Location -Path $HOME
 }
 
-New-Alias -Name "home" -Value Set-LocationHome -Force
+New-Alias -Name "home" -Value Push-LocationHome -Force
 
-#endregion Set-LocationHome (aka home)
+#endregion Push-LocationHome (aka home)
 
-#region Set-LocationRepos (aka repos)
+#region Push-LocationRepos (aka repos)
 
-function Set-LocationRepos {
+function Push-LocationRepos {
     if (Test-Path -Path "$HOME\repos") {
-        Set-Location -Path "$HOME\repos"
+        Push-Location -Path "$HOME\repos"
     }
 }
 
-New-Alias -Name "repos" -Value Set-LocationRepos -Force
+New-Alias -Name "repos" -Value Push-LocationRepos -Force
 
-#endregion Set-LocationRepos (aka repos)
+#endregion Push-LocationRepos (aka repos)
 
-#region Set-PromptMinimal (aka quiet)
+#region Hide-PromptMinimal (aka quiet)
 
-function Set-PromptMinimal {
+function Hide-PromptMinimal {
     function global:prompt { "~> " }
 }
 
-New-Alias -Name "quiet" -Value Set-PromptMinimal -Force
+New-Alias -Name "quiet" -Value Hide-PromptMinimal -Force
 
-#endregion Set-PromptMinimal (aka quiet)
+#endregion Hide-PromptMinimal (aka quiet)
 
-#region Set-PromptOff (aka silence)
+#region Hide-PromptOff (aka silence)
 
-function Set-PromptOff {
+function Hide-PromptOff {
     function global:prompt { "`0" }
 }
 
-New-Alias -Name "silence" -Value Set-PromptOff -Force
+New-Alias -Name "silence" -Value Hide-PromptOff -Force
 
 #endregion Set-PromptOff (aka silence)
 
-#region Set-PSReadLineHistory (aka oops)
+#region Open-PSReadLineHistory (aka oops)
 
-function Set-PSReadLineHistory {
+function Open-PSReadLineHistory {
     notepad (Get-PSReadLineOption).HistorySavePath
 }
 
-New-Alias -Name "oops" -Value Set-PSReadLineHistory -Force
+New-Alias -Name "oops" -Value Open-PSReadLineHistory -Force
 
-#endregion Set-PSReadLineHistory (aka oops)
+#endregion Open-PSReadLineHistory (aka oops)
 
 #region Show-New (aka new)
 
 function Show-New {
     Clear-Host
     Show-RonHowe
-    Set-LocationHome
 }
 
 New-Alias -Name "new" -Value Show-New -Force
@@ -175,18 +174,18 @@ New-Alias -Name "ronhowe" -Value Show-RonHowe -Force
 
 #endregion Show-RonHowe (aka ronhowe)
 
-#region Start-WslCmatrix (aka matrix)
+#region Push-WslCmatrix (aka matrix)
 
-function Start-WslCmatrix {
+function Invoke-WslCmatrix {
     Clear-Host
-    Write-Host "The Matrix has you..." -ForegroundColor Green
+    Write-Output "The Matrix has you..."
     Start-Sleep -Seconds 3
     wsl cmatrix
 }
 
-New-Alias -Name "matrix" -Value Start-WslCmatrix -Force
+New-Alias -Name "matrix" -Value Invoke-WslCmatrix -Force
 
-#endregion Start-WslCmatrix (aka matrix)
+#endregion Push-WslCmatrix (aka matrix)
 
 #region PSReadLine Configuration
 
