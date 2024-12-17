@@ -33,13 +33,13 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         string? mySecret;
         try
         {
-            logger.LogDebug("Getting MySecret From Configuration");
+            logger.LogDebug("Getting MySecret");
             mySecret = configuration["MySecret"];
             logger.LogTrace("mySecret = {mySecret}", mySecret);
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting MySecret From Configuration");
+            logger.LogError("Error Getting MySecret");
             logger.LogError(ex, "{Message}", ex.Message);
             throw;
         }
