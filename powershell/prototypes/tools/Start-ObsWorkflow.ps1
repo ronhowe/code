@@ -62,7 +62,7 @@ process {
             Start-Process -Path $HandbrakeCliPath -ArgumentList "--input", "`"$MkvPath`"", "--output", "`"$Mp4Path`"", "--all-audio" -Wait -NoNewWindow
         }
 
-        # TODO - Handle Process Return Code
+        ## TODO: Handle Process Return Code
 
         if (Test-Path -Path $Mp4Path) {
             Write-Verbose "Confirmed $Mp4Path"

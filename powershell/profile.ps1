@@ -190,8 +190,8 @@ New-Alias -Name "matrix" -Value Start-WslCmatrix -Force
 
 #region PSReadLine Configuration
 
-# TODO: Choose a prediction view style (static or dynamic).
-# TODO: Create aliases "inlineview" and "listview" to easiliy switch.
+## TODO: Choose a prediction view style (static or dynamic).
+## TODO: Create aliases "inlineview" and "listview" to easiliy switch.
 #Set-PSReadLineOption -PredictionViewStyle InlineView -WarningAction SilentlyContinue
 #Set-PSReadLineOption -PredictionViewStyle ListView -WarningAction SilentlyContinue
 

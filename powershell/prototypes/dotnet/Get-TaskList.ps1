@@ -13,8 +13,8 @@ param (
     [ValidateNotNullOrEmpty()]
     [string]$Pattern = "(LINK|NOTE|TODO)"
 )
-# TODO: Refactor -Include as input parameter with a default.
-# TODO: Add tasks alias to profile.
+## TODO: Refactor -Include as input parameter with a default.
+## TODO: Add tasks alias to profile.
 Get-ChildItem -Path $Path -Include @("*.bicep", "*.cs", "*.json", "*.ps*", "*.sql", "*.txt", "*.xml") -Recurse |
 Where-Object { $_.FullName -notlike "*\bin\*" -and $_.FullName -notlike "*\obj\*" } |
 Sort-Object -Property "FullName" |

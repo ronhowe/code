@@ -62,7 +62,7 @@ Configuration GuestConfiguration {
         }
         else {
             DnsServerAddress "SetDnsServerIpAddress" {
-                # TODO - Remove the secondary DNS.
+                ## TODO: Remove the secondary DNS.
                 Address        = "192.168.0.10", $Node.DnsIpAddress
                 AddressFamily  = "IPv4"
                 InterfaceAlias = "Ethernet"

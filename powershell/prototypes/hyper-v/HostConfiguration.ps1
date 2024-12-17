@@ -29,7 +29,7 @@ Configuration HostConfiguration {
         #     InterfaceAlias = "vEthernet (Internal Switch)"
         #     IPAddress      = "192.168.0.1"
         # }
-        # TODO DSC Support for NAT rule.
+        ## TODO: DSC Support for NAT rule.
         @("DC-VM", "SQL-VM", "WEB-VM") | ForEach-Object {
             xVHD "xVHD$_" {
                 Ensure           = $Ensure

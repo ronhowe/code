@@ -21,5 +21,5 @@ Remove-Module -Force -Verbose
 Write-Output "Starting Build"
 & "$PSScriptRoot\Start-Build.ps1"
 
-# TODO - Getting an assembly already loaded error on some machines. -ErrorAction SilentlyContinue as workaround.
+## TODO: Getting an assembly already loaded error on some machines. -ErrorAction SilentlyContinue as workaround.
 Import-Module -Name "$modulePath\$moduleName" -Force -ErrorAction SilentlyContinue
