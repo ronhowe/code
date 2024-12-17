@@ -1,4 +1,8 @@
-﻿CREATE TABLE [dbo].[MyTable]
+﻿/*******************************************************************************
+https://github.com/ronhowe
+*******************************************************************************/
+
+CREATE TABLE [dbo].[MyTable]
 (
     -- NOTE: Modeled after Azure Table Storage.
     -- TODO: Add [PartitionKey].

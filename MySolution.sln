@@ -24,6 +24,14 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MyDatabase", "sql\MyDatabas
 EndProject
 Project("{F5034706-568F-408A-B7B3-4D38C6DB8A32}") = "MyPowerShellProject", "powershell\MyPowerShellProject.pssproj", "{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help", "help", "{1AC742E0-BE94-4AA9-968E-49BD4065CDAE}"
+	ProjectSection(SolutionItems) = preProject
+		help\content.txt = help\content.txt
+		help\links.txt = help\links.txt
+		help\notes.txt = help\notes.txt
+		help\templates.txt = help\templates.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,5 +67,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1AC742E0-BE94-4AA9-968E-49BD4065CDAE} = {5884E110-C15F-48E0-B66F-1588568E341E}
 	EndGlobalSection
 EndGlobal
