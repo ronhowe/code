@@ -17,8 +17,6 @@ Write-Output "PowerShell $($PSVersionTable.PSVersion.ToString())"
 
 Set-Location -Path $HOME
 
-#region imports
-
 if (Get-Module -Name "Az.Tools.Predictor" -ListAvailable) {
     Write-Output "Importing Az.Tools.Predictor"
     Import-Module -Name "Az.Tools.Predictor"
@@ -59,8 +57,6 @@ else {
     Write-Output "Skipping Microsoft.PowerShell.SecretStore"
 }
 
-#endregion imports
-
 if ($host.Name -eq "Windows PowerShell ISE Host") {
     # legacy build machine support
     New-Variable -Name "Root" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
@@ -69,9 +65,6 @@ else {
     New-Variable -Name "root" -Value "$HOME\repos\ronhowe\code" -Scope Global -Force -ErrorAction SilentlyContinue
 }
 
-#region PSReadLine Configuration
-
-## TODO: Create aliases "inlineview" and "listview" to easiliy switch.
 if ($PSVersionTable.PSEdition -eq "Core") {
     Set-PSReadLineOption -PredictionSource HistoryAndPlugin
     Set-PSReadLineOption -PredictionViewStyle ListView -WarningAction SilentlyContinue
@@ -80,23 +73,49 @@ else {
     Set-PSReadLineOption -PredictionViewStyle InlineView -WarningAction SilentlyContinue
 }
 
-#endregion PSReadLine Configuration
+function Get-DevOpsStatus {
+    Write-Output "Getting DevOps Tools"
+    & "$HOME\repos\ronhowe\code\powershell\prototypes\tools\Get-DevOpsTools.ps1"
 
-#region Get-UpgradeStatus (aka upgrade)
+    Write-Output "Testing Dependencies"
+    & "$HOME\repos\ronhowe\code\powershell\dependencies\Invoke-Dependencies.Tests.ps1"
 
-function Get-UpgradeStatus {
-    . "$HOME\repos\ronhowe\code\powershell\prototypes\tools\Get-DevOpsTools.ps1"
-    . "$HOME\repos\ronhowe\code\powershell\dependencies\Invoke-Dependencies.Tests.ps1"
+    Write-Output "Running .NET List"
     dotnet list .\repos\ronhowe\code\dotnet\MySolution.sln package --outdated
+
+    Write-Output "Running WinGet Upgrade"
     winget upgrade
 }
 
-New-Alias -Name "ok" -Value Get-UpgradeStatus -Force
-New-Alias -Name "upgrade" -Value Get-UpgradeStatus -Force
+New-Alias -Name "ok" -Value Get-DevOpsStatus -Force
 
-#endregion Get-UpgradeStatus (aka upgrade)
+function Hide-PromptMinimal {
+    function global:prompt { "~> " }
+}
 
-#region Push-LocationCode (aka go)
+New-Alias -Name "quiet" -Value Hide-PromptMinimal -Force
+
+function Hide-PromptOff {
+    function global:prompt { "`0" }
+}
+
+New-Alias -Name "silence" -Value Hide-PromptOff -Force
+
+
+function Invoke-WslCmatrix {
+    Clear-Host
+    Write-Output "The Matrix has you..."
+    Start-Sleep -Seconds 3
+    wsl cmatrix
+}
+
+New-Alias -Name "matrix" -Value Invoke-WslCmatrix -Force
+
+function Open-PSReadLineHistory {
+    notepad (Get-PSReadLineOption).HistorySavePath
+}
+
+New-Alias -Name "oops" -Value Open-PSReadLineHistory -Force
 
 function Push-LocationCode {
     if (Test-Path -Path "$HOME\repos\ronhowe\code") {
@@ -106,19 +125,11 @@ function Push-LocationCode {
 
 New-Alias -Name "go" -Value Push-LocationCode -Force
 
-#endregion Push-LocationHome (aka home)
-
-#region Push-LocationHome (aka home)
-
 function Push-LocationHome {
     Push-Location -Path $HOME
 }
 
 New-Alias -Name "home" -Value Push-LocationHome -Force
-
-#endregion Push-LocationHome (aka home)
-
-#region Push-LocationRepos (aka repos)
 
 function Push-LocationRepos {
     if (Test-Path -Path "$HOME\repos") {
@@ -128,40 +139,6 @@ function Push-LocationRepos {
 
 New-Alias -Name "repos" -Value Push-LocationRepos -Force
 
-#endregion Push-LocationRepos (aka repos)
-
-#region Hide-PromptMinimal (aka quiet)
-
-function Hide-PromptMinimal {
-    function global:prompt { "~> " }
-}
-
-New-Alias -Name "quiet" -Value Hide-PromptMinimal -Force
-
-#endregion Hide-PromptMinimal (aka quiet)
-
-#region Hide-PromptOff (aka silence)
-
-function Hide-PromptOff {
-    function global:prompt { "`0" }
-}
-
-New-Alias -Name "silence" -Value Hide-PromptOff -Force
-
-#endregion Set-PromptOff (aka silence)
-
-#region Open-PSReadLineHistory (aka oops)
-
-function Open-PSReadLineHistory {
-    notepad (Get-PSReadLineOption).HistorySavePath
-}
-
-New-Alias -Name "oops" -Value Open-PSReadLineHistory -Force
-
-#endregion Open-PSReadLineHistory (aka oops)
-
-#region Show-New (aka new)
-
 function Show-New {
     Clear-Host
     Show-RonHowe
@@ -169,9 +146,19 @@ function Show-New {
 
 New-Alias -Name "new" -Value Show-New -Force
 
-#endregion Show-New (aka new)
+function Show-PredictionInline {
+    Write-Output "Setting Prediction View Style To Inline"
+    Set-PSReadLineOption -PredictionViewStyle InlineView -WarningAction SilentlyContinue
+}
 
-#region Show-RonHowe (aka ronhowe)
+New-Alias -Name "showinline" -Value Show-PredictionInline -Force
+
+function Show-PredictionList {
+    Write-Output "Setting Prediction View Style To ListView"
+    Set-PSReadLineOption -PredictionViewStyle ListView -WarningAction SilentlyContinue
+}
+
+New-Alias -Name "showlist" -Value Show-PredictionList -Force
 
 function Show-RonHowe {
     Write-Host "r" -BackgroundColor Red -ForegroundColor Black -NoNewline
@@ -185,18 +172,3 @@ function Show-RonHowe {
 }
 
 New-Alias -Name "ronhowe" -Value Show-RonHowe -Force
-
-#endregion Show-RonHowe (aka ronhowe)
-
-#region Push-WslCmatrix (aka matrix)
-
-function Invoke-WslCmatrix {
-    Clear-Host
-    Write-Output "The Matrix has you..."
-    Start-Sleep -Seconds 3
-    wsl cmatrix
-}
-
-New-Alias -Name "matrix" -Value Invoke-WslCmatrix -Force
-
-#endregion Push-WslCmatrix (aka matrix)
