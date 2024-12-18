@@ -3,6 +3,7 @@ https://github.com/ronhowe
 *******************************************************************************/
 
 using FluentAssertions;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
@@ -64,5 +65,42 @@ public sealed class MyUnitTests : TestBase
 
         Debug.WriteLine($"Asserting Log Message Exists For Exiting");
         mockLogger.VerifyLogMessage($"Exiting {nameof(MyService)}", LogLevel.Debug);
+    }
+
+    [TestMethod]
+    [TestCategory("UnitTest")]
+    [Ignore]
+    [DataTestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void MyRepositoryTests(bool value)
+    {
+        Debug.WriteLine($"Mocking {nameof(ILogger<MyService>)}");
+        var mockLogger = new Mock<ILogger<MyService>>();
+
+        Debug.WriteLine($"Mocking {nameof(IConfiguration)}");
+        var mockConfiguration = new Mock<IConfiguration>();
+        mockConfiguration.Setup(x => x["ConnectionStrings.MyDatabase"]).Returns("MYMOCKDATABASECONNECTIONSTRING");
+        mockConfiguration.Setup(x => x["ConnectionStrings.MyAzureStorage"]).Returns("MYMOCKAZURESTORAGECONNECTIONSTRING;");
+
+        var mockConnection = new Mock<SqlConnection>();
+        var mockCommand = new Mock<SqlCommand>();
+        mockConnection.Setup(conn => conn.CreateCommand()).Returns(mockCommand.Object);
+        mockCommand.Setup(cmd => cmd.ExecuteNonQuery());
+
+        Debug.WriteLine($"Creating {nameof(MyRepository)}");
+        var myRepository = new MyRepository(
+            mockLogger.Object,
+            mockConfiguration.Object
+        );
+
+        Debug.WriteLine($"Calling {nameof(MyRepository)} With {value}");
+        myRepository.Save(value);
+
+        mockConnection.Verify(conn => conn.CreateCommand(), Times.Once);
+        mockCommand.Verify(cmd => cmd.ExecuteNonQuery(), Times.Once);
+
+        // TODO: Moq SqlConnection and SqlCommand and enable test.
+        Assert.Inconclusive();
     }
 }
