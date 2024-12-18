@@ -1,8 +1,4 @@
-﻿/*******************************************************************************
-https://github.com/ronhowe
-*******************************************************************************/
-
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;

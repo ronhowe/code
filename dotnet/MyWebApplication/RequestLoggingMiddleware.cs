@@ -1,8 +1,4 @@
-﻿/*******************************************************************************
-https://github.com/ronhowe
-*******************************************************************************/
-
-namespace MyWebApplication;
+﻿namespace MyWebApplication;
 
 public class RequestLoggingMiddleware(RequestDelegate next, ILogger<RequestLoggingMiddleware> logger)
 {

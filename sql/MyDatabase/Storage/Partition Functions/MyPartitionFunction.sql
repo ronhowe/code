@@ -1,8 +1,4 @@
-﻿/*******************************************************************************
-https://github.com/ronhowe
-*******************************************************************************/
-
-CREATE PARTITION FUNCTION [MyPartitionFunction] (DATETIME)
+﻿CREATE PARTITION FUNCTION [MyPartitionFunction] (DATETIME)
 
 AS
 

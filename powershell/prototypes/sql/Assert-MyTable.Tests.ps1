@@ -1,7 +1,3 @@
-<###############################################################################
-https://github.com/ronhowe
-###############################################################################>
-
 #requires -Module "Pester"
 #requires -Module "SqlServer"
 
@@ -14,7 +10,7 @@ Describe "Database Integration Tests" {
             # arrange
 
             # act
-            $result = Assert-MyTableExists
+            $result = Assert-MyTable
 
             # assert
             $result.Result |

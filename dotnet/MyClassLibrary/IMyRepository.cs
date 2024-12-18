@@ -1,8 +1,4 @@
-﻿/*******************************************************************************
-https://github.com/ronhowe
-*******************************************************************************/
-
-namespace MyClassLibrary;
+﻿namespace MyClassLibrary;
 
 public interface IMyRepository
 {

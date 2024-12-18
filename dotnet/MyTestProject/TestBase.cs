@@ -1,8 +1,4 @@
-﻿/*******************************************************************************
-https://github.com/ronhowe
-*******************************************************************************/
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 
 namespace MyTestProject;

@@ -1,8 +1,4 @@
-﻿/*******************************************************************************
-https://github.com/ronhowe
-*******************************************************************************/
-
--- NOTE: Modeled after Azure Table Storage.
+﻿-- NOTE: Modeled after Azure Table Storage.
 CREATE TABLE [dbo].[MyTable]
 (
     [PartitionKey] DATETIME NOT NULL

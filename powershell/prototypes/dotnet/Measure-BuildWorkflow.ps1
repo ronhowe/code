@@ -1,7 +1,3 @@
-<###############################################################################
-https://github.com/ronhowe
-###############################################################################>
-
 $ErrorActionPreference = "Stop"
 Write-Output "Running $($MyInvocation.MyCommand.Name)"
 

@@ -1,8 +1,4 @@
-﻿/*******************************************************************************
-https://github.com/ronhowe
-*******************************************************************************/
-
-CREATE PARTITION SCHEME [MyPartitionScheme]
+﻿CREATE PARTITION SCHEME [MyPartitionScheme]
 
 AS
 

@@ -27,10 +27,8 @@ Project("{F5034706-568F-408A-B7B3-4D38C6DB8A32}") = "MyPowerShellProject", "powe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help", "help", "{1AC742E0-BE94-4AA9-968E-49BD4065CDAE}"
 	ProjectSection(SolutionItems) = preProject
-		help\content.txt = help\content.txt
 		help\links.txt = help\links.txt
 		help\notes.txt = help\notes.txt
-		help\templates.txt = help\templates.txt
 	EndProjectSection
 EndProject
 Global

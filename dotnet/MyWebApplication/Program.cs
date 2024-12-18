@@ -1,7 +1,3 @@
-/*******************************************************************************
-https://github.com/ronhowe
-*******************************************************************************/
-
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;

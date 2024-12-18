@@ -1,7 +1,3 @@
-<###############################################################################
-https://github.com/ronhowe
-###############################################################################>
-
 <#
 ## NOTE: This script is intended to be run in a PowerShell Core environment.
 New-Item -Path $profile -Force ;
