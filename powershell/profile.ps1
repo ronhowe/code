@@ -9,7 +9,9 @@ New-Item -Path $profile -Force ;
 . $profile
 #>
 
+$ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
+Write-Output "Running $($MyInvocation.MyCommand.Name)"
 
 Write-Output "https://github.com/ronhowe/code/powershell/blob/main/profile.ps1"
 
