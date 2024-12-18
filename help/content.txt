@@ -1,2 +1,5 @@
 Nick Chapsas - The New ID To Replace GUIDs and Integers in .NET
 https://www.youtube.com/watch?v=nJ1ppFayHOk&t=276s
+
+Nick Chapsas - Implementing Modern API Versioning in .NET
+https://www.youtube.com/watch?v=8Asq7ymF1R8
