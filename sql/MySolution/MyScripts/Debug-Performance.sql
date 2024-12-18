@@ -2,6 +2,8 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
+--RAISERROR (N'INTENTIONAL SAFETY ERROR', 20, 1) WITH LOG;
+
 SET STATISTICS IO ON;
 
 PRINT N'Freeing Procedure Cache';
@@ -9,7 +11,8 @@ DBCC FREEPROCCACHE;
 
 PRINT N'Selecting Table Ordered By RowKey';
 SELECT
-    [RowKey]
+    [PartitionKey]
+    ,[RowKey]
     ,[Timestamp]
     ,[MyInput]
     ,N'[RowKey]' AS [Sort]
@@ -21,7 +24,8 @@ ORDER BY
 
 PRINT N'Selecting Table Ordered By Timestamp';
 SELECT
-    [RowKey]
+    [PartitionKey]
+    ,[RowKey]
     ,[Timestamp]
     ,[MyInput]
     ,N'[Timestamp]' AS [Sort]
@@ -30,5 +34,3 @@ FROM
 ORDER BY
     [Timestamp]
 ;
-
-GO

@@ -11,5 +11,4 @@ CREATE TABLE [dbo].[MyTable]
     ,[MyInput] BIT NOT NULL
     CONSTRAINT [MyTablePrimaryKey] PRIMARY KEY ([PartitionKey], [RowKey]) -- both required
 )
-ON [MyPartitionScheme]([PartitionKey])
-;
+ON [MyPartitionScheme]([PartitionKey]);
