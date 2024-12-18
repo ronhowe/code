@@ -120,10 +120,20 @@ public sealed class MyIntegrationTests : TestBase
         using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {
             builder.UseEnvironment(environmentName);
+            builder.ConfigureKestrel(serverOptions =>
+            {
+                serverOptions.ListenLocalhost(5001, listenOptions =>
+                {
+                    listenOptions.UseHttps();
+                });
+            });
         });
 
         Debug.WriteLine("Creating Client");
-        using var client = application.CreateClient();
+        using var client = application.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            BaseAddress = new Uri("https://localhost:5001")
+        });
 
         Debug.WriteLine($"Sending GET Request With {value}");
         using var response = await client.GetAsync($"/v{version}/{nameof(MyService)}?input={value}");
