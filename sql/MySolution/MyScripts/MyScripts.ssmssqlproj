@@ -28,6 +28,12 @@
           <AssociatedConnUserName />
           <FullPath>Assert-MyTableExists.sql</FullPath>
         </FileNode>
+        <FileNode Name="Debug-Partitioning.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:LOCALHOST:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>LOCALHOST</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Debug-Partitioning.sql</FullPath>
+        </FileNode>
         <FileNode Name="Debug-Performance.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:LOCALHOST:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>LOCALHOST</AssociatedConnSrvName>
