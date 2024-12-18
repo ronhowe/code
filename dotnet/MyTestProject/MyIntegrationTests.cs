@@ -106,11 +106,15 @@ public sealed class MyIntegrationTests : TestBase
     [TestMethod]
     [TestCategory("IntegrationTest")]
     [DataTestMethod]
-    [DataRow(false, "Development")]
-    [DataRow(true, "Development")]
-    [DataRow(false, "Production")]
-    [DataRow(true, "Production")]
-    public async Task WebHostTests(bool value, string environmentName)
+    [DataRow(false, "Development", "1")]
+    [DataRow(false, "Development", "2")]
+    [DataRow(false, "Production", "1")]
+    [DataRow(false, "Production", "2")]
+    [DataRow(true, "Development", "1")]
+    [DataRow(true, "Development", "2")]
+    [DataRow(true, "Production", "1")]
+    [DataRow(true, "Production", "2")]
+    public async Task WebHostTests(bool value, string environmentName, string version)
     {
         Debug.WriteLine("Building Web Host");
         using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
@@ -122,7 +126,7 @@ public sealed class MyIntegrationTests : TestBase
         using var client = application.CreateClient();
 
         Debug.WriteLine($"Sending GET Request With {value}");
-        using var response = await client.GetAsync($"/api/{nameof(MyService)}?input={value}");
+        using var response = await client.GetAsync($"/v{version}/{nameof(MyService)}?input={value}");
 
         Debug.WriteLine($"Asserting HTTP Status Code Is {HttpStatusCode.OK}");
         response.StatusCode.Should().Be(HttpStatusCode.OK);

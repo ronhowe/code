@@ -2,6 +2,7 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
 using MyClassLibrary;
@@ -47,6 +48,14 @@ try
     Log.ForContext("SourceContext", _sourceContext).Information("Adding Feature Management");
     builder.Services.AddFeatureManagement();
 
+    Log.ForContext("SourceContext", _sourceContext).Information("Adding API Versioning");
+    builder.Services.AddApiVersioning(options =>
+    {
+        options.DefaultApiVersion = new ApiVersion(1);
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.ApiVersionReader = new UrlSegmentApiVersionReader();
+    });
+
     Log.ForContext("SourceContext", _sourceContext).Information("Adding {name}", nameof(MyRepository));
     // TODO: Learn the difference between AddSingleton and AddTransient.
     builder.Services.AddSingleton<IMyRepository, MyRepository>();
@@ -76,12 +85,35 @@ try
     app.Logger.LogInformation("Using Serilog Request Logging");
     app.UseSerilogRequestLogging();
 
-    app.Logger.LogInformation("Mapping GET Requests To {name}", nameof(MyService));
-    app.MapGet($"/api/{nameof(MyService)}", (bool input, [FromServices] IMyService myService) =>
-    {
-        app.Logger.LogInformation("Calling {name} With {input}", nameof(MyService), input);
-        return myService.MyMethod(input);
-    });
+    var versionSet = app.NewApiVersionSet()
+        .HasApiVersion(new ApiVersion(1))
+        .HasApiVersion(new ApiVersion(2))
+        .ReportApiVersions()
+        .Build();
+
+    // TODO: Use better {tokens} for better queryability.  e.g. {serviceName} instead of {name}.
+
+    const int _v1 = 1;
+    app.Logger.LogInformation("Mapping Version {version} GET Requests To {name}", _v1, nameof(MyService));
+    app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context) =>
+        {
+            var apiVersion = context.GetRequestedApiVersion();
+            app.Logger.LogInformation("Calling Version {apiVersion} Of {name} With {input}", apiVersion, nameof(MyService), input);
+            return myService.MyMethod(input);
+        })
+        .WithApiVersionSet(versionSet)
+        .MapToApiVersion(_v1);
+
+    const int _v2 = 2;
+    app.Logger.LogInformation("Mapping Version {version} GET Requests To {name}", _v2, nameof(MyService));
+    app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context) =>
+        {
+            var apiVersion = context.GetRequestedApiVersion();
+            app.Logger.LogInformation("Calling Version {apiVersion} Of {name} With {input}", apiVersion, nameof(MyService), input);
+            return myService.MyMethod(input);
+        })
+        .WithApiVersionSet(versionSet)
+        .MapToApiVersion(_v2);
 
     await app.RunAsync();
 }
