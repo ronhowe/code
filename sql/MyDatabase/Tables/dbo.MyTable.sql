@@ -2,12 +2,14 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
+-- NOTE: Modeled after Azure Table Storage.
 CREATE TABLE [dbo].[MyTable]
 (
-    -- NOTE: Modeled after Azure Table Storage.
-    -- TODO: Add [PartitionKey].
-    [RowKey] CHAR(36) NOT NULL
+    [PartitionKey] DATETIME NOT NULL
+    ,[RowKey] CHAR(36) NOT NULL
     ,[Timestamp] DATETIME NOT NULL DEFAULT GETUTCDATE()
     ,[MyInput] BIT NOT NULL
-    ,CONSTRAINT [MyTablePrimaryKey] PRIMARY KEY ([RowKey])
-);
+    CONSTRAINT [MyTablePrimaryKey] PRIMARY KEY ([PartitionKey], [RowKey]) -- both required
+)
+ON [MyPartitionScheme]([PartitionKey])
+;
