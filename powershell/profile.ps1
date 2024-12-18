@@ -74,6 +74,7 @@ else {
 }
 
 function Get-DevOpsStatus {
+    ## TODO: Which to use: & or . or nothing.
     Write-Output "Getting DevOps Tools"
     & "$HOME\repos\ronhowe\code\powershell\prototypes\tools\Get-DevOpsTools.ps1"
 
@@ -81,7 +82,7 @@ function Get-DevOpsStatus {
     & "$HOME\repos\ronhowe\code\powershell\dependencies\Invoke-Dependencies.Tests.ps1"
 
     Write-Output "Running .NET List"
-    dotnet list .\repos\ronhowe\code\dotnet\MySolution.sln package --outdated
+    dotnet list $HOME\repos\ronhowe\code\dotnet\MySolution.sln package --outdated
 
     Write-Output "Running WinGet Upgrade"
     winget upgrade
