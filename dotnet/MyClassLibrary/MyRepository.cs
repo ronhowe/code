@@ -67,39 +67,50 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
                     logger.LogWarning("Retry Attempt # {retryAttempt} Of {maxRetries}", retryAttempt, _maxRetries);
                 });
 
+        bool _dbSaved = false;
+        bool _azSaved = false;
+
         try
         {
             logger.LogDebug("Executing With Retry Policy");
             // TODO: Fix redundant saves on retry with _dbUnsaved and _azUnsaved checks.
             retryPolicy.Execute(() =>
             {
-                logger.LogDebug("Saving To Database");
+                if (!_dbSaved)
+                {
+                    logger.LogDebug("Saving To Database");
 
-                logger.LogDebug("Opening Connection");
-                using SqlConnection connection = new(dbConnectionString);
-                connection.Open();
+                    logger.LogDebug("Opening Connection");
+                    using SqlConnection connection = new(dbConnectionString);
+                    connection.Open();
 
-                logger.LogDebug("Executing Command");
-                using SqlCommand command = new("INSERT [dbo].[MyTable] ([RowKey], [MyInput]) VALUES (@RowKey, @MyInput);", connection);
-                command.Parameters.AddWithValue("@RowKey", rowKey);
-                command.Parameters.AddWithValue("@MyInput", myInput);
-                command.ExecuteNonQuery();
+                    logger.LogDebug("Executing Command");
+                    using SqlCommand command = new("INSERT [dbo].[MyTable] ([RowKey], [MyInput]) VALUES (@RowKey, @MyInput);", connection);
+                    command.Parameters.AddWithValue("@RowKey", rowKey);
+                    command.Parameters.AddWithValue("@MyInput", myInput);
+                    command.ExecuteNonQuery();
+                }
 
+                _dbSaved = true;
                 logger.LogDebug("Save To Database Succeeded");
 
-                logger.LogDebug("Saving To Azure Storage");
+                if (!_azSaved)
+                {
+                    logger.LogDebug("Saving To Azure Storage");
 
-                logger.LogDebug("Creating Table");
-                var tableClient = new TableClient(azConnectionString, "MyCloudTable");
-                tableClient.CreateIfNotExists();
+                    logger.LogDebug("Creating Table");
+                    var tableClient = new TableClient(azConnectionString, "MyCloudTable");
+                    tableClient.CreateIfNotExists();
 
-                logger.LogDebug("Adding Entity");
-                var tableEntity = new TableEntity(DateTime.UtcNow.ToString("yyyy-MM-dd"), rowKey)
+                    logger.LogDebug("Adding Entity");
+                    var tableEntity = new TableEntity(DateTime.UtcNow.ToString("yyyy-MM-dd"), rowKey)
                     {
                         { "MyInput", myInput }
                     };
-                tableClient.AddEntity(tableEntity);
+                    tableClient.AddEntity(tableEntity);
+                }
 
+                _azSaved = true;
                 logger.LogDebug("Save To Azure Storage Succeeded");
             }
             );
