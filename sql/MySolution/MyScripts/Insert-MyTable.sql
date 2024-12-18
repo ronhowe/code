@@ -2,10 +2,12 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
-:setvar COUNT 1
+:setvar COUNT 1000000
 :setvar MYINPUT 1
 
-PRINT N'Inserting Into Table';
+SET NOCOUNT ON;
+
+--PRINT N'Inserting Into Table';
 INSERT [dbo].[MyTable]
 (
     [RowKey]
