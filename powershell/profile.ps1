@@ -76,12 +76,17 @@ else {
 }
 
 function Get-DevOpsStatus {
-    ## TODO: Which to use: & or . or nothing.
     Write-Output "Getting DevOps Tools"
     & "$HOME\repos\ronhowe\code\powershell\prototypes\tools\Get-DevOpsTools.ps1"
 
     Write-Output "Testing Dependencies"
     & "$HOME\repos\ronhowe\code\powershell\dependencies\Invoke-Dependencies.Tests.ps1"
+
+    ## TODO: Add .NET and PowerShell tests.
+    ## TODO: Pick an Test- vs Invoke- strategy.
+    ## TODO: Which to use: & or . or nothing.
+    # & "$HOME\repos\ronhowe\code\powershell\dependencies\Test-Module.ps1"
+    # .\$HOME\repos\ronhowe\code\powershell\prototypes\dotnet\Invoke-BuildWorkflow.ps1
 
     Write-Output "Running .NET List"
     dotnet list $HOME\repos\ronhowe\code\dotnet\MySolution.sln package --outdated
