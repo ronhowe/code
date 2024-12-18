@@ -17,3 +17,5 @@ BEGIN
     DROP DATABASE [MyDatabase];
 
 END;
+
+GO

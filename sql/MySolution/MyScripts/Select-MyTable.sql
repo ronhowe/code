@@ -12,3 +12,5 @@ FROM
 ORDER BY
     [RowKey]
 ;
+
+GO

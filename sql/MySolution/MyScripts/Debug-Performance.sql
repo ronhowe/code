@@ -2,7 +2,6 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
-SET NOCOUNT ON;
 SET STATISTICS IO ON;
 
 PRINT N'Freeing Procedure Cache';
@@ -31,3 +30,5 @@ FROM
 ORDER BY
     [Timestamp]
 ;
+
+GO
