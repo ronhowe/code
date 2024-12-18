@@ -28,8 +28,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting Database Connection String");
-            logger.LogError(ex, "{Message}", ex.Message);
+            logger.LogError("Error Getting Database Connection String Because {message}", ex.Message);
             throw;
         }
 
@@ -43,8 +42,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting Azure Storage Connection String");
-            logger.LogError(ex, "{Message}", ex.Message);
+            logger.LogError("Error Getting Azure Storage Connection String Because {message}", ex.Message);
             throw;
         }
 
@@ -85,7 +83,8 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
                     connection.Open();
 
                     logger.LogDebug("Executing Command");
-                    using SqlCommand command = new("INSERT [dbo].[MyTable] ([RowKey], [MyInput]) VALUES (@RowKey, @MyInput);", connection);
+                    using SqlCommand command = new("INSERT [dbo].[MyTable] ([PartitionKey], [RowKey], [MyInput]) VALUES (@PartitionKey, @RowKey, @MyInput);", connection);
+                    command.Parameters.AddWithValue("@PartitionKey", DateTime.UtcNow);
                     command.Parameters.AddWithValue("@RowKey", rowKey);
                     command.Parameters.AddWithValue("@MyInput", myInput);
                     command.ExecuteNonQuery();

@@ -2,16 +2,16 @@
 https://github.com/ronhowe
 *******************************************************************************/
 
-PRINT N'Selecting Table';
 SELECT
-    [PartitionKey]
-    ,[RowKey]
-    ,[Timestamp]
-    ,[MyInput]
+    *
 FROM
-    [dbo].[MyTable]
+    [sys].[partitions]
+WHERE
+    1 = 1
+    AND [object_id] = OBJECT_ID(N'dbo.MyTable')
+    AND [index_id] IN (0, 1)
 ORDER BY
-    [RowKey]
+    [partition_number]
 ;
 
 GO

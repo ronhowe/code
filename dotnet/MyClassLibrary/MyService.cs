@@ -25,8 +25,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting MyConfiguration");
-            logger.LogError(ex, "{Message}", ex.Message);
+            logger.LogError("Error Getting MyConfiguration Because {message}", ex.Message);
             throw;
         }
 
@@ -39,8 +38,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting MySecret");
-            logger.LogError(ex, "{Message}", ex.Message);
+            logger.LogError("Error Getting MySecret Because {message}", ex.Message);
             throw;
         }
 
@@ -53,8 +51,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting MyFeature");
-            logger.LogError(ex, "{Message}", ex.Message);
+            logger.LogError("Error Getting MyFeature Because {message}", ex.Message);
             throw;
         }
 

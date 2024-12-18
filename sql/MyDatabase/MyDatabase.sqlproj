@@ -61,9 +61,14 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables" />
+    <Folder Include="Storage" />
+    <Folder Include="Storage\Partition Schemes" />
+    <Folder Include="Storage\Partition Functions" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\dbo.MyTable.sql" />
+    <Build Include="Storage\Partition Functions\MyPartitionFunction.sql" />
+    <Build Include="Storage\Partition Schemes\MyPartitionScheme.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MyDatabase.publish.xml" />
