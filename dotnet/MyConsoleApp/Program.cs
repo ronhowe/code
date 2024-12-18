@@ -17,17 +17,19 @@ public class Program
     private static bool _benchmark;
     private static bool _clear;
     private static bool _color;
+    private static bool _noHeaders;
 
     static void Main(string[] args)
     {
         if (args.Length == 0 || !Uri.TryCreate(args[0], UriKind.Absolute, out Uri? uri))
         {
-            uri = new Uri("https://LOCALHOST:444/api/MyService?input=false");
+            uri = new Uri("https://LOCALHOST:444/MyService?input=false");
         }
 
         _benchmark = args.Contains("--benchmark");
         _clear = args.Contains("--clear");
         _color = args.Contains("--color");
+        _noHeaders = args.Contains("--noheaders");
 
         var background = Console.BackgroundColor;
         Console.CancelKeyPress += (sender, e) =>
@@ -68,7 +70,7 @@ public class Program
 
                 foreach (var header in response.Headers)
                 {
-                    if (header.Key == "CustomHeader")
+                    if (!_noHeaders)
                     {
                         Console.WriteLine($"{header.Key} = {header.Value.FirstOrDefault()}");
                     }
