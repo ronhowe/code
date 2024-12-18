@@ -9,12 +9,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyClassLibrary;
 using Serilog;
 using Serilog.Events;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Security.Claims;
+using System.Text;
 
 namespace MyTestProject;
 
@@ -135,7 +139,24 @@ public sealed class MyIntegrationTests : TestBase
             BaseAddress = new Uri("https://localhost:5001")
         });
 
+        Debug.WriteLine("Generating Bearer Token");
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.UTF8.GetBytes($"/{new string('*', 512)}");
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity([new Claim("sub", "testuser")]),
+            Expires = DateTime.UtcNow.AddMinutes(30),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+            Issuer = "yourIssuer",
+            Audience = "yourAudience"
+        };
+        // TODO: Decide on standard for local variable names (understore prefix or not).
+        var _token = tokenHandler.CreateToken(tokenDescriptor);
+        var _tokenString = tokenHandler.WriteToken(_token);
+        Debug.WriteLine(_tokenString);
+
         Debug.WriteLine($"Sending GET Request With {value}");
+        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _tokenString);
         using var response = await client.GetAsync($"/v{version}/{nameof(MyService)}?input={value}");
 
         Debug.WriteLine($"Asserting HTTP Status Code Is {HttpStatusCode.OK}");

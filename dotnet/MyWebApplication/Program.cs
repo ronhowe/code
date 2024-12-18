@@ -3,12 +3,15 @@ https://github.com/ronhowe
 *******************************************************************************/
 
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
+using Microsoft.IdentityModel.Tokens;
 using MyClassLibrary;
 using MyWebApplication;
 using Serilog;
 using Serilog.Events;
+using System.Text;
 
 // TODO: Update for production release.
 // const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
@@ -67,6 +70,26 @@ try
     // TODO: Learn the difference between AddSingleton and AddTransient.
     builder.Services.AddSingleton<IMyService, MyService>();
 
+    Log.ForContext("SourceContext", _sourceContext).Information("Adding Authentication");
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            var _key = $"/{new string('*', 512)}";
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = "yourIssuer",
+                ValidAudience = "yourAudience",
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key))
+            };
+        });
+
+    Log.ForContext("SourceContext", _sourceContext).Information("Adding Authorization");
+    builder.Services.AddAuthorization();
+
     Log.ForContext("SourceContext", _sourceContext).Information("Building Web Application");
     var app = builder.Build();
 
@@ -88,6 +111,12 @@ try
     app.Logger.LogInformation("Using Serilog Request Logging");
     app.UseSerilogRequestLogging();
 
+    app.Logger.LogInformation("Using Authentication Middleware");
+    app.UseAuthentication();
+
+    app.Logger.LogInformation("Using Authorization Middleware");
+    app.UseAuthorization();
+
     var versionSet = app.NewApiVersionSet()
         .HasApiVersion(new ApiVersion(1))
         .HasApiVersion(new ApiVersion(2))
@@ -99,24 +128,25 @@ try
     const int _v1 = 1;
     app.Logger.LogInformation("Mapping Version {version} GET Requests To {name}", _v1, nameof(MyService));
     app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context) =>
-        {
-            var apiVersion = context.GetRequestedApiVersion();
-            app.Logger.LogInformation("Calling Version {apiVersion} Of {name} With {input}", apiVersion, nameof(MyService), input);
-            return myService.MyMethod(input);
-        })
+    {
+        var apiVersion = context.GetRequestedApiVersion();
+        app.Logger.LogInformation("Calling Version {apiVersion} Of {name} With {input}", apiVersion, nameof(MyService), input);
+        return myService.MyMethod(input);
+    })
         .WithApiVersionSet(versionSet)
         .MapToApiVersion(_v1);
 
     const int _v2 = 2;
     app.Logger.LogInformation("Mapping Version {version} GET Requests To {name}", _v2, nameof(MyService));
     app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context) =>
-        {
-            var apiVersion = context.GetRequestedApiVersion();
-            app.Logger.LogInformation("Calling Version {apiVersion} Of {name} With {input}", apiVersion, nameof(MyService), input);
-            return myService.MyMethod(input);
-        })
+    {
+        var apiVersion = context.GetRequestedApiVersion();
+        app.Logger.LogInformation("Calling Version {apiVersion} Of {name} With {input}", apiVersion, nameof(MyService), input);
+        return myService.MyMethod(input);
+    })
         .WithApiVersionSet(versionSet)
-        .MapToApiVersion(_v2);
+        .MapToApiVersion(_v2)
+        .RequireAuthorization();
 
     await app.RunAsync();
 }

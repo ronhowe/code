@@ -4,6 +4,7 @@ https://github.com/ronhowe
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace MyTestProject;
 
@@ -22,5 +23,10 @@ public sealed class MyTests : TestBase
 #if DEBUG
         Debug.WriteLine("DEBUG Defined");
 #endif
+        // NOTE: 4096-bit key = 512 bytes
+        var key = new byte[512];
+        RandomNumberGenerator.Fill(key);
+        var base64Key = Convert.ToBase64String(key);
+        Debug.WriteLine($"Randomly Generated 4096-bit Base 64 Key:\n{base64Key}");
     }
 }
