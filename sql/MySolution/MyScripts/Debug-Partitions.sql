@@ -4,6 +4,12 @@ https://github.com/ronhowe
 
 --RAISERROR (N'INTENTIONAL SAFETY ERROR', 20, 1) WITH LOG;
 
+PRINT N'Selecting Partition Functions';
+SELECT * FROM [sys].[partition_functions];
+
+PRINT N'Selecting Partition Schemes';
+SELECT * FROM [sys].[partition_schemes];
+
 PRINT N'Selecting Partitions';
 SELECT
     OBJECT_NAME([object_id]) AS [object_name]
