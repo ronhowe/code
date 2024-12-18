@@ -53,8 +53,9 @@ try
     Log.ForContext("SourceContext", _sourceContext).Information("Adding API Versioning");
     builder.Services.AddApiVersioning(options =>
     {
-        options.DefaultApiVersion = new ApiVersion(1);
-        options.AssumeDefaultVersionWhenUnspecified = true;
+        // TODO: Learn how these work with v{version:apiVersion} in the MapGet calls.
+        //options.DefaultApiVersion = new ApiVersion(1);
+        //options.AssumeDefaultVersionWhenUnspecified = true;
         options.ApiVersionReader = new UrlSegmentApiVersionReader();
     });
 
