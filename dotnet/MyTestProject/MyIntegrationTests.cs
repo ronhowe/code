@@ -146,6 +146,7 @@ public sealed class MyIntegrationTests : TestBase
             Issuer = "yourIssuer",
             Audience = "yourAudience"
         };
+
         // TODO: Decide on standard for local variable names (understore prefix or not).
         var _token = tokenHandler.CreateToken(tokenDescriptor);
         var _tokenString = tokenHandler.WriteToken(_token);
@@ -157,6 +158,23 @@ public sealed class MyIntegrationTests : TestBase
 
         Debug.WriteLine($"Asserting HTTP Status Code Is {HttpStatusCode.OK}");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        foreach (var header in response.Headers)
+        {
+            Debug.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
+        }
+
+        Debug.WriteLine("Asserting Custom Header");
+        if (response.Headers.TryGetValues("CustomHeader", out var values))
+        {
+            values.First().Should<string>().Be("MyCustomHeader");
+        }
+
+        Debug.WriteLine("Asserting API Supported Versions Header");
+        if (response.Headers.TryGetValues("api-supported-versions", out var values2))
+        {
+            values2.First().Should<string>().Be("1, 2");
+        }
 
         Debug.WriteLine($"Asserting Result Is {value}");
         Boolean.Parse(response.Content.ReadAsStringAsync().Result).Should().Be(value);

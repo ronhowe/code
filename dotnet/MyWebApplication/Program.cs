@@ -107,8 +107,22 @@ try
     app.Logger.LogInformation("Using Serilog Request Logging");
     app.UseSerilogRequestLogging();
 
+    app.Logger.LogInformation("Using Custom Header");
+    app.Use(async (context, next) =>
+    {
+        AddCustomHeader(context, app);
+        await next();
+    });
+
     app.Logger.LogInformation("Using Authentication Middleware");
     app.UseAuthentication();
+
+    app.Use(async (context, next) =>
+    {
+        var claims = context.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+        app.Logger.LogDebug("User Claims: {@Claims}", claims);
+        await next.Invoke();
+    });
 
     app.Logger.LogInformation("Using Authorization Middleware");
     app.UseAuthorization();
@@ -137,6 +151,7 @@ try
     app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context) =>
     {
         var apiVersion = context.GetRequestedApiVersion();
+
         app.Logger.LogInformation("Calling Version {apiVersion} Of {name} With {input}", apiVersion, nameof(MyService), input);
         return myService.MyMethod(input);
     })
@@ -154,4 +169,17 @@ catch (Exception ex)
 finally
 {
     Log.CloseAndFlush();
+}
+
+static void AddCustomHeader(HttpContext context, WebApplication app)
+{
+    app.Logger.LogDebug("Adding Custom Header");
+
+    const string headerKey = "CustomHeader";
+    var headerValue = "MyCustomHeader";// app.Configuration.GetSection(headerKey).Value;
+
+    app.Logger.LogDebug("Logging Custom Header");
+    app.Logger.LogTrace("$headerKey = {headerKey} ; $headerValue = {headerValue}", headerKey, headerValue);
+
+    context.Response.Headers.Append(headerKey, headerValue);
 }
