@@ -10,7 +10,9 @@ using MyWebApplication;
 using Serilog;
 using Serilog.Events;
 
-const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
+// TODO: Update for production release.
+// const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
+const string _outputTemplate = "[{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
 const string _sourceContext = nameof(Program);
 
 Log.Logger = new LoggerConfiguration()
