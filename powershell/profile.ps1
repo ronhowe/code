@@ -12,13 +12,12 @@ if ($PSVersionTable.PSEdition -ne "Core") {
 
 Write-Host "Loading Profile ; Please Wait" -ForegroundColor DarkGray
 
-## TODO: Investigate performance degredation of loading this module recently.
-# if (Get-Module -Name "Az.Tools.Predictor" -ListAvailable) {
-#     Import-Module -Name "Az.Tools.Predictor" -Verbose:$false
-# }
-# else {
-Write-Warning "Skipping Az.Tools.Predictor"
-# }
+if (Get-Module -Name "Az.Tools.Predictor" -ListAvailable) {
+    Import-Module -Name "Az.Tools.Predictor" -Verbose:$false
+}
+else {
+    Write-Warning "Skipping Az.Tools.Predictor"
+}
 
 if ($host.Name -eq "Windows PowerShell ISE Host") {
     if (Get-Module -Name "ISESteroids" -ListAvailable) {
@@ -51,7 +50,7 @@ else {
 }
 
 if ($host.Name -eq "Windows PowerShell ISE Host") {
-    # NOTE: work configuration
+    ## NOTE: work configuration
     New-Variable -Name "Root" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
 }
 
@@ -71,13 +70,13 @@ function Get-DevOpsStatus {
     & "$HOME\repos\ronhowe\code\powershell\prototypes\tools\Get-DevOpsTools.ps1"
 
     Write-Verbose "Testing Dependencies"
-    & "$HOME\repos\ronhowe\code\powershell\dependencies\Invoke-Dependencies.Tests.ps1"
+    & "$HOME\repos\ronhowe\code\powershell\dependencies\Invoke-PesterTests.ps1"
 
-    ## TODO: Add .NET and PowerShell tests.
-    ## TODO: Pick an Test- vs Invoke- strategy.
-    ## TODO: Which to use: & or . or nothing.
-    # & "$HOME\repos\ronhowe\code\powershell\dependencies\Test-Module.ps1"
-    # . "$HOME\repos\ronhowe\code\powershell\prototypes\dotnet\Invoke-BuildWorkflow.ps1"
+    Write-Verbose "Testing Module"
+    & "$HOME\repos\ronhowe\code\powershell\dependencies\Test-Module.ps1"
+
+    Write-Verbose "Invoking Build Workflow"
+    & "$HOME\repos\ronhowe\code\powershell\prototypes\dotnet\Invoke-BuildWorkflow.ps1"
 
     Write-Verbose "Running .NET List"
     dotnet list $HOME\repos\ronhowe\code\dotnet\MySolution.sln package --outdated
