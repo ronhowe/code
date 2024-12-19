@@ -1,27 +1,13 @@
-# code
+`Code I wrote.  Free for public use.`
 
-Code I wrote.  Free for public use.
+# Azure (azure)
 
-## Azure (azure)
+# .NET (dotnet)
 
-TODO
+# Help (help)
 
-## .NET (dotnet)
+# Roll20 (roll20)
 
-TODO
+# PowerShell (powershell)
 
-## Help (help)
-
-TODO
-
-## Roll20 (roll20)
-
-TODO
-
-## PowerShell (powershell)
-
-TODO
-
-## SQL (sql)
-
-TODO
+# SQL (sql)

@@ -1,10 +1,3 @@
-<#
-## NOTE: This script is intended to be run in a PowerShell Core environment.
-New-Item -Path $profile -Force ;
-'. $HOME\repos\ronhowe\code\powershell\profile.ps1' | Set-Content -Path $profile -Force
-. $profile
-#>
-
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 Write-Output "Running $($MyInvocation.MyCommand.Name)"
