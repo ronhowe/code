@@ -1,51 +1,58 @@
+[CmdletBinding()]
+param()
+
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
-Write-Output "Running $($MyInvocation.MyCommand.Name)"
+$VerbosePreference = "SilentlyContinue"
 
-Write-Output "https://github.com/ronhowe/code/powershell/blob/main/profile.ps1"
+Get-Date
 
-Write-Output "PowerShell $($PSVersionTable.PSVersion.ToString())"
+Write-Host "Running PowerShell $($PSVersionTable.PSVersion.ToString())"
 
-Set-Location -Path $HOME
+if ($PSVersionTable.PSEdition -ne "Core") {
+    Write-Warning "PowerShell Core Not Detected" -WarningAction Continue
+}
 
 if (Get-Module -Name "Az.Tools.Predictor" -ListAvailable) {
-    Write-Output "Importing Az.Tools.Predictor"
-    Import-Module -Name "Az.Tools.Predictor"
+    Write-Verbose "Importing Az.Tools.Predictor"
+    Import-Module -Name "Az.Tools.Predictor" -Verbose:$false
 }
 else {
-    Write-Output "Skipping Az.Tools.Predictor"
+    Write-Warning "Skipping Az.Tools.Predictor"
 }
 
-if ((Get-Module -Name "ISESteroids" -ListAvailable) -and ($host.Name -eq "Windows PowerShell ISE Host")) {
-    Write-Output "Importing ISESteroids"
-    Import-Module -Name "ISESteroids"
-}
-else {
-    Write-Output "Skipping ISESteroids"
+if ($host.Name -eq "Windows PowerShell ISE Host") {
+    if (Get-Module -Name "ISESteroids" -ListAvailable) {
+        Write-Verbose "Importing ISESteroids"
+        Import-Module -Name "ISESteroids" -Verbose:$false
+    }
+    else {
+        Write-Warning "Skipping ISESteroids"
+    }
 }
 
-if ((Get-Module -Name "posh-git" -ListAvailable) -and ($host.Name -ne "Visual Studio Code Host")) {
-    Write-Output "Importing posh-git"
-    Import-Module -Name "posh-git"
+if (Get-Module -Name "posh-git" -ListAvailable) {
+    Write-Verbose "Importing posh-git"
+    Import-Module -Name "posh-git" -Verbose:$false
 }
 else {
-    Write-Output "Skipping posh-git"
+    Write-Warning "Skipping posh-git"
 }
 
 if (Get-Module -Name "Microsoft.PowerShell.SecretManagement" -ListAvailable) {
-    Write-Output "Importing Microsoft.PowerShell.SecretManagement"
-    Import-Module -Name "Microsoft.PowerShell.SecretManagement"
+    Write-Verbose "Importing Microsoft.PowerShell.SecretManagement"
+    Import-Module -Name "Microsoft.PowerShell.SecretManagement" -Verbose:$false
 }
 else {
-    Write-Output "Skipping Microsoft.PowerShell.SecretManagement"
+    Write-Warning "Skipping Microsoft.PowerShell.SecretManagement"
 }
 
 if (Get-Module -Name "Microsoft.PowerShell.SecretStore" -ListAvailable) {
-    Write-Output "Importing Microsoft.PowerShell.SecretStore"
-    Import-Module -Name "Microsoft.PowerShell.SecretStore"
+    Write-Verbose "Importing Microsoft.PowerShell.SecretStore"
+    Import-Module -Name "Microsoft.PowerShell.SecretStore" -Verbose:$false
 }
 else {
-    Write-Output "Skipping Microsoft.PowerShell.SecretStore"
+    Write-Warning "Skipping Microsoft.PowerShell.SecretStore"
 }
 
 if ($host.Name -eq "Windows PowerShell ISE Host") {
@@ -56,6 +63,7 @@ else {
     New-Variable -Name "root" -Value "$HOME\repos\ronhowe\code" -Scope Global -Force -ErrorAction SilentlyContinue
 }
 
+Write-Verbose "Setting PSReadLine Options"
 if ($PSVersionTable.PSEdition -eq "Core") {
     Set-PSReadLineOption -PredictionSource HistoryAndPlugin
     Set-PSReadLineOption -PredictionViewStyle ListView -WarningAction SilentlyContinue
@@ -65,22 +73,25 @@ else {
 }
 
 function Get-DevOpsStatus {
-    Write-Output "Getting DevOps Tools"
+    [CmdletBinding()]
+    param()
+
+    Write-Verbose "Getting DevOps Tools"
     & "$HOME\repos\ronhowe\code\powershell\prototypes\tools\Get-DevOpsTools.ps1"
 
-    Write-Output "Testing Dependencies"
+    Write-Verbose "Testing Dependencies"
     & "$HOME\repos\ronhowe\code\powershell\dependencies\Invoke-Dependencies.Tests.ps1"
 
     ## TODO: Add .NET and PowerShell tests.
     ## TODO: Pick an Test- vs Invoke- strategy.
     ## TODO: Which to use: & or . or nothing.
     # & "$HOME\repos\ronhowe\code\powershell\dependencies\Test-Module.ps1"
-    # .\$HOME\repos\ronhowe\code\powershell\prototypes\dotnet\Invoke-BuildWorkflow.ps1
+    # . "$HOME\repos\ronhowe\code\powershell\prototypes\dotnet\Invoke-BuildWorkflow.ps1"
 
-    Write-Output "Running .NET List"
+    Write-Verbose "Running .NET List"
     dotnet list $HOME\repos\ronhowe\code\dotnet\MySolution.sln package --outdated
 
-    Write-Output "Running WinGet Upgrade"
+    Write-Verbose "Running WinGet Upgrade"
     winget upgrade
 }
 
@@ -101,7 +112,7 @@ New-Alias -Name "silence" -Value Hide-PromptOff -Force
 
 function Invoke-WslCmatrix {
     Clear-Host
-    Write-Output "The Matrix has you..."
+    Write-Host "The Matrix has you..." -ForegroundColor Green
     Start-Sleep -Seconds 3
     wsl cmatrix
 }
@@ -144,14 +155,12 @@ function Show-New {
 New-Alias -Name "new" -Value Show-New -Force
 
 function Show-PredictionInline {
-    Write-Output "Setting Prediction View Style To Inline"
     Set-PSReadLineOption -PredictionViewStyle InlineView -WarningAction SilentlyContinue
 }
 
 New-Alias -Name "showinline" -Value Show-PredictionInline -Force
 
 function Show-PredictionList {
-    Write-Output "Setting Prediction View Style To ListView"
     Set-PSReadLineOption -PredictionViewStyle ListView -WarningAction SilentlyContinue
 }
 
@@ -169,3 +178,11 @@ function Show-RonHowe {
 }
 
 New-Alias -Name "ronhowe" -Value Show-RonHowe -Force
+
+Set-Location -Path $HOME
+
+Show-RonHowe
+
+Write-Host "https://github.com/ronhowe" -ForegroundColor Blue
+
+Write-Host "OK" -ForegroundColor Green

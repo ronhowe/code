@@ -1,24 +1,29 @@
 #requires -PSEdition "Core"
 
+[CmdletBinding()]
 param(
+    [ValidateNotNullOrEmpty()]
     [string]
-    $Why = "Power-On Self-Test"
+    $Why = "Debugging"
 )
 
-Write-Output "WHO"
+Clear-Host
+
+Write-Verbose "Writing Who"
 Write-Output $env:USERNAME
 
-Write-Output "WHAT"
+Write-Verbose "Writing What"
 Write-Output $PSVersionTable.PSEdition
 
-Write-Output "WHERE"
+Write-Verbose "Writing Where"
 Write-Output $env:COMPUTERNAME
 
-Write-Output "WHEN"
+Write-Verbose "Writing When"
 Write-Output (Get-Date -AsUTC).Date
 
-Write-Output "WHY"
+Write-Verbose "Writing Why"
 Write-Output $Why
 
-Write-Output "HOW"
-Write-Output $PSCommandPath # $($MyInvocation.MyCommand.Name)
+Write-Verbose "Writing How"
+Write-Output $MyInvocation.MyCommand.Name
+Write-Output $PSCommandPath # core only
