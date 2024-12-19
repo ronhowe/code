@@ -112,20 +112,31 @@ try
     app.Logger.LogInformation("Using Serilog Request Logging Middleware");
     app.UseSerilogRequestLogging();
 
-    app.Logger.LogInformation("Using Custom Header Middleware");
+    app.Logger.LogInformation("Using Header Middleware");
     app.Use(async (context, next) =>
     {
-        AddCustomHeader(context, app);
+        const string _myHeader = "MyHeader";
+
+        app.Logger.LogDebug("Getting Header From Configuration.");
+        var myHeader = app.Configuration.GetSection(_myHeader).Value;
+        app.Logger.LogTrace("myHeader = {myHeader}", myHeader);
+
+        app.Logger.LogDebug("Appending Header");
+        context.Response.Headers.Append(_myHeader, myHeader);
+
         await next();
     });
 
     app.Logger.LogInformation("Using Authentication Middleware");
     app.UseAuthentication();
 
+    app.Logger.LogInformation("Using Claims Logger Middleware");
     app.Use(async (context, next) =>
     {
+        app.Logger.LogInformation("Selecting Claims From Context");
         var claims = context.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-        app.Logger.LogDebug("User Claims: {@Claims}", claims);
+        app.Logger.LogTrace("claims = {@claims}", claims);
+
         await next.Invoke();
     });
 
@@ -174,17 +185,4 @@ catch (Exception ex)
 finally
 {
     Log.CloseAndFlush();
-}
-
-static void AddCustomHeader(HttpContext context, WebApplication app)
-{
-    app.Logger.LogDebug("Adding Custom Header");
-
-    const string headerKey = "CustomHeader";
-    var headerValue = "MyCustomHeader";// app.Configuration.GetSection(headerKey).Value;
-
-    app.Logger.LogDebug("Logging Custom Header");
-    app.Logger.LogTrace("$headerKey = {headerKey} ; $headerValue = {headerValue}", headerKey, headerValue);
-
-    context.Response.Headers.Append(headerKey, headerValue);
 }

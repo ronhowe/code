@@ -72,6 +72,7 @@ public sealed class MyIntegrationTests : TestBase
             { "ConnectionStrings:MyDatabase", "Server=LOCALHOST;Database=MyDatabase;Integrated Security=True;Application Name=MyTestProject;Encrypt=False;Connect Timeout=1;Command Timeout=0;" },
             { "FeatureManagement:MyFeature", $"{value}" },
             { "MyConfiguration", "MyTestProject" },
+            { "MyHeader", "MyHeader" },
             { "MySecret", "MyTestProject" }
         };
         var configuration = new ConfigurationBuilder()
@@ -162,10 +163,10 @@ public sealed class MyIntegrationTests : TestBase
             Debug.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
         }
 
-        Debug.WriteLine("Asserting Custom Header");
-        if (response.Headers.TryGetValues("CustomHeader", out var values))
+        Debug.WriteLine("Asserting Header");
+        if (response.Headers.TryGetValues("MyHeader", out var values))
         {
-            values.First().Should<string>().Be("MyCustomHeader");
+            values.First().Should<string>().Be($"MyHeader ({environmentName})");
         }
 
         Debug.WriteLine("Asserting API Supported Versions Header");
