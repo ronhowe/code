@@ -9,7 +9,7 @@ using Serilog;
 using Serilog.Events;
 using System.Text;
 
-// TODO: Update for production release.
+// TODO: Update log template for production release.
 // const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
 const string _outputTemplate = "[{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
 const string _sourceContext = nameof(Program);
@@ -52,9 +52,9 @@ try
     Log.ForContext("SourceContext", _sourceContext).Information("Adding API Versioning Services");
     builder.Services.AddApiVersioning(options =>
     {
-        // TODO: Learn how these work with v{version:apiVersion} in the MapGet calls.
-        //options.DefaultApiVersion = new ApiVersion(1);
-        //options.AssumeDefaultVersionWhenUnspecified = true;
+        // TODO: Assert versionless route works.
+        options.DefaultApiVersion = new ApiVersion(1);
+        options.AssumeDefaultVersionWhenUnspecified = true;
         options.ApiVersionReader = new UrlSegmentApiVersionReader();
     });
 
@@ -65,7 +65,6 @@ try
     builder.Services.AddSingleton<IMyRepository, MyRepository>();
 
     Log.ForContext("SourceContext", _sourceContext).Information("Adding {name} Services", nameof(MyService));
-    // TODO: Learn the difference between AddSingleton and AddTransient.
     builder.Services.AddSingleton<IMyService, MyService>();
 
     Log.ForContext("SourceContext", _sourceContext).Information("Adding Authentication Services");
@@ -139,7 +138,7 @@ try
         .ReportApiVersions()
         .Build();
 
-    // TODO: Use better {tokens} for better queryability.  e.g. {serviceName} instead of {name}.
+    // TODO: Use better {tokens} for better discoverability.
 
     const int _v1 = 1;
     app.Logger.LogInformation("Mapping Version {version} GET Requests To {name}", _v1, nameof(MyService));

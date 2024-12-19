@@ -47,7 +47,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
 
         logger.LogInformation("Saving {rowKey}", rowKey);
 
-        // TODO: Read from configuration.
+        // TODO: Read retry settings from configuration.
         const int _maxRetries = 2;
         const int _retryMilliseconds = 1;
 
@@ -67,7 +67,6 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         try
         {
             logger.LogDebug("Executing With Retry Policy");
-            // TODO: Fix redundant saves on retry with _dbUnsaved and _azUnsaved checks.
             retryPolicy.Execute(() =>
             {
                 if (!_dbSaved)

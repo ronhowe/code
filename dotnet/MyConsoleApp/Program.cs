@@ -39,7 +39,7 @@ public class Program
 
         if (_benchmark)
         {
-            // TODO: Resolve .sln reference error.
+            // TODO: Resolve .sln reference error during benchmark run.
             var config = ManualConfig
                 .Create(DefaultConfig.Instance)
                 .WithOptions(ConfigOptions.DisableOptimizationsValidator)

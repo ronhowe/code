@@ -83,11 +83,9 @@ public sealed class MyIntegrationTests : TestBase
         serviceCollection.AddFeatureManagement();
 
         Log.ForContext("SourceContext", _sourceContext).Debug("Adding {name}", nameof(MyRepository));
-        // TODO: Learn the difference between AddSingleton and AddTransient.
         serviceCollection.AddTransient<IMyRepository, MyRepository>();
 
         Log.ForContext("SourceContext", _sourceContext).Debug("Adding {name}", nameof(MyService));
-        // TODO: Learn the difference between AddSingleton and AddTransient.
         serviceCollection.AddTransient<MyService>();
 
         Log.ForContext("SourceContext", _sourceContext).Debug("Building Service Provider");
@@ -147,7 +145,7 @@ public sealed class MyIntegrationTests : TestBase
             Audience = "yourAudience"
         };
 
-        // TODO: Decide on standard for local variable names (understore prefix or not).
+        // TODO: Decide on naming standard for variables, fields, etc.
         var _token = tokenHandler.CreateToken(tokenDescriptor);
         var _tokenString = tokenHandler.WriteToken(_token);
         Debug.WriteLine(_tokenString);
