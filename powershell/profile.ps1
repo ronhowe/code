@@ -10,6 +10,8 @@ if ($PSVersionTable.PSEdition -ne "Core") {
     Write-Warning "PowerShell Core Not Detected" -WarningAction Continue
 }
 
+Write-Host "Loading Profile ; Please Wait" -ForegroundColor DarkGray
+
 if (Get-Module -Name "Az.Tools.Predictor" -ListAvailable) {
     Import-Module -Name "Az.Tools.Predictor" -Verbose:$false
 }
