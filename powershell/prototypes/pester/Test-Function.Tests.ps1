@@ -3,18 +3,18 @@
 BeforeAll {
     . $PSCommandPath.Replace(".Tests.ps1", ".ps1")
 }
-Describe "Test-Function" {
-    Context "Filter Tests" {
+Describe "Test-Function Tests" {
+    Context "Testing Filters" {
         It "Asserting Default Filter Returns All Values" {
-            $allPlanets = Test-Function
+            $results = Test-Function
 
-            $allPlanets.Count |
+            $results.Count |
             Should -Be 3
         }
         It "Asserting Filter Returns One Value" {
-            $allPlanets = Test-Function -Name "*a*"
+            $results = Test-Function -Name "*a*"
 
-            $allPlanets.Count |
+            $results.Count |
             Should -Be 1
         }
     }

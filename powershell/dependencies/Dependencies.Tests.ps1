@@ -1,6 +1,6 @@
 #requires -Module "Pester"
 
-Describe "Testing Dependencies" {
+Describe "Dependency Tests" {
     BeforeAll {
         $ErrorActionPreference = "Stop"
         $ProgressPreference = "SilentlyContinue"

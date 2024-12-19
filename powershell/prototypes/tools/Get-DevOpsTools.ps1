@@ -1,29 +1,34 @@
-Write-Output ".NET SDK"
+[CmdletBinding()]
+param()
+
+$ErrorActionPreference = "Continue"
+
+Write-Verbose "Getting .NET (dotnet) Version"
 dotnet --version
 
-Write-Output "Azure CLI"
+Write-Verbose "Getting Azure CLI (az) Version"
 az --version
 
-Write-Output "Bicep CLI"
+Write-Verbose "Getting Bicep (bicep) Version"
 bicep --version
 
-Write-Output "GitHub CLI"
-gh --version
-
-Write-Output "Git"
+Write-Verbose "Getting Git CLI (git) Version"
 git --version
 
-Write-Output "NuGet"
+Write-Verbose "Getting GitHub CLI (gh) Version"
+gh --version
+
+Write-Verbose "Getting NuGet (nuget) Version"
 nuget | Select-String -SimpleMatch "NuGet Version"
 
-Write-Output "PowerShell"
+Write-Verbose "Getting PowerShell (pwsh) Version"
 pwsh --version
 
-Write-Output "Python"
+Write-Verbose "Getting Python (python) Version"
 python --version
 
-Write-Output "Visual Studio Code"
+Write-Verbose "Getting Visual Studio Code (code) Version"
 code --version
 
-Write-Output "Windows Subsystem for Linux"
+Write-Verbose "Getting Windows Subsystem For Linux (wsl) Version"
 wsl --version

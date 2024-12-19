@@ -67,7 +67,7 @@ function Get-DevOpsStatus {
     param()
 
     Write-Verbose "Getting DevOps Tools"
-    & "$HOME\repos\ronhowe\code\powershell\prototypes\tools\Get-DevOpsTools.ps1"
+    & "$HOME\repos\ronhowe\code\powershell\prototypes\tools\Get-DevOpsTools.ps1" -Verbose
 
     Write-Verbose "Testing Dependencies"
     & "$HOME\repos\ronhowe\code\powershell\dependencies\Invoke-PesterTests.ps1"
