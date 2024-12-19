@@ -12,12 +12,13 @@ if ($PSVersionTable.PSEdition -ne "Core") {
 
 Write-Host "Loading Profile ; Please Wait" -ForegroundColor DarkGray
 
-if (Get-Module -Name "Az.Tools.Predictor" -ListAvailable) {
-    Import-Module -Name "Az.Tools.Predictor" -Verbose:$false
-}
-else {
-    Write-Warning "Skipping Az.Tools.Predictor"
-}
+## TODO: Investigate performance degredation of loading this module recently.
+# if (Get-Module -Name "Az.Tools.Predictor" -ListAvailable) {
+#     Import-Module -Name "Az.Tools.Predictor" -Verbose:$false
+# }
+# else {
+Write-Warning "Skipping Az.Tools.Predictor"
+# }
 
 if ($host.Name -eq "Windows PowerShell ISE Host") {
     if (Get-Module -Name "ISESteroids" -ListAvailable) {

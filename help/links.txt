@@ -30,6 +30,10 @@ https://www.youtube.com/watch?v=8Asq7ymF1R8
 # PowerShell (powershell)
 ################################################################################
 
+TODO: Add links to all open source PowerShell module dependencies.
+https://github.com/adamdriscoll/pspolly
+https://github.com/PoShLog/PoShLog
+
 ################################################################################
 # SQL (sql)
 ################################################################################
