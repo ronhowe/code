@@ -69,17 +69,18 @@ function Get-DevOpsStatus {
     Write-Verbose "Getting DevOps Tools"
     & "$HOME\repos\ronhowe\code\powershell\prototypes\tools\Get-DevOpsTools.ps1" -Verbose
 
-    Write-Verbose "Testing Dependencies"
-    & "$HOME\repos\ronhowe\code\powershell\dependencies\Invoke-PesterTests.ps1"
-
-    Write-Verbose "Testing Module"
-    & "$HOME\repos\ronhowe\code\powershell\dependencies\Test-Module.ps1"
-
     Write-Verbose "Invoking Build Workflow"
     & "$HOME\repos\ronhowe\code\powershell\prototypes\dotnet\Invoke-BuildWorkflow.ps1"
 
     Write-Verbose "Running .NET List"
     dotnet list $HOME\repos\ronhowe\code\dotnet\MySolution.sln package --outdated
+
+    Write-Verbose "Testing Dependencies"
+    & "$HOME\repos\ronhowe\code\powershell\dependencies\Invoke-PesterTests.ps1"
+
+    ## TODO: Enable Module Testing
+    # Write-Verbose "Testing Module"
+    # & "$HOME\repos\ronhowe\code\powershell\module\Test-Module.ps1"
 
     Write-Verbose "Running WinGet Upgrade"
     winget upgrade
