@@ -1,28 +1,35 @@
+################################################################################
 # Azure (azure)
+################################################################################
 
 https://github.com/Azure
 https://github.com/Azure/azure-sdk-for-net/tree/main/sdk/tables/Azure.Data.Tables
 
+################################################################################
 # DevOps (devops)
+################################################################################
 
 https://learn.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops&tabs=yaml-editor
 https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/powershell-v2?view=azure-pipelines
 
-# Docs (docs)
-
-https://semver.org/
-
+################################################################################
 # .NET (dotnet)
+################################################################################
 
-https://www.thepollyproject.org/
 https://benchmarkdotnet.org/
+https://semver.org/
+https://thepollyproject.org/
 
-    Nick Chapsas - The New ID To Replace GUIDs and Integers in .NET
-    https://www.youtube.com/watch?v=nJ1ppFayHOk&t=276s
+Nick Chapsas - The New ID To Replace GUIDs and Integers in .NET
+https://www.youtube.com/watch?v=nJ1ppFayHOk&t=276s
 
-    Nick Chapsas - Implementing Modern API Versioning in .NET
-    https://www.youtube.com/watch?v=8Asq7ymF1R8
+Nick Chapsas - Implementing Modern API Versioning in .NET
+https://www.youtube.com/watch?v=8Asq7ymF1R8
 
+################################################################################
 # PowerShell (powershell)
+################################################################################
 
+################################################################################
 # SQL (sql)
+################################################################################
