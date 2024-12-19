@@ -13,6 +13,7 @@ using Serilog.Events;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 
@@ -134,6 +135,8 @@ public sealed class MyIntegrationTests : TestBase
             BaseAddress = new Uri("https://localhost:5001")
         });
 
+
+        // TODO: Decide on naming standard for variables, fields, etc.
         Debug.WriteLine("Generating Bearer Token");
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes($"/{new string('*', 4096 / 8)}");
@@ -145,14 +148,12 @@ public sealed class MyIntegrationTests : TestBase
             Issuer = "yourIssuer",
             Audience = "yourAudience"
         };
-
-        // TODO: Decide on naming standard for variables, fields, etc.
         var _token = tokenHandler.CreateToken(tokenDescriptor);
         var _tokenString = tokenHandler.WriteToken(_token);
         Debug.WriteLine(_tokenString);
 
         Debug.WriteLine($"Sending GET Request With {value}");
-        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _tokenString);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _tokenString);
         using var response = await client.GetAsync($"/v{version}/{nameof(MyService)}?input={value}");
 
         Debug.WriteLine($"Asserting HTTP Status Code Is {HttpStatusCode.OK}");
