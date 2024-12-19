@@ -4,6 +4,10 @@ BeforeAll {
     . $PSCommandPath.Replace(".Tests.ps1", ".ps1")
 }
 Describe "Test-Function Tests" {
+    BeforeAll {
+        Write-Host "$((Get-Date).ToString()) (LOCAL)" -ForegroundColor Yellow
+        Write-Host "$((Get-Date -AsUTC).ToString()) (UTC)" -ForegroundColor Yellow
+    }
     Context "Testing Filters" {
         It "Asserting Default Filter Returns All Values" {
             $results = Test-Function

@@ -3,21 +3,22 @@
 #requires -Module "WriteAscii"
 
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$Name,
+    [Parameter(Mandatory = $false)]
+    [string]$Name = "MyWebApplication",
 
-    [Parameter(Mandatory = $true)]
-    [string]$Platform,
+    [Parameter(Mandatory = $false)]
+    [string]$Platform = "Kestrel",
 
-    [Parameter(Mandatory = $true)]
-    [Uri]$Uri,
+    [Parameter(Mandatory = $false)]
+    [Uri]$Uri = "https://LOCALHOST:444",
 
-    [Parameter(Mandatory = $true)]
-    [string]$CustomHeader
+    [Parameter(Mandatory = $false)]
+    [string]$Header = "MyHeader"
 )
-Describe "IntegrationTests" {
+Describe "API Tests" {
     BeforeAll {
-        Write-Host (Get-Date).ToString() -ForegroundColor Yellow
+        Write-Host "$((Get-Date).ToString()) (LOCAL)" -ForegroundColor Yellow
+        Write-Host "$((Get-Date -AsUTC).ToString()) (UTC)" -ForegroundColor Yellow
     }
     Context "<Name> (<Platform>) @ <Uri>" {
         # It "ClientRetries" -Tag @("healthcheck") {
@@ -28,46 +29,18 @@ Describe "IntegrationTests" {
         #         $response.StatusCode | Should -Be 200
         #     }
         # }
-        # It "ApplicationHeaderIsCorrect [<CustomHeader>]" -Tag @("application") {
-        #     $response = Invoke-WebRequest -Uri "$Uri/service1?input=false" -SkipCertificateCheck
-        #     $response.Headers["CustomHeader"] | Should -Be $CustomHeader
-        # }
-        # It "ApplicationRespondsOKFromTrueInput" -Tag @("application") {
-        #     $response = Invoke-WebRequest -Uri "$Uri/service1?input=true" -SkipCertificateCheck
-        #     $response.StatusCode | Should -Be 200
-        # }
-        # It "ApplicationReturnsTrueFromTrueInput" -Tag @("application") {
-        #     $response = Invoke-WebRequest -Uri "$Uri/service1?input=true" -SkipCertificateCheck
-        #     $response.Content | Should -Be "true"
-        # }
-        It "ApplicationRespondsOKFromFalseInput" -Tag @("application") {
+        It "Asserting Response Status Code Is 200" -Tag @("application") {
             $response = Invoke-WebRequest -Uri "$Uri/v1/MyService?input=false" -SkipCertificateCheck
             $response.StatusCode | Should -Be 200
         }
-        # It "ApplicationReturnsFalseFromFalseInput" -Tag @("application") {
-        #     $response = Invoke-WebRequest -Uri "$Uri/service1?input=false" -SkipCertificateCheck
-        #     $response.Content | Should -Be "false"
-        # }
-        # It "ApplicationRespondsBadRequestFromMissingInput" -Tag @("application") {
-        #     $response = Invoke-WebRequest -Uri "$Uri/service1" -SkipCertificateCheck -SkipHttpErrorCheck
-        #     $response.StatusCode | Should -Be 400
-        # }
-        # It "ApplicationRespondsNotFoundFromInvalidRoute" -Tag @("application") {
-        #     $response = Invoke-WebRequest -Uri "$Uri" -SkipCertificateCheck -SkipHttpErrorCheck
-        #     $response.StatusCode | Should -Be 404
-        # }
-        # It "HealthCheckHeaderIsCorrect [<CustomHeader>]" -Tag @("healthcheck") {
-        #     $response = Invoke-WebRequest -Uri "$Uri/health" -SkipCertificateCheck
-        #     $response.Headers["CustomHeader"] | Should -Be $CustomHeader
-        # }
-        # It "HealthCheckRespondsOK" -Tag @("healthcheck") {
-        #     $response = Invoke-WebRequest -Uri "$Uri/health" -SkipCertificateCheck
-        #     $response.StatusCode | Should -Be 200
-        # }
-        # It "HealthCheckReturnsHealthy" -Tag @("healthcheck") {
-        #     $response = Invoke-WebRequest -Uri "$Uri/health" -SkipCertificateCheck
-        #     $response.Content | Should -Be "Healthy"
-        # }
+        It "Asserting Response Content Is False" -Tag @("application") {
+            $response = Invoke-WebRequest -Uri "$Uri/v1/MyService?input=false" -SkipCertificateCheck
+            $response.Content | Should -Be "false"
+        }
+        It "Asserting Response Headers Include [<Header>]" -Tag @("application") {
+            $response = Invoke-WebRequest -Uri "$Uri/v1/MyService?input=false" -SkipCertificateCheck
+            $response.Headers["MyHeader"] | Should -Be $Header
+        }
     }
     AfterAll {
         Write-Ascii $Name

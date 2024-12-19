@@ -10,6 +10,9 @@ Describe "Dependency Tests" {
         $ErrorActionPreference = "Stop"
         $ProgressPreference = "SilentlyContinue"
         $WarningPreference = "SilentlyContinue"
+
+        Write-Host "$((Get-Date).ToString()) (LOCAL)" -ForegroundColor Yellow
+        Write-Host "$((Get-Date -AsUTC).ToString()) (UTC)" -ForegroundColor Yellow
     }
     It "Asserting Dependency Is Current @{ ModuleName = '<Name>' ; RequiredVersion = '<Version>' }" -ForEach `
     $(

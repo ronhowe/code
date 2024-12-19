@@ -4,22 +4,23 @@
 param(
     [Parameter(Mandatory = $false)]
     [ValidateSet("*", "Application", "FunctionApp1", "MyWebApplication")]
-    [string]$Name = "*",
+    [string]$Name = "MyWebApplication",
 
     [Parameter(Mandatory = $false)]
     [ValidateSet("*", "AppService", "Docker", "FrontDoor", "FunctionApp", "Gateway", "IIS", "Kestrel")]
-    [string]$Platform = "*",
+    [string]$Platform = "Kestrel",
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullorEmpty()]
-    [int]$Sleep = 3,
+    [int]$Sleep = 1,
+
+    [switch]$Loop,
 
     [switch]$SkipApplicationChecks,
 
     [switch]$SkipHealthChecks
 )
-while ($true) {
-    Clear-Host
+do {
     $path = "$PSScriptRoot\Api.Tests.ps1"
     $data = (Import-PowerShellDataFile -Path "$PSScriptRoot\Api.Tests.psd1").Endpoints |
     Where-Object { ($_.Enabled -eq $true) -and ($_.Endpoint.Name -like $Name) -and ($_.Endpoint.Platform -like $Platform) } |
@@ -27,17 +28,28 @@ while ($true) {
     if ($data) {
         $includeTags = @()
         $excludeTags = @()
+
         if ($SkipApplicationChecks) {
+            Write-Warning "Skipping Application Checks"
             $excludeTags += "application"
         }
-        if ($SkipHealthChecks) {
-            $excludeTags += "healthcheck"
-        }
+
+        ## TODO: Enable after Health Checks are implemented.
+        # if ($SkipHealthChecks) {
+        Write-Warning "Skipping Health Checks"
+        $excludeTags += "healthcheck"
+        # }
+
+        Write-Verbose "Invoking Pester"
         Invoke-Pester -Path $path -Output Detailed -Container (New-PesterContainer -Path $path -Data $data) -TagFilter $includeTags -ExcludeTagFilter $excludeTags
-        Write-Host "Sleeping $Sleep Second(s)..." -ForegroundColor Cyan
-        Start-Sleep -Seconds $Sleep
+
+        if ($Loop) {
+            Write-Host "Sleeping $Sleep Second(s)..." -ForegroundColor Cyan
+            Start-Sleep -Seconds $Sleep
+        }
     }
     else {
-        Write-Error "No API Test Data Found" -ErrorAction Stop
+        Write-Warning "No Test Definitions Found"
     }
 }
+while ($Loop)

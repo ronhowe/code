@@ -101,6 +101,12 @@ function Hide-PromptOff {
 New-Alias -Name "silence" -Value Hide-PromptOff -Force
 
 
+function Invoke-ApiTest {
+    & "$HOME\repos\ronhowe\code\powershell\api\Invoke-PesterTests.ps1"
+}
+
+New-Alias -Name "api" -Value Invoke-ApiTest -Force
+
 function Invoke-WslCmatrix {
     Clear-Host
     Write-Host "The Matrix has you..." -ForegroundColor Green
