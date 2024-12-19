@@ -1,3 +1,5 @@
+#requires -Module "Pester"
+
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $false)]

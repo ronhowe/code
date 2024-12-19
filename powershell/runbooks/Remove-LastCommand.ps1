@@ -1,5 +1,3 @@
-#requires -PSEdition "Core"
-
 [CmdletBinding()]
 param()
 

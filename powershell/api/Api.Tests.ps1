@@ -1,4 +1,7 @@
-#requires -module "PSPolly"
+#requires -Module "Pester"
+#requires -Module "PSPolly"
+#requires -Module "WriteAscii"
+
 param(
     [Parameter(Mandatory = $true)]
     [string]$Name,
@@ -38,7 +41,7 @@ Describe "IntegrationTests" {
         #     $response.Content | Should -Be "true"
         # }
         It "ApplicationRespondsOKFromFalseInput" -Tag @("application") {
-            $response = Invoke-WebRequest -Uri "$Uri/api/MyService?input=false" -SkipCertificateCheck
+            $response = Invoke-WebRequest -Uri "$Uri/v1/MyService?input=false" -SkipCertificateCheck
             $response.StatusCode | Should -Be 200
         }
         # It "ApplicationReturnsFalseFromFalseInput" -Tag @("application") {

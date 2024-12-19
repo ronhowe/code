@@ -1,5 +1,3 @@
-#requires -PSEdition "Core"
-
 #requires -Module "Az.Storage"
 #requires -Module "SqlServer"
 

@@ -1,5 +1,10 @@
 #requires -Module "Pester"
 
+[CmdletBinding()]
+param ()
+
+$ErrorActionPreference = "Stop"
+
 Describe "Dependency Tests" {
     BeforeAll {
         $ErrorActionPreference = "Stop"

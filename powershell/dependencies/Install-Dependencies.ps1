@@ -1,19 +1,16 @@
 [CmdletBinding()]
-param (
-)
+param ()
 
 $ErrorActionPreference = "Stop"
-Write-Output "Running $($MyInvocation.MyCommand.Name)"
 
 Import-PowerShellDataFile -Path "$PSScriptRoot\Dependencies.psd1" |
 Select-Object -ExpandProperty "Modules" |
 ForEach-Object {
-    Write-Output "Installing @{ ModuleName = $($_.Name) ; RequiredVersion = $($_.Version) }"
-
     if (Get-Module -FullyQualifiedName @{ ModuleName = $_.Name ; RequiredVersion = $_.Version } -ListAvailable -Verbose:$false) {
-        Write-Output "Skipping Module Already Installed"
+        Write-Verbose "Skipping Module Already Installed"
     }
     else {
+        Write-Verbose "Installing Module @{ ModuleName = $($_.Name) ; RequiredVersion = $($_.Version) }"
         $parameters = @{
             AllowClobber       = $true
             ErrorAction        = "Stop"
