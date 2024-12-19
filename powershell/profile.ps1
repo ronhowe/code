@@ -70,7 +70,7 @@ function Get-DevOpsStatus {
     & "$HOME\repos\ronhowe\code\powershell\prototypes\tools\Get-DevOpsTools.ps1" -Verbose
 
     Write-Verbose "Invoking Build Workflow"
-    & "$HOME\repos\ronhowe\code\powershell\prototypes\dotnet\Invoke-BuildWorkflow.ps1"
+    & "$HOME\repos\ronhowe\code\powershell\prototypes\dotnet\Invoke-BuildWorkflow.ps1" -Verbose
 
     Write-Verbose "Running .NET List"
     dotnet list $HOME\repos\ronhowe\code\dotnet\MySolution.sln package --outdated
