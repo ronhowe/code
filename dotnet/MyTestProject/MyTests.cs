@@ -11,18 +11,19 @@ public sealed class MyTests : TestBase
     [TestMethod]
     public void MyTest()
     {
-        // LINK: MyLink
-        // NOTE: MyNote
-        // TODO: MyToDo
         Debug.WriteLine("Debugging");
-        Debug.WriteLine(Guid.CreateVersion7());
+
 #if DEBUG
-        Debug.WriteLine("DEBUG Defined");
+        Debug.WriteLine("Defining DEBUG");
 #endif
-        // NOTE: 4096-bit key = 512 bytes
-        var key = new byte[512];
+
+        Debug.WriteLine($"Creating Globally Unique Identifier");
+        Debug.WriteLine(Guid.CreateVersion7());
+
+        Debug.WriteLine($"Generating Random Number");
+        var key = new byte[4096 / 8];
         RandomNumberGenerator.Fill(key);
         var base64Key = Convert.ToBase64String(key);
-        Debug.WriteLine($"Randomly Generated 4096-bit Base 64 Key:\n{base64Key}");
+        Debug.WriteLine(base64Key);
     }
 }

@@ -137,7 +137,7 @@ public sealed class MyIntegrationTests : TestBase
 
         Debug.WriteLine("Generating Bearer Token");
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes($"/{new string('*', 512)}");
+        var key = Encoding.UTF8.GetBytes($"/{new string('*', 4096 / 8)}");
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity([new Claim("sub", "testuser")]),

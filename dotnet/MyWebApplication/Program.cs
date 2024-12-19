@@ -72,7 +72,7 @@ try
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
-            var _key = $"/{new string('*', 512)}";
+            var _key = $"/{new string('*', 4096 / 8)}";
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
