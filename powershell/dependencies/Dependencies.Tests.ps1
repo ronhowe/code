@@ -1,13 +1,10 @@
-[CmdletBinding()]
-param (
-)
 Describe "Testing Dependencies" {
     BeforeAll {
         $ErrorActionPreference = "Stop"
         $ProgressPreference = "SilentlyContinue"
         $WarningPreference = "SilentlyContinue"
     }
-    It "Dependency Is Latest @{ ModuleName = '<Name>' ; RequiredVersion = '<Version>' }" -ForEach `
+    It "Asserting Dependency Is Current @{ ModuleName = '<Name>' ; RequiredVersion = '<Version>' }" -ForEach `
     $(
         (Import-PowerShellDataFile -Path "$PSScriptRoot\Dependencies.psd1").Modules
     ) {
@@ -15,7 +12,7 @@ Describe "Testing Dependencies" {
         Select-Object -ExpandProperty "Version" |
         Should -Be $Version
     }
-    It "Dependency Is Installed @{ ModuleName = '<Name>' ; RequiredVersion = '<Version>' }" -ForEach `
+    It "Asserting Dependency Is Installed @{ ModuleName = '<Name>' ; RequiredVersion = '<Version>' }" -ForEach `
     $(
         (Import-PowerShellDataFile -Path "$PSScriptRoot\Dependencies.psd1").Modules
     ) {
