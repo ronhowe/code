@@ -7,8 +7,6 @@ param(
     $Why = "Debugging"
 )
 
-Clear-Host
-
 Write-Verbose "Writing Who"
 Write-Output $env:USERNAME
 

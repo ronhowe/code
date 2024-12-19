@@ -4,6 +4,4 @@
 
 #!pwsh
 
-Write-Output "OK"
-Get-Date
-Get-Date -AsUTC
+& "$HOME\repos\ronhowe\code\powershell\runbooks\Debug-Runbook.ps1" -Verbose
