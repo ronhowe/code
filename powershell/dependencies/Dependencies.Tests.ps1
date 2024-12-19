@@ -1,3 +1,5 @@
+#requires -Module "Pester"
+
 Describe "Testing Dependencies" {
     BeforeAll {
         $ErrorActionPreference = "Stop"
