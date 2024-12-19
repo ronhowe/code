@@ -23,8 +23,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MyDatabase", "sql\MyDatabase\MyDatabase.sqlproj", "{45DBE26A-9DCF-4230-933D-7FA90676A17E}"
 EndProject
-Project("{F5034706-568F-408A-B7B3-4D38C6DB8A32}") = "MyPowerShellProject", "powershell\MyPowerShellProject.pssproj", "{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help", "help", "{1AC742E0-BE94-4AA9-968E-49BD4065CDAE}"
 	ProjectSection(SolutionItems) = preProject
 		help\links.txt = help\links.txt
@@ -59,10 +57,6 @@ Global
 		{45DBE26A-9DCF-4230-933D-7FA90676A17E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45DBE26A-9DCF-4230-933D-7FA90676A17E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{45DBE26A-9DCF-4230-933D-7FA90676A17E}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
