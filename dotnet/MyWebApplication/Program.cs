@@ -46,10 +46,10 @@ try
     var environmentName = builder.Environment.EnvironmentName;
     Log.ForContext("SourceContext", _sourceContext).Debug("environmentName = {environmentName}", environmentName);
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding Feature Management");
+    Log.ForContext("SourceContext", _sourceContext).Information("Adding Feature Management Services");
     builder.Services.AddFeatureManagement();
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding API Versioning");
+    Log.ForContext("SourceContext", _sourceContext).Information("Adding API Versioning Services");
     builder.Services.AddApiVersioning(options =>
     {
         // TODO: Learn how these work with v{version:apiVersion} in the MapGet calls.
@@ -58,15 +58,17 @@ try
         options.ApiVersionReader = new UrlSegmentApiVersionReader();
     });
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding {name}", nameof(MyRepository));
+    builder.Services.AddOpenApi();
+
+    Log.ForContext("SourceContext", _sourceContext).Information("Adding {name} Services", nameof(MyRepository));
     // TODO: Learn the difference between AddSingleton and AddTransient.
     builder.Services.AddSingleton<IMyRepository, MyRepository>();
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding {name}", nameof(MyService));
+    Log.ForContext("SourceContext", _sourceContext).Information("Adding {name} Services", nameof(MyService));
     // TODO: Learn the difference between AddSingleton and AddTransient.
     builder.Services.AddSingleton<IMyService, MyService>();
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding Authentication");
+    Log.ForContext("SourceContext", _sourceContext).Information("Adding Authentication Services");
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
@@ -83,7 +85,7 @@ try
             };
         });
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding Authorization");
+    Log.ForContext("SourceContext", _sourceContext).Information("Adding Authorization Services");
     builder.Services.AddAuthorization();
 
     Log.ForContext("SourceContext", _sourceContext).Information("Building Web Application");
@@ -98,16 +100,20 @@ try
     app.Logger.LogInformation("{now} (LOCAL)", DateTime.Now);
     app.Logger.LogInformation("{utcNow} (UTC)", DateTime.UtcNow);
 
+    // NOTE: Order matters. (e.g. Swagger before Authentication)
+
     app.Logger.LogInformation("Using Request Logging Middleware");
     app.UseMiddleware<RequestLoggingMiddleware>();
 
-    app.Logger.LogInformation("Using HTTPS Redirection");
+    app.MapOpenApi();
+
+    app.Logger.LogInformation("Using HTTPS Redirection Middleware");
     app.UseHttpsRedirection();
 
-    app.Logger.LogInformation("Using Serilog Request Logging");
+    app.Logger.LogInformation("Using Serilog Request Logging Middleware");
     app.UseSerilogRequestLogging();
 
-    app.Logger.LogInformation("Using Custom Header");
+    app.Logger.LogInformation("Using Custom Header Middleware");
     app.Use(async (context, next) =>
     {
         AddCustomHeader(context, app);
