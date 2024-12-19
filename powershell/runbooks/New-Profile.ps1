@@ -1,3 +1,8 @@
+#requires -PSEdition "Core"
+
+[CmdletBinding()]
+param()
+
 New-Item -Path $profile -Force -Verbose
 
 @"

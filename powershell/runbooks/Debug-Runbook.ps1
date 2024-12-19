@@ -26,4 +26,5 @@ Write-Output $Why
 
 Write-Verbose "Writing How"
 Write-Output $MyInvocation.MyCommand.Name
-Write-Output $PSCommandPath # core only
+## NOTE: PowerShell Core Only
+Write-Output $PSCommandPath
