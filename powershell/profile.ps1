@@ -1,6 +1,3 @@
-[CmdletBinding()]
-param()
-
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 $VerbosePreference = "SilentlyContinue"
@@ -14,7 +11,6 @@ if ($PSVersionTable.PSEdition -ne "Core") {
 }
 
 if (Get-Module -Name "Az.Tools.Predictor" -ListAvailable) {
-    Write-Verbose "Importing Az.Tools.Predictor"
     Import-Module -Name "Az.Tools.Predictor" -Verbose:$false
 }
 else {
@@ -23,7 +19,6 @@ else {
 
 if ($host.Name -eq "Windows PowerShell ISE Host") {
     if (Get-Module -Name "ISESteroids" -ListAvailable) {
-        Write-Verbose "Importing ISESteroids"
         Import-Module -Name "ISESteroids" -Verbose:$false
     }
     else {
@@ -32,7 +27,6 @@ if ($host.Name -eq "Windows PowerShell ISE Host") {
 }
 
 if (Get-Module -Name "posh-git" -ListAvailable) {
-    Write-Verbose "Importing posh-git"
     Import-Module -Name "posh-git" -Verbose:$false
 }
 else {
@@ -40,7 +34,6 @@ else {
 }
 
 if (Get-Module -Name "Microsoft.PowerShell.SecretManagement" -ListAvailable) {
-    Write-Verbose "Importing Microsoft.PowerShell.SecretManagement"
     Import-Module -Name "Microsoft.PowerShell.SecretManagement" -Verbose:$false
 }
 else {
@@ -48,7 +41,6 @@ else {
 }
 
 if (Get-Module -Name "Microsoft.PowerShell.SecretStore" -ListAvailable) {
-    Write-Verbose "Importing Microsoft.PowerShell.SecretStore"
     Import-Module -Name "Microsoft.PowerShell.SecretStore" -Verbose:$false
 }
 else {
@@ -56,14 +48,10 @@ else {
 }
 
 if ($host.Name -eq "Windows PowerShell ISE Host") {
-    # legacy build machine support
+    # NOTE: work configuration
     New-Variable -Name "Root" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
 }
-else {
-    New-Variable -Name "root" -Value "$HOME\repos\ronhowe\code" -Scope Global -Force -ErrorAction SilentlyContinue
-}
 
-Write-Verbose "Setting PSReadLine Options"
 if ($PSVersionTable.PSEdition -eq "Core") {
     Set-PSReadLineOption -PredictionSource HistoryAndPlugin
     Set-PSReadLineOption -PredictionViewStyle ListView -WarningAction SilentlyContinue
