@@ -1,5 +1,6 @@
 param appInsightsName string
 param appName string
+param automationAccountName string = 'aa-ronhowe-0'
 param configStoreName string
 param location string
 param planName string
@@ -53,6 +54,18 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
   }
   identity: {
     type: 'SystemAssigned'
+  }
+}
+
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.automation/automationaccounts?pivots=deployment-language-bicep
+// TODO: 2023-11-01 is the latest version in eastus2. 2024-04-01 is the latest version in eastus.
+resource automationAccount 'Microsoft.Automation/automationAccounts@2023-11-01' = {
+  name: automationAccountName
+  location: location
+  properties: {
+    sku: {
+      name: 'Free'
+    }
   }
 }
 

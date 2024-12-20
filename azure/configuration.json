@@ -1,8 +1,0 @@
-{
-  "CustomHeader": "default",
-  "MockService1CpuThrottleIterations": 0,
-  "Sentinel": 0,
-  "FeatureManagement": {
-    "MyFeature": "true"
-  }
-}

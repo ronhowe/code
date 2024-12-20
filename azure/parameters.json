@@ -8,6 +8,9 @@
         "appName": {
             "value": "app-ronhowe-0"
         },
+        "automationAccountName": {
+            "value": "aa-ronhowe-0"
+        },
         "configStoreName": {
             "value": "appc-ronhowe-0"
         },
