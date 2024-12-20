@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appInsightsName": {
+            "value": "appi-ronhowe-0"
+        },
+        "appName": {
+            "value": "app-ronhowe-0"
+        },
+        "configStoreName": {
+            "value": "appc-ronhowe-0"
+        },
+        "location": {
+            "value": "eastus2"
+        },
+        "planName": {
+            "value": "asp-ronhowe-0"
+        },
+        "storageAccountName": {
+            "value": "stronhowe0"
+        },
+        "vaultName": {
+            "value": "kv-ronhowe-0"
+        },
+        "workspaceName": {
+            "value": "law-ronhowe-0"
+        }
+    }
+}

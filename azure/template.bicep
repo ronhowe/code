@@ -1,22 +1,26 @@
-param appName string
-param planName string
-param configStoreName string
-param workspaceName string
 param appInsightsName string
-param storageAccountName string
+param appName string
+param configStoreName string
 param location string
-param skuName string = 'B2'
-param skuCapacity int = 1
-param vaultName string = 'key-ronhowe-0'
+param planName string
+param storageAccountName string
+param vaultName string
+param workspaceName string
+
+param curveName string = ''
 param keyName string = 'mykey'
-param vaultSku string = 'standard'
-param keyType string = 'RSA'
 param keyOps array = []
 param keySize int = 2048
-param curveName string = ''
+param keyType string = 'RSA'
+param skuCapacity int = 1
+// LINK: https://azure.microsoft.com/en-us/pricing/details/app-service/windows/
+// NOTE: B1 => 1 Core => 1.75 GB RAM =>  10 GB Storage => $0.075/hour => $54.75/month
+// TODO: Can we get cheaper with Linux?
+param skuName string = 'B1'
+param vaultSku string = 'standard'
 
-// https://learn.microsoft.com/en-us/azure/templates/microsoft.web/serverfarms?pivots=deployment-language-bicep
-resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.web/serverfarms?pivots=deployment-language-bicep
+resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: planName
   location: location
   sku: {
@@ -25,8 +29,8 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
   }
 }
 
-// https://learn.microsoft.com/en-us/azure/templates/microsoft.web/sites?pivots=deployment-language-bicep
-resource appService 'Microsoft.Web/sites@2022-09-01' = {
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.web/sites?pivots=deployment-language-bicep
+resource appService 'Microsoft.Web/sites@2024-04-01' = {
   name: appName
   location: location
   properties: {
@@ -39,11 +43,11 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
           value: 'dotnet'
         }
       ]
-      netFrameworkVersion: 'v7.0'
+      netFrameworkVersion: 'v9.0'
       http20Enabled: true
       minTlsVersion: '1.2'
       use32BitWorkerProcess: false
-      healthCheckPath: '/health'
+      healthCheckPath: '/healthcheck'
     }
     httpsOnly: true
   }
@@ -52,8 +56,8 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
   }
 }
 
-// https://learn.microsoft.com/en-us/azure/templates/microsoft.appconfiguration/configurationstores?pivots=deployment-language-bicep
-resource configStore 'Microsoft.AppConfiguration/configurationStores@2023-03-01' = {
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.appconfiguration/configurationstores?pivots=deployment-language-bicep
+resource configStore 'Microsoft.AppConfiguration/configurationStores@2024-05-01' = {
   name: configStoreName
   location: location
   sku: {
@@ -68,13 +72,13 @@ resource configStore 'Microsoft.AppConfiguration/configurationStores@2023-03-01'
   }
 }
 
-// https://learn.microsoft.com/en-us/azure/templates/microsoft.operationalinsights/workspaces?pivots=deployment-language-bicep
-resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.operationalinsights/workspaces?pivots=deployment-language-bicep
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: workspaceName
   location: location
 }
 
-// https://learn.microsoft.com/en-us/azure/templates/microsoft.insights/components?pivots=deployment-language-bicep
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.insights/components?pivots=deployment-language-bicep
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: appInsightsName
   location: location
@@ -85,8 +89,8 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-// https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts?pivots=deployment-language-bicep
-resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts?pivots=deployment-language-bicep
+resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   name: storageAccountName
   location: location
   kind: 'StorageV2'
@@ -95,18 +99,18 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   }
 }
 
-// https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults?pivots=deployment-language-bicep
-resource vault 'Microsoft.KeyVault/vaults@2022-07-01' = {
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults?pivots=deployment-language-bicep
+resource vault 'Microsoft.KeyVault/vaults@2024-04-01-preview' = {
   name: vaultName
   location: location
   properties: {
     accessPolicies: []
     enableRbacAuthorization: true
     enableSoftDelete: true
-    softDeleteRetentionInDays: 90
-    enabledForDeployment: false
-    enabledForDiskEncryption: false
-    enabledForTemplateDeployment: false
+    softDeleteRetentionInDays: 7
+    enabledForDeployment: true
+    enabledForDiskEncryption: true
+    enabledForTemplateDeployment: true
     tenantId: subscription().tenantId
     sku: {
       name: vaultSku
@@ -119,8 +123,8 @@ resource vault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   }
 }
 
-// https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults/keys?pivots=deployment-language-bicep
-resource key 'Microsoft.KeyVault/vaults/keys@2022-07-01' = {
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults/keys?pivots=deployment-language-bicep
+resource key 'Microsoft.KeyVault/vaults/keys@2024-04-01-preview' = {
   parent: vault
   name: keyName
   properties: {
