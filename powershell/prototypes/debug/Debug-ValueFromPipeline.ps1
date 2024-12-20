@@ -1,26 +1,51 @@
-function Debug-Function {
+function Debug-ValueFromPipeline {
     param(
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [string[]]
         $Items
     )
     begin {
-        Write-Output "begin {}"
+        Write-Debug "Beginning $($MyInvocation.MyCommand.Name)"
+
+        Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
+        Select-Object -Property @("Name", "Value") |
+        ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
     }
     process {
-        Write-Output "process {} begin"
+        Write-Debug "Processing $($MyInvocation.MyCommand.Name)"
+
         foreach ($Item in $Items) {
-            Write-Output $Item
+            Write-Debug $Item
         }
-        Write-Output "process {} end"
     }
     end {
-        Write-Output "end {}"
+        Write-Debug "Ending $($MyInvocation.MyCommand.Name)"
     }
 }
 
-Debug-Function -Items 1
+Debug-ValueFromPipeline -Items 1 -Verbose -Debug
 
-Debug-Function -Items @(1, 2)
+# DEBUG: Beginning Debug-ValueFromPipeline
+# DEBUG: $Items = 1
+# DEBUG: Processing Debug-ValueFromPipeline
+# DEBUG: 1
+# DEBUG: Ending Debug-ValueFromPipeline
 
-@(1..2) | Debug-Function
+Debug-ValueFromPipeline -Items @(1, 2) -Verbose -Debug
+
+# DEBUG: Beginning Debug-ValueFromPipeline
+# DEBUG: $Items = 1 2
+# DEBUG: Processing Debug-ValueFromPipeline
+# DEBUG: 1
+# DEBUG: 2
+# DEBUG: Ending Debug-ValueFromPipeline
+
+@(1..2) | Debug-ValueFromPipeline -Verbose -Debug
+
+# DEBUG: Beginning Debug-ValueFromPipeline
+# DEBUG: $Items = 
+# DEBUG: Processing Debug-ValueFromPipeline
+# DEBUG: 1
+# DEBUG: Processing Debug-ValueFromPipeline
+# DEBUG: 2
+# DEBUG: Ending Debug-ValueFromPipeline

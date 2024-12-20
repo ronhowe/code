@@ -2,7 +2,6 @@
 param()
 
 $ErrorActionPreference = "Stop"
-Write-Verbose "Running $($MyInvocation.MyCommand.Name)"
 
 Write-Verbose "Pushing Location"
 Push-Location -Path "$HOME\repos\ronhowe\code"
