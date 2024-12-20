@@ -1,6 +1,5 @@
 #requires -Module "Pester"
 #requires -Module "PSPolly"
-#requires -Module "WriteAscii"
 
 param(
     [Parameter(Mandatory = $false)]
@@ -20,15 +19,25 @@ Describe "API Tests" {
         Write-Host "$((Get-Date).ToString()) (LOCAL)" -ForegroundColor Yellow
         Write-Host "$((Get-Date -AsUTC).ToString()) (UTC)" -ForegroundColor Yellow
     }
-    Context "<Name> (<Platform>) @ <Uri>" {
-        # It "ClientRetries" -Tag @("healthcheck") {
-        #     $policy = New-PollyPolicy -Retry -RetryCount 10 -RetryWait (New-TimeSpan -Seconds 1)
-        #     Invoke-PollyCommand -Policy $policy -ScriptBlock {
-        #         Write-Host "`tInvoking Web Request within Polly Policy.." -ForegroundColor DarkGray
-        #         $response = Invoke-WebRequest -Uri "$Uri/health" -SkipCertificateCheck
-        #         $response.StatusCode | Should -Be 200
-        #     }
-        # }
+    Context "<Name> (<Platform>) @ <Uri> MyHealthCheck" {
+        It "Asserting Response Status Code Is 200" -Tag @("healthcheck") {
+            $policy = New-PollyPolicy -Retry -RetryCount 10 -RetryWait (New-TimeSpan -Seconds 1)
+            Invoke-PollyCommand -Policy $policy -ScriptBlock {
+                Write-Host "`tInvoking Web Request With Retry" -ForegroundColor DarkGray
+                $response = Invoke-WebRequest -Uri "$Uri/healthcheck" -SkipCertificateCheck
+                $response.StatusCode | Should -Be 200
+            }
+        }
+        It "Asserting Response Content Code Is Healthy" -Tag @("healthcheck") {
+            $policy = New-PollyPolicy -Retry -RetryCount 10 -RetryWait (New-TimeSpan -Seconds 1)
+            Invoke-PollyCommand -Policy $policy -ScriptBlock {
+                Write-Host "`tInvoking Web Request With Retry" -ForegroundColor DarkGray
+                $response = Invoke-WebRequest -Uri "$Uri/healthcheck" -SkipCertificateCheck
+                $response.Content | Should -Be "Healthy"
+            }
+        }
+    }
+    Context "<Name> (<Platform>) @ <Uri> MyService" {
         It "Asserting Response Status Code Is 200" -Tag @("application") {
             $response = Invoke-WebRequest -Uri "$Uri/v1/MyService?input=false" -SkipCertificateCheck
             $response.StatusCode | Should -Be 200
@@ -41,8 +50,5 @@ Describe "API Tests" {
             $response = Invoke-WebRequest -Uri "$Uri/v1/MyService?input=false" -SkipCertificateCheck
             $response.Headers["MyHeader"] | Should -Be $Header
         }
-    }
-    AfterAll {
-        Write-Ascii $Name
     }
 }
