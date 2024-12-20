@@ -9,7 +9,7 @@ dotnet --version
 Write-Verbose "Getting Azure CLI (az) Version"
 az --version
 
-Write-Verbose "Getting Bicep (bicep) Version"
+Write-Verbose "Getting Bicep CLI (bicep) Version"
 bicep --version
 
 Write-Verbose "Getting Git CLI (git) Version"
