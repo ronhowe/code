@@ -49,6 +49,9 @@ try
     Log.ForContext("SourceContext", _sourceContext).Information("Adding Feature Management Services");
     builder.Services.AddFeatureManagement();
 
+    Log.ForContext("SourceContext", _sourceContext).Information("Adding Health Check Services");
+    builder.Services.AddHealthChecks().AddCheck<MyHealthCheck>("MyHealthCheck");
+
     Log.ForContext("SourceContext", _sourceContext).Information("Adding API Versioning Services");
     builder.Services.AddApiVersioning(options =>
     {
@@ -126,6 +129,9 @@ try
 
         await next();
     });
+
+    app.Logger.LogInformation("Using HealthCheck");
+    app.UseHealthChecks("/healthcheck");
 
     app.Logger.LogInformation("Using Authentication Middleware");
     app.UseAuthentication();

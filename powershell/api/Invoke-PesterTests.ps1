@@ -4,21 +4,27 @@
 param(
     [Parameter(Mandatory = $false)]
     [ValidateSet("*", "MyWebApplication")]
-    [string]$Name = "MyWebApplication",
+    [string]
+    $Name = "MyWebApplication",
 
     [Parameter(Mandatory = $false)]
     [ValidateSet("*", "AppService", "Kestrel")]
-    [string]$Platform = "*",
+    [string]
+    $Platform = "*",
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullorEmpty()]
-    [int]$Sleep = 1,
+    [int]
+    $Sleep = 1,
 
-    [switch]$Loop,
+    [switch]
+    $Loop,
 
-    [switch]$SkipApplicationChecks,
+    [switch]
+    $SkipApplicationChecks,
 
-    [switch]$SkipHealthChecks
+    [switch]
+    $SkipHealthChecks
 )
 do {
     $path = "$PSScriptRoot\Api.Tests.ps1"
@@ -34,11 +40,10 @@ do {
             $excludeTags += "application"
         }
 
-        ## TODO: Enable after Health Checks are implemented.
-        # if ($SkipHealthChecks) {
-        Write-Warning "Skipping Health Checks"
-        $excludeTags += "healthcheck"
-        # }
+        if ($SkipHealthChecks) {
+            Write-Warning "Skipping Health Checks"
+            $excludeTags += "healthcheck"
+        }
 
         Write-Verbose "Invoking Pester"
         Invoke-Pester -Path $path -Output Detailed -Container (New-PesterContainer -Path $path -Data $data) -TagFilter $includeTags -ExcludeTagFilter $excludeTags
