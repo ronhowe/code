@@ -113,7 +113,9 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         {
             logger.LogError("Save Failed Because {message}", ex.Message);
             logger.LogCritical("CRITICAL ERROR");
+#if DEBUG
             throw;
+#endif
         }
 
         logger.LogDebug("Exiting {name}", nameof(MyRepository));
