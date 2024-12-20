@@ -3,12 +3,12 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $false)]
-    [ValidateSet("*", "Application", "FunctionApp1", "MyWebApplication")]
+    [ValidateSet("*", "MyWebApplication")]
     [string]$Name = "MyWebApplication",
 
     [Parameter(Mandatory = $false)]
-    [ValidateSet("*", "AppService", "Docker", "FrontDoor", "FunctionApp", "Gateway", "IIS", "Kestrel")]
-    [string]$Platform = "Kestrel",
+    [ValidateSet("*", "AppService", "Kestrel")]
+    [string]$Platform = "*",
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullorEmpty()]
