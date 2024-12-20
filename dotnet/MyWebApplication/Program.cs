@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
@@ -40,6 +41,16 @@ try
     builder.Host.UseSerilog((hostContext, loggerConfiguration) =>
     {
         loggerConfiguration.ReadFrom.Configuration(hostContext.Configuration);
+    });
+
+    Log.ForContext("SourceContext", _sourceContext).Information("Getting Application Insights Connection String");
+    var _aiConnectionString = builder.Configuration["ConnectionStrings:ApplicationInsights"];
+    Log.ForContext("SourceContext", _sourceContext).Debug("_aiConnectionString = {_aiConnectionString}", _aiConnectionString);
+
+    Log.ForContext("SourceContext", _sourceContext).Information("Adding Application Insights Telemetry");
+    builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions
+    {
+        ConnectionString = _aiConnectionString
     });
 
     Log.ForContext("SourceContext", _sourceContext).Debug("Getting Environment Name From Environment");
