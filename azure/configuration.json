@@ -3,8 +3,6 @@
   "MockService1CpuThrottleIterations": 0,
   "Sentinel": 0,
   "FeatureManagement": {
-    "MockService1PermanentExceptionToggle": false,
-    "MockService1TransientExceptionToggle": false,
-    "MockService1CpuThrottleToggle": false
+    "MyFeature": "true"
   }
 }
