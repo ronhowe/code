@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Tokens;
@@ -10,9 +11,7 @@ using Serilog;
 using Serilog.Events;
 using System.Text;
 
-// TODO: Update log template for production release.
-// const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
-const string _outputTemplate = "[{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
+const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
 const string _sourceContext = nameof(Program);
 
 Log.Logger = new LoggerConfiguration()
@@ -99,7 +98,9 @@ try
         });
 
     Log.ForContext("SourceContext", _sourceContext).Information("Adding Authorization Services");
-    builder.Services.AddAuthorization();
+    builder.Services.AddAuthorizationBuilder()
+        .AddPolicy("MyClaimPolicy", policy =>
+            policy.RequireClaim("MyClaimType", "MyClaimValue"));
 
     Log.ForContext("SourceContext", _sourceContext).Information("Building Web Application");
     var app = builder.Build();
@@ -118,6 +119,14 @@ try
     app.Logger.LogInformation("Using Request Logging Middleware");
     app.UseMiddleware<RequestLoggingMiddleware>();
 
+
+    if (!app.Environment.IsDevelopment())
+    {
+        app.Logger.LogInformation("Using Exception Handling");
+        app.UseExceptionHandler("/error");
+    }
+
+    app.Logger.LogInformation("Mapping Open API");
     app.MapOpenApi();
 
     app.Logger.LogInformation("Using HTTPS Redirection Middleware");
@@ -177,7 +186,8 @@ try
         return myService.MyMethod(input);
     })
         .WithApiVersionSet(versionSet)
-        .MapToApiVersion(_v1);
+        .MapToApiVersion(_v1)
+        .RequireAuthorization("MyClaimPolicy");
 
     const int _v2 = 2;
     app.Logger.LogInformation("Mapping Version {version} GET Requests To {name}", _v2, nameof(MyService));
@@ -190,7 +200,7 @@ try
     })
         .WithApiVersionSet(versionSet)
         .MapToApiVersion(_v2)
-        .RequireAuthorization();
+        .RequireAuthorization("MyClaimPolicy");
 
     await app.RunAsync();
 }

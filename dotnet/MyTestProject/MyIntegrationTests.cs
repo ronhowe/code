@@ -135,14 +135,13 @@ public sealed class MyIntegrationTests : TestBase
             BaseAddress = new Uri("https://localhost:5001")
         });
 
-
         // TODO: Decide on naming standard for variables, fields, etc.
         Debug.WriteLine("Generating Bearer Token");
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes($"/{new string('*', 4096 / 8)}");
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity([new Claim("sub", "testuser")]),
+            Subject = new ClaimsIdentity([new Claim("MyClaimType", "MyClaimValue")]),
             Expires = DateTime.UtcNow.AddMinutes(30),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             Issuer = "yourIssuer",
