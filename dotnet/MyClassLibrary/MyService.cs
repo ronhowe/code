@@ -8,16 +8,16 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
 {
     public bool MyMethod(bool myInput)
     {
-        logger.LogDebug("Entering {name}", nameof(MyService));
+        logger.LogInformation("Entering {name}", nameof(MyService));
 
-        logger.LogTrace("myInput = {myInput}", myInput);
+        logger.LogDebug("myInput = {myInput}", myInput);
 
         string? myConfiguration;
         try
         {
-            logger.LogDebug("Getting MyConfiguration");
+            logger.LogInformation("Getting MyConfiguration From Configuration");
             myConfiguration = configuration["MyConfiguration"];
-            logger.LogTrace("myConfiguration = {myConfiguration}", myConfiguration);
+            logger.LogDebug("myConfiguration = {myConfiguration}", myConfiguration);
         }
         catch (Exception ex)
         {
@@ -28,9 +28,9 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         string? mySecret;
         try
         {
-            logger.LogDebug("Getting MySecret");
+            logger.LogInformation("Getting MySecret From Configuration");
             mySecret = configuration["MySecret"];
-            logger.LogTrace("mySecret = {mySecret}", mySecret);
+            logger.LogDebug("mySecret = {mySecret}", mySecret);
         }
         catch (Exception ex)
         {
@@ -41,9 +41,9 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         bool? myFeature;
         try
         {
-            logger.LogDebug("Getting MyFeature");
+            logger.LogInformation("Getting MyFeature From Configuration");
             myFeature = featureManager.IsEnabledAsync("MyFeature").Result;
-            logger.LogTrace("myFeature = {myFeature}", myFeature);
+            logger.LogDebug("myFeature = {myFeature}", myFeature);
         }
         catch (Exception ex)
         {
@@ -56,7 +56,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
 
         logger.LogInformation("Returning {result}", myInput);
 
-        logger.LogDebug("Exiting {name}", nameof(MyService));
+        logger.LogInformation("Exiting {name}", nameof(MyService));
 
         return myInput;
     }

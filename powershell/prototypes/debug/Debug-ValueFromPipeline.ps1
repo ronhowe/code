@@ -1,51 +1,33 @@
 function Debug-ValueFromPipeline {
+    [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [string[]]
         $Items
     )
     begin {
-        Write-Debug "Beginning $($MyInvocation.MyCommand.Name)"
+        Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
 
         Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
         Select-Object -Property @("Name", "Value") |
         ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
     }
+    ## NOTE: process{} blocks not supported in Azure Automation runbooks.
     process {
-        Write-Debug "Processing $($MyInvocation.MyCommand.Name)"
+        Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-        foreach ($Item in $Items) {
-            Write-Debug $Item
+        foreach ($item in $Items) {
+            Write-Output $item
         }
     }
     end {
-        Write-Debug "Ending $($MyInvocation.MyCommand.Name)"
+        Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
     }
 }
 
 Debug-ValueFromPipeline -Items 1 -Verbose -Debug
-
-# DEBUG: Beginning Debug-ValueFromPipeline
-# DEBUG: $Items = 1
-# DEBUG: Processing Debug-ValueFromPipeline
-# DEBUG: 1
-# DEBUG: Ending Debug-ValueFromPipeline
+Debug-ValueFromPipeline -Items 2 -Verbose -Debug
 
 Debug-ValueFromPipeline -Items @(1, 2) -Verbose -Debug
 
-# DEBUG: Beginning Debug-ValueFromPipeline
-# DEBUG: $Items = 1 2
-# DEBUG: Processing Debug-ValueFromPipeline
-# DEBUG: 1
-# DEBUG: 2
-# DEBUG: Ending Debug-ValueFromPipeline
-
 @(1..2) | Debug-ValueFromPipeline -Verbose -Debug
-
-# DEBUG: Beginning Debug-ValueFromPipeline
-# DEBUG: $Items = 
-# DEBUG: Processing Debug-ValueFromPipeline
-# DEBUG: 1
-# DEBUG: Processing Debug-ValueFromPipeline
-# DEBUG: 2
-# DEBUG: Ending Debug-ValueFromPipeline

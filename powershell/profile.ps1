@@ -2,15 +2,18 @@ $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 $VerbosePreference = "SilentlyContinue"
 
-Get-Date
+Write-Host "********************************************************************************" -ForegroundColor Green
+Write-Host "https://github.com/ronhowe" -ForegroundColor Green
+Write-Host "********************************************************************************" -ForegroundColor Green
+
+Write-Host "$([DateTime]::Now.ToString(`"yyyy-MM-dd HH:mm:ss.fff`")) (LOCAL)"
+Write-Host "$([DateTime]::UtcNow.ToString(`"yyyy-MM-dd HH:mm:ss.fff`")) (UTC)"
 
 Write-Host "Running PowerShell $($PSVersionTable.PSVersion.ToString())"
 
 if ($PSVersionTable.PSEdition -ne "Core") {
     Write-Warning "PowerShell Core Not Detected" -WarningAction Continue
 }
-
-Write-Host "Loading Profile ; Please Wait" -ForegroundColor DarkGray
 
 if (Get-Module -Name "Az.Tools.Predictor" -ListAvailable) {
     Import-Module -Name "Az.Tools.Predictor" -Verbose:$false
@@ -176,10 +179,9 @@ function Show-RonHowe {
 
 New-Alias -Name "ronhowe" -Value Show-RonHowe -Force
 
+Write-Verbose "Setting Location To Home"
 Set-Location -Path $HOME
 
 Show-RonHowe
 
-Write-Host "https://github.com/ronhowe" -ForegroundColor Blue
-
-Write-Host "OK" -ForegroundColor Green
+Write-Host "OK"

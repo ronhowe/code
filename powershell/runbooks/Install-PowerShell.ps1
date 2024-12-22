@@ -4,7 +4,8 @@
 
 [CmdletBinding()]
 param(
-    [string]$Source = "https://github.com/PowerShell/PowerShell/releases/download/v7.4.6/PowerShell-7.4.6-win-x64.msi"
+    [string]
+    $Source = "https://github.com/PowerShell/PowerShell/releases/download/v7.4.6/PowerShell-7.4.6-win-x64.msi"
 )
 
 $ErrorActionPreference = "Stop"

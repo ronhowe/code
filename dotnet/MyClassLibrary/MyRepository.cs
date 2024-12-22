@@ -10,17 +10,19 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
 {
     public void Save(bool myInput)
     {
-        logger.LogDebug("Entering {name}", nameof(MyRepository));
+        logger.LogInformation("Entering {name}", nameof(MyRepository));
 
-        logger.LogTrace("myInput = {myInput}", myInput);
+        logger.LogDebug("myInput = {myInput}", myInput);
 
         const string _dbConnection = "MyDatabase";
         string? dbConnectionString;
         try
         {
-            logger.LogDebug("Getting Database Connection String");
+            logger.LogInformation("Getting Database Connection String");
             dbConnectionString = configuration[$"ConnectionStrings:{_dbConnection}"];
-            logger.LogTrace("dbConnectionString = {dbConnectionString}", dbConnectionString);
+#if DEBUG
+            logger.LogDebug("dbConnectionString = {dbConnectionString}", dbConnectionString);
+#endif
         }
         catch (Exception ex)
         {
@@ -32,9 +34,11 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         string? azConnectionString;
         try
         {
-            logger.LogDebug("Getting Azure Storage Connection String");
+            logger.LogInformation("Getting Azure Storage Connection String");
             azConnectionString = configuration[$"ConnectionStrings:{_azConnection}"];
-            logger.LogTrace("azConnectionString = {azConnectionString}", azConnectionString);
+#if DEBUG
+            logger.LogDebug("azConnectionString = {azConnectionString}", azConnectionString);
+#endif
         }
         catch (Exception ex)
         {
@@ -42,7 +46,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
             throw;
         }
 
-        logger.LogDebug("Generating Row Key");
+        logger.LogInformation("Generating Row Key");
         var rowKey = Guid.CreateVersion7().ToString();
 
         logger.LogInformation("Saving {rowKey}", rowKey);
@@ -51,7 +55,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         const int _maxRetries = 2;
         const int _retryMilliseconds = 1;
 
-        logger.LogDebug("Creating Retry Policy");
+        logger.LogInformation("Creating Retry Policy");
         var retryPolicy = Policy
             .Handle<SqlException>()
             .WaitAndRetry(_maxRetries, retryAttempt => TimeSpan.FromMilliseconds(_retryMilliseconds),
@@ -71,13 +75,13 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
             {
                 if (!_dbSaved)
                 {
-                    logger.LogDebug("Saving To Database");
+                    logger.LogInformation("Saving To Database");
 
-                    logger.LogDebug("Opening Connection");
+                    logger.LogInformation("Opening Connection");
                     using SqlConnection connection = new(dbConnectionString);
                     connection.Open();
 
-                    logger.LogDebug("Executing Command");
+                    logger.LogInformation("Executing Command");
                     using SqlCommand command = new("INSERT [dbo].[MyTable] ([PartitionKey], [RowKey], [MyInput]) VALUES (@PartitionKey, @RowKey, @MyInput);", connection);
                     command.Parameters.AddWithValue("@PartitionKey", DateTime.UtcNow);
                     command.Parameters.AddWithValue("@RowKey", rowKey);
@@ -86,17 +90,17 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
                 }
 
                 _dbSaved = true;
-                logger.LogDebug("Save To Database Succeeded");
+                logger.LogInformation("Save To Database Succeeded");
 
                 if (!_azSaved)
                 {
-                    logger.LogDebug("Saving To Azure Storage");
+                    logger.LogInformation("Saving To Azure Storage");
 
-                    logger.LogDebug("Creating Table");
+                    logger.LogInformation("Creating Table");
                     var tableClient = new TableClient(azConnectionString, "MyCloudTable");
                     tableClient.CreateIfNotExists();
 
-                    logger.LogDebug("Adding Entity");
+                    logger.LogInformation("Adding Entity");
                     var tableEntity = new TableEntity(DateTime.UtcNow.ToString("yyyy-MM-dd"), rowKey)
                     {
                         { "MyInput", myInput }
@@ -105,7 +109,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
                 }
 
                 _azSaved = true;
-                logger.LogDebug("Save To Azure Storage Succeeded");
+                logger.LogInformation("Save To Azure Storage Succeeded");
             }
             );
         }
@@ -118,6 +122,6 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
 #endif
         }
 
-        logger.LogDebug("Exiting {name}", nameof(MyRepository));
+        logger.LogInformation("Exiting {name}", nameof(MyRepository));
     }
 }

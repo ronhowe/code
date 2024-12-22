@@ -12,16 +12,19 @@ try {
     if ($LASTEXITCODE -ne 0) {
         throw ".NET Clean Failed"
     }
+
     Write-Verbose "Running .NET Restore"
     dotnet restore ./dotnet
     if ($LASTEXITCODE -ne 0) {
         throw ".NET Restore Failed"
     }
+
     Write-Verbose "Running .NET Build"
     dotnet build ./dotnet --no-restore
     if ($LASTEXITCODE -ne 0) {
         throw ".NET Build Failed"
     }
+
     Write-Verbose "Running .NET Test"
     dotnet test ./dotnet --no-build --nologo --filter "TestCategory=UnitTest" --verbosity normal
     if ($LASTEXITCODE -ne 0) {

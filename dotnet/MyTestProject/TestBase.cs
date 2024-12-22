@@ -14,11 +14,11 @@ public class TestBase
     [TestInitialize]
     public void TestInitialize()
     {
-        Debug.WriteLine($"/{new string('*', 79)}");
+        Debug.WriteLine($"{new string('*', 80)}");
         Debug.WriteLine("https://github.com/ronhowe");
-        Debug.WriteLine($"{new string('*', 79)}/");
-        Debug.WriteLine($"{DateTime.Now} (LOCAL)");
-        Debug.WriteLine($"{DateTime.UtcNow} (UTC)");
+        Debug.WriteLine($"{new string('*', 80)}");
+        Debug.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} (LOCAL)");
+        Debug.WriteLine($"{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss.fff} (UTC)");
         Debug.WriteLine($"Initializing Test");
     }
 }
