@@ -1,7 +1,6 @@
 using Asp.Versioning;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Tokens;
@@ -11,7 +10,7 @@ using Serilog;
 using Serilog.Events;
 using System.Text;
 
-const string _outputTemplate = "[{Timestamp:yyyy-MM-dd @ HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
+const string _outputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
 const string _sourceContext = nameof(Program);
 
 Log.Logger = new LoggerConfiguration()
@@ -34,36 +33,38 @@ Log.ForContext("SourceContext", _sourceContext).Information("{utcNow} (UTC)", Da
 try
 {
     Log.ForContext("SourceContext", _sourceContext).Information("Creating Web Application Builder");
-    var builder = WebApplication.CreateBuilder(args);
+    var _builder = WebApplication.CreateBuilder(args);
+
+    Log.ForContext("SourceContext", _sourceContext).Information("Getting Environment Name From Environment");
+    var _environmentName = _builder.Environment.EnvironmentName;
+    Log.ForContext("SourceContext", _sourceContext).Debug("environmentName = {environmentName}", _environmentName);
 
     Log.ForContext("SourceContext", _sourceContext).Information("Using Serilog");
-    builder.Host.UseSerilog((hostContext, loggerConfiguration) =>
+    _builder.Host.UseSerilog((hostContext, loggerConfiguration) =>
     {
         loggerConfiguration.ReadFrom.Configuration(hostContext.Configuration);
     });
 
     Log.ForContext("SourceContext", _sourceContext).Information("Getting Application Insights Connection String");
-    var _aiConnectionString = builder.Configuration["ConnectionStrings:ApplicationInsights"];
+    var _aiConnectionString = _builder.Configuration["ConnectionStrings:ApplicationInsights"];
+#if DEBUG
     Log.ForContext("SourceContext", _sourceContext).Debug("_aiConnectionString = {_aiConnectionString}", _aiConnectionString);
+#endif
 
     Log.ForContext("SourceContext", _sourceContext).Information("Adding Application Insights Telemetry");
-    builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions
+    _builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions
     {
         ConnectionString = _aiConnectionString
     });
 
-    Log.ForContext("SourceContext", _sourceContext).Debug("Getting Environment Name From Environment");
-    var environmentName = builder.Environment.EnvironmentName;
-    Log.ForContext("SourceContext", _sourceContext).Debug("environmentName = {environmentName}", environmentName);
-
     Log.ForContext("SourceContext", _sourceContext).Information("Adding Feature Management Services");
-    builder.Services.AddFeatureManagement();
+    _builder.Services.AddFeatureManagement();
 
     Log.ForContext("SourceContext", _sourceContext).Information("Adding Health Check Services");
-    builder.Services.AddHealthChecks().AddCheck<MyHealthCheck>("MyHealthCheck");
+    _builder.Services.AddHealthChecks().AddCheck<MyHealthCheck>("MyHealthCheck");
 
     Log.ForContext("SourceContext", _sourceContext).Information("Adding API Versioning Services");
-    builder.Services.AddApiVersioning(options =>
+    _builder.Services.AddApiVersioning(options =>
     {
         // TODO: Assert versionless route works.
         options.DefaultApiVersion = new ApiVersion(1);
@@ -71,17 +72,17 @@ try
         options.ApiVersionReader = new UrlSegmentApiVersionReader();
     });
 
-    builder.Services.AddOpenApi();
+    _builder.Services.AddOpenApi();
 
     Log.ForContext("SourceContext", _sourceContext).Information("Adding {name} Services", nameof(MyRepository));
     // TODO: Learn the difference between AddSingleton and AddTransient.
-    builder.Services.AddSingleton<IMyRepository, MyRepository>();
+    _builder.Services.AddSingleton<IMyRepository, MyRepository>();
 
     Log.ForContext("SourceContext", _sourceContext).Information("Adding {name} Services", nameof(MyService));
-    builder.Services.AddSingleton<IMyService, MyService>();
+    _builder.Services.AddSingleton<IMyService, MyService>();
 
     Log.ForContext("SourceContext", _sourceContext).Information("Adding Authentication Services");
-    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    _builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
             var _key = $"/{new string('*', 4096 / 8)}";
@@ -98,12 +99,12 @@ try
         });
 
     Log.ForContext("SourceContext", _sourceContext).Information("Adding Authorization Services");
-    builder.Services.AddAuthorizationBuilder()
+    _builder.Services.AddAuthorizationBuilder()
         .AddPolicy("MyClaimPolicy", policy =>
             policy.RequireClaim("MyClaimType", "MyClaimValue"));
 
     Log.ForContext("SourceContext", _sourceContext).Information("Building Web Application");
-    var app = builder.Build();
+    var app = _builder.Build();
 
     app.Logger.LogTrace("POST (1 of 6) => Trace Logging ON");
     app.Logger.LogDebug("POST (2 of 6) => Debug Logging ON");
@@ -119,10 +120,9 @@ try
     app.Logger.LogInformation("Using Request Logging Middleware");
     app.UseMiddleware<RequestLoggingMiddleware>();
 
-
     if (!app.Environment.IsDevelopment())
     {
-        app.Logger.LogInformation("Using Exception Handling");
+        app.Logger.LogInformation("Using Exception Handling Middleware");
         app.UseExceptionHandler("/error");
     }
 
@@ -140,11 +140,11 @@ try
     {
         const string _myHeader = "MyHeader";
 
-        app.Logger.LogDebug("Getting Header From Configuration.");
+        app.Logger.LogInformation("Getting Header From Configuration.");
         var myHeader = app.Configuration.GetSection(_myHeader).Value;
-        app.Logger.LogTrace("myHeader = {myHeader}", myHeader);
+        app.Logger.LogDebug("myHeader = {myHeader}", myHeader);
 
-        app.Logger.LogDebug("Appending Header");
+        app.Logger.LogInformation("Appending Header");
         context.Response.Headers.Append(_myHeader, myHeader);
 
         await next();
@@ -161,7 +161,7 @@ try
     {
         app.Logger.LogInformation("Selecting Claims From Context");
         var claims = context.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-        app.Logger.LogTrace("claims = {@claims}", claims);
+        app.Logger.LogDebug("claims = {@claims}", claims);
 
         await next.Invoke();
     });

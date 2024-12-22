@@ -9,7 +9,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyClassLibrary;
 using Serilog;
-using Serilog.Events;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -29,44 +28,24 @@ public sealed class MyIntegrationTests : TestBase
     [DataRow(true)]
     public void DebugHostTests(bool value)
     {
-        const string _outputTemplate = "[{Level:u3}] [{SourceContext}] {Message}{NewLine}{Exception}";
-        const string _sourceContext = nameof(MyTests);
-
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Verbose()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            .Enrich.FromLogContext()
-            .Enrich.WithMachineName()
-            .WriteTo.Console(outputTemplate: _outputTemplate)
-            .CreateLogger();
-
-        Log.ForContext("SourceContext", _sourceContext).Verbose("POST (1 of 6) => Verbose Logging ON");
-        Log.ForContext("SourceContext", _sourceContext).Debug("POST (2 of 6) => Debug Logging ON");
-        Log.ForContext("SourceContext", _sourceContext).Information("POST (3 of 6) => Information Logging ON");
-        Log.ForContext("SourceContext", _sourceContext).Warning("POST (4 of 6) => Warning Logging ON");
-        Log.ForContext("SourceContext", _sourceContext).Error("POST (5 of 6) => Error Logging ON");
-        Log.ForContext("SourceContext", _sourceContext).Fatal("POST (6 of 6) => Fatal Logging ON");
-        Log.ForContext("SourceContext", _sourceContext).Information("{now} (LOCAL)", DateTime.Now);
-        Log.ForContext("SourceContext", _sourceContext).Information("{utcNow} (UTC)", DateTime.UtcNow);
-
-        Log.ForContext("SourceContext", _sourceContext).Debug("Creating Service Collection");
+        Debug.WriteLine($"Creating Service Collection");
         var serviceCollection = new ServiceCollection();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug("Adding Logging");
+        Debug.WriteLine($"Adding Logging");
         serviceCollection.AddLogging(configure =>
         {
-            Log.ForContext("SourceContext", _sourceContext).Debug("Clearing Log Providers");
+            Debug.WriteLine($"Clearing Log Providers");
             configure.ClearProviders();
 
-            Log.ForContext("SourceContext", _sourceContext).Debug("Adding Serilog");
+            Debug.WriteLine($"Adding Serilog");
             configure.AddSerilog();
 
-            var logLevel = LogLevel.Trace;
-            Log.ForContext("SourceContext", _sourceContext).Debug("Setting Minimum Log Level = {logLevel}", logLevel);
-            configure.SetMinimumLevel(logLevel);
+            var _logLevel = LogLevel.Trace;
+            Debug.WriteLine($"Setting Minimum Log Level = {_logLevel}");
+            configure.SetMinimumLevel(_logLevel);
         });
 
-        Log.ForContext("SourceContext", _sourceContext).Debug("Adding Configuration");
+        Debug.WriteLine($"Adding Configuration");
         var configurationSettings = new Dictionary<string, string?>
         {
             { "ConnectionStrings:MyAzureStorage", "UseDevelopmentStorage=true;" },
@@ -81,22 +60,22 @@ public sealed class MyIntegrationTests : TestBase
             .Build();
         serviceCollection.AddSingleton<IConfiguration>(configuration);
 
-        Log.ForContext("SourceContext", _sourceContext).Debug("Adding Feature Management");
+        Debug.WriteLine($"Adding Feature Management");
         serviceCollection.AddFeatureManagement();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug("Adding {name}", nameof(MyRepository));
+        Debug.WriteLine($"Adding {nameof(MyRepository)}");
         serviceCollection.AddTransient<IMyRepository, MyRepository>();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug("Adding {name}", nameof(MyService));
+        Debug.WriteLine($"Adding {nameof(MyService)}");
         serviceCollection.AddTransient<MyService>();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug("Building Service Provider");
+        Debug.WriteLine($"Building Service Provider");
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug("Getting {name}", nameof(MyService));
+        Debug.WriteLine($"Getting {nameof(MyService)}");
         var myService = serviceProvider.GetService<MyService>();
 
-        Log.ForContext("SourceContext", _sourceContext).Debug("Calling {name} With {value}", nameof(MyService), value);
+        Debug.WriteLine($"Calling {nameof(MyService)} With {value}");
         var result = myService?.MyMethod(value);
 
         Debug.WriteLine($"Asserting Result Is {value}");
@@ -116,7 +95,7 @@ public sealed class MyIntegrationTests : TestBase
     [DataRow(true, "Production", "2")]
     public async Task WebHostTests(bool value, string environmentName, string version)
     {
-        Debug.WriteLine("Building Web Host");
+        Debug.WriteLine($"Building Web Host");
         using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {
             builder.UseEnvironment(environmentName);
@@ -129,14 +108,14 @@ public sealed class MyIntegrationTests : TestBase
             });
         });
 
-        Debug.WriteLine("Creating Client");
+        Debug.WriteLine($"Creating Client");
         using var client = application.CreateClient(new WebApplicationFactoryClientOptions
         {
             BaseAddress = new Uri("https://localhost:5001")
         });
 
         // TODO: Decide on naming standard for variables, fields, etc.
-        Debug.WriteLine("Generating Bearer Token");
+        Debug.WriteLine($"Generating Bearer Token");
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes($"/{new string('*', 4096 / 8)}");
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -163,13 +142,13 @@ public sealed class MyIntegrationTests : TestBase
             Debug.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
         }
 
-        Debug.WriteLine("Asserting Header");
+        Debug.WriteLine($"Asserting Header");
         if (response.Headers.TryGetValues("MyHeader", out var values))
         {
             values.First().Should<string>().Be($"MyHeader ({environmentName})");
         }
 
-        Debug.WriteLine("Asserting API Supported Versions Header");
+        Debug.WriteLine($"Asserting API Supported Versions Header");
         if (response.Headers.TryGetValues("api-supported-versions", out var values2))
         {
             values2.First().Should<string>().Be("1, 2");

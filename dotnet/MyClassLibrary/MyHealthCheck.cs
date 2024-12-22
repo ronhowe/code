@@ -7,13 +7,13 @@ public class MyHealthCheck(ILogger<MyService> logger, IMyService myService) : IH
 {
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        logger.LogDebug("Entering {name}", nameof(MyHealthCheck));
+        logger.LogInformation("Entering {name}", nameof(MyHealthCheck));
 
         HealthCheckResult _result;
 
         try
         {
-            logger.LogDebug("Calling MyService.MyMethod(false)");
+            logger.LogInformation("Calling MyService.MyMethod(false)");
             myService.MyMethod(false);
             _result = HealthCheckResult.Healthy("HEALTHY");
         }
@@ -23,9 +23,9 @@ public class MyHealthCheck(ILogger<MyService> logger, IMyService myService) : IH
             _result = new HealthCheckResult(context.Registration.FailureStatus, "UNHEALTHY");
         }
 
-        logger.LogTrace("_result = {_result}", _result);
+        logger.LogDebug("_result = {_result}", _result);
 
-        logger.LogDebug("Exiting {name}", nameof(MyHealthCheck));
+        logger.LogInformation("Exiting {name}", nameof(MyHealthCheck));
 
         return Task.FromResult(_result);
     }

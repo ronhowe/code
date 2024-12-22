@@ -28,8 +28,6 @@ powershell/module/Output/*
 # Mono auto generated files
 mono_crash.*
 
-dotnet/.NCrunch*
-
 # Build results
 dotnet/[Dd]ebug/
 [Dd]ebugPublic/
@@ -166,8 +164,10 @@ coverage*.info
 *.coveragexml
 
 # NCrunch
-_NCrunch_*
 .*crunch*.local.xml
+.NCrunch_MySolution/
+_NCrunch_*
+dotnet/.NCrunch*
 nCrunchTemp_*
 
 # MightyMoose

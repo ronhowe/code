@@ -11,10 +11,10 @@ public sealed class MyTests : TestBase
     [TestMethod]
     public void MyTest()
     {
-        Debug.WriteLine("Debugging");
+        Debug.WriteLine($"Debugging");
 
 #if DEBUG
-        Debug.WriteLine("Defining DEBUG");
+        Debug.WriteLine($"Defining DEBUG");
 #endif
 
         Debug.WriteLine($"Creating Globally Unique Identifier");
