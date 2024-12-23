@@ -71,6 +71,9 @@ Good, not perfect.
 - [GitHub Copilot](https://github.com/features/copilot/) - $10 per month / $120 per year
   - Pro - For developers who want unlimited access to GitHub Copilot.
   - First 30 days free.
+- GoDaddy
+  - DNS [ronhowe.net](https://ronhowe.net) - $24.99 per year
+  - Single Domain DV SSL - $99.99 per year
 - [NCrunch](https://www.ncrunch.net/) - $159 once
   - A single user license.
   - Includes 1 year of updates.
