@@ -66,6 +66,10 @@
     - 10 GB Storage
   - App Configuration - $36.06 per month / $1.26 per day / $460 per year
     - Standard Tier
+  - Azure SQL Database - $14.72 per month / $0.48 per day / $175 per year
+    - Standard Tier, S0
+    - 10 DTUs
+    - 250 GB included storage
 - [GitHub Copilot](https://github.com/features/copilot/) - $10 per month / $120 per year
   - Pro - For developers who want unlimited access to GitHub Copilot.
   - First 30 days free.
