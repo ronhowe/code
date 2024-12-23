@@ -5,10 +5,10 @@ using System.Security.Cryptography;
 namespace MyTestProject;
 
 [TestClass]
-[TestCategory("DebugTest")]
 public sealed class MyTests : TestBase
 {
     [TestMethod]
+    [TestCategory("DebugTest")]
     public void MyTest()
     {
         Debug.WriteLine($"Debugging");

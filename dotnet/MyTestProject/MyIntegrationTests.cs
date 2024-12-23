@@ -29,7 +29,7 @@ public sealed class MyIntegrationTests : TestBase
     public async Task DebugHostTests(bool value)
     {
         Debug.WriteLine($"Creating Service Collection");
-        ServiceCollection _serviceCollection = new ServiceCollection();
+        ServiceCollection _serviceCollection = new();
 
         Debug.WriteLine($"Adding Logging");
         _serviceCollection.AddLogging(configure =>

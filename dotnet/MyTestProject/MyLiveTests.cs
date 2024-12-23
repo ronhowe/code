@@ -7,7 +7,7 @@ using System.Net;
 namespace MyTestProject;
 
 [TestClass]
-public sealed class MyLiveTests
+public sealed class MyLiveTests : TestBase
 {
     [TestMethod]
     [TestCategory("LiveTest")]
