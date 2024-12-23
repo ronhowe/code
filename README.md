@@ -10,7 +10,9 @@
 5. [Credits](#credits)
 6. [Logging](#logging)
 
-# MissionGood, not perfect.
+# Mission
+
+Good, not perfect.
 
 # Ideas
 
