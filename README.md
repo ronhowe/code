@@ -25,7 +25,7 @@ Good, not perfect.
 - DevOps (Actions, Azure DevOps, GitHub, Issues, Pipelines)
 - Discoverability (Application Insights, Open API)
 - Engineering (Docker, NCrunch, Visual Studio, Visual Studio Code, WSL)
-- Logging (LogLevel, Serilog, Sinks, Standard Filters, Structured Logs)
+- Logging (LogLevel, Serilog, Sinks, Standard Filters, Structured Logs, Universal Time Coordinated)
 - Maintainability (Dashboards, Runbooks)
 - Monitoring (Application Insights, Console App, PerfMon, Pester, SQL Profiler, Visual Studio)
 - Operations (az, azdo, gh, git, pwsh)

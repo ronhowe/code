@@ -8,9 +8,10 @@ using MyClassLibrary;
 using MyWebApplication;
 using Serilog;
 using Serilog.Events;
+using SerilogEnricherCollection.Enricher;
 using System.Text;
 
-const string _outputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
+const string _outputTemplate = "[{UtcTimestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
 const string _sourceContext = nameof(Program);
 
 Log.Logger = new LoggerConfiguration()
@@ -18,6 +19,7 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
     .Enrich.FromLogContext()
     .Enrich.WithMachineName()
+    .Enrich.WithUtcTimestamp()
     .WriteTo.Console(outputTemplate: _outputTemplate)
     .CreateLogger();
 
@@ -43,6 +45,7 @@ try
     _builder.Host.UseSerilog((hostContext, loggerConfiguration) =>
     {
         loggerConfiguration.ReadFrom.Configuration(hostContext.Configuration);
+        loggerConfiguration.Enrich.WithUtcTimestamp();
     });
 
     Log.ForContext("SourceContext", _sourceContext).Information("Getting Application Insights Connection String");
