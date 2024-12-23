@@ -157,7 +157,6 @@ try
         await next();
     });
 
-    _app.UseSerilogRequestLogging();
     _app.Logger.LogInformation("Using Health Check Middleware");
     _app.UseHealthChecks("/healthcheck");
 
