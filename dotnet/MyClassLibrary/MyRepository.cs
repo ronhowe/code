@@ -15,48 +15,48 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         logger.LogDebug("myInput = {myInput}", myInput);
 
         const string _dbConnection = "MyDatabase";
-        string? dbConnectionString;
+        string? _dbConnectionString;
         try
         {
-            logger.LogInformation("Getting Database Connection String From Configuration");
-            dbConnectionString = configuration[$"ConnectionStrings:{_dbConnection}"];
+            logger.LogInformation("Configuring Database Connection String");
+            _dbConnectionString = configuration[$"ConnectionStrings:{_dbConnection}"];
 #if DEBUG
-            logger.LogDebug("dbConnectionString = {dbConnectionString}", dbConnectionString);
+            logger.LogDebug("_dbConnectionString = {_dbConnectionString}", _dbConnectionString);
 #endif
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting Database Connection String Because {message}", ex.Message);
+            logger.LogError("Error Configuring Database Connection String Because {message}", ex.Message);
             throw;
         }
 
         const string _azConnection = "MyAzureStorage";
-        string? azConnectionString;
+        string? _azConnectionString;
         try
         {
-            logger.LogInformation("Getting Azure Storage Connection String From Configuration");
-            azConnectionString = configuration[$"ConnectionStrings:{_azConnection}"];
+            logger.LogInformation("Configuring Azure Storage Connection String");
+            _azConnectionString = configuration[$"ConnectionStrings:{_azConnection}"];
 #if DEBUG
-            logger.LogDebug("azConnectionString = {azConnectionString}", azConnectionString);
+            logger.LogDebug("_azConnectionString = {_azConnectionString}", _azConnectionString);
 #endif
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting Azure Storage Connection String Because {message}", ex.Message);
+            logger.LogError("Error Configuring Azure Storage Connection String Because {message}", ex.Message);
             throw;
         }
 
         logger.LogInformation("Generating Row Key");
-        var rowKey = Guid.CreateVersion7().ToString();
+        var _rowKey = Guid.CreateVersion7().ToString();
 
-        logger.LogInformation("Saving {rowKey}", rowKey);
+        logger.LogInformation("Saving {_rowKey}", _rowKey);
 
         // TODO: Read retry settings from configuration.
         const int _maxRetries = 2;
         const int _retryMilliseconds = 1;
 
         logger.LogInformation("Creating Retry Policy");
-        var retryPolicy = Policy
+        var _retryPolicy = Policy
             .Handle<SqlException>()
             .WaitAndRetryAsync(_maxRetries, retryAttempt => TimeSpan.FromMilliseconds(_retryMilliseconds),
                 (ex, timeSpan, retryAttempt, context) =>
@@ -71,22 +71,22 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         try
         {
             logger.LogDebug("Executing With Retry Policy");
-            await retryPolicy.ExecuteAsync(async () =>
+            await _retryPolicy.ExecuteAsync(async () =>
             {
                 if (!_dbSaved)
                 {
                     logger.LogInformation("Saving To Database");
 
                     logger.LogInformation("Opening Connection");
-                    using SqlConnection connection = new(dbConnectionString);
-                    await connection.OpenAsync();
+                    using SqlConnection _sqlConnection = new(_dbConnectionString);
+                    await _sqlConnection.OpenAsync();
 
                     logger.LogInformation("Executing Command");
-                    using SqlCommand command = new("INSERT [dbo].[MyTable] ([PartitionKey], [RowKey], [MyInput]) VALUES (@PartitionKey, @RowKey, @MyInput);", connection);
-                    command.Parameters.AddWithValue("@PartitionKey", DateTime.UtcNow);
-                    command.Parameters.AddWithValue("@RowKey", rowKey);
-                    command.Parameters.AddWithValue("@MyInput", myInput);
-                    await command.ExecuteNonQueryAsync();
+                    using SqlCommand _sqlCommand = new("INSERT [dbo].[MyTable] ([PartitionKey], [RowKey], [MyInput]) VALUES (@PartitionKey, @RowKey, @MyInput);", _sqlConnection);
+                    _sqlCommand.Parameters.AddWithValue("@PartitionKey", DateTime.UtcNow);
+                    _sqlCommand.Parameters.AddWithValue("@RowKey", _rowKey);
+                    _sqlCommand.Parameters.AddWithValue("@MyInput", myInput);
+                    await _sqlCommand.ExecuteNonQueryAsync();
                 }
 
                 _dbSaved = true;
@@ -97,15 +97,15 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
                     logger.LogInformation("Saving To Azure Storage");
 
                     logger.LogInformation("Creating Table");
-                    var tableClient = new TableClient(azConnectionString, "MyCloudTable");
-                    await tableClient.CreateIfNotExistsAsync();
+                    TableClient _tableClient = new(_azConnectionString, "MyCloudTable");
+                    await _tableClient.CreateIfNotExistsAsync();
 
                     logger.LogInformation("Adding Entity");
-                    var tableEntity = new TableEntity(DateTime.UtcNow.ToString("yyyy-MM-dd"), rowKey)
+                    TableEntity _tableEntity = new(DateTime.UtcNow.ToString("yyyy-MM-dd"), _rowKey)
                     {
                         { "MyInput", myInput }
                     };
-                    await tableClient.AddEntityAsync(tableEntity);
+                    await _tableClient.AddEntityAsync(_tableEntity);
                 }
 
                 _azSaved = true;

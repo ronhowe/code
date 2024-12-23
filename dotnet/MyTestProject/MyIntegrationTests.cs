@@ -29,10 +29,10 @@ public sealed class MyIntegrationTests : TestBase
     public async Task DebugHostTests(bool value)
     {
         Debug.WriteLine($"Creating Service Collection");
-        var serviceCollection = new ServiceCollection();
+        ServiceCollection _serviceCollection = new ServiceCollection();
 
         Debug.WriteLine($"Adding Logging");
-        serviceCollection.AddLogging(configure =>
+        _serviceCollection.AddLogging(configure =>
         {
             Debug.WriteLine($"Clearing Log Providers");
             configure.ClearProviders();
@@ -40,13 +40,13 @@ public sealed class MyIntegrationTests : TestBase
             Debug.WriteLine($"Adding Serilog");
             configure.AddSerilog();
 
-            var _logLevel = LogLevel.Trace;
+            LogLevel _logLevel = LogLevel.Trace;
             Debug.WriteLine($"Setting Minimum Log Level = {_logLevel}");
             configure.SetMinimumLevel(_logLevel);
         });
 
         Debug.WriteLine($"Adding Configuration");
-        var configurationSettings = new Dictionary<string, string?>
+        Dictionary<string, string?> _configurationSettings = new()
         {
             { "ConnectionStrings:MyAzureStorage", "UseDevelopmentStorage=true;" },
             { "ConnectionStrings:MyDatabase", "Server=localhost;Database=MyDatabase;Integrated Security=True;Application Name=MyTestProject;Encrypt=False;Connect Timeout=1;Command Timeout=0;" },
@@ -55,33 +55,33 @@ public sealed class MyIntegrationTests : TestBase
             { "MyHeader", "MyHeader" },
             { "MySecret", "MyTestProject" }
         };
-        var configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(configurationSettings)
+        IConfigurationRoot _configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(_configurationSettings)
             .Build();
-        serviceCollection.AddSingleton<IConfiguration>(configuration);
+        _serviceCollection.AddSingleton<IConfiguration>(_configuration);
 
         Debug.WriteLine($"Adding Feature Management");
-        serviceCollection.AddFeatureManagement();
+        _serviceCollection.AddFeatureManagement();
 
         Debug.WriteLine($"Adding {nameof(MyRepository)}");
-        serviceCollection.AddTransient<IMyRepository, MyRepository>();
+        _serviceCollection.AddTransient<IMyRepository, MyRepository>();
 
         Debug.WriteLine($"Adding {nameof(MyService)}");
-        serviceCollection.AddTransient<MyService>();
+        _serviceCollection.AddTransient<MyService>();
 
         Debug.WriteLine($"Building Service Provider");
-        var serviceProvider = serviceCollection.BuildServiceProvider();
+        ServiceProvider _serviceProvider = _serviceCollection.BuildServiceProvider();
 
         Debug.WriteLine($"Getting {nameof(MyService)}");
-        var myService = serviceProvider.GetService<MyService>();
+        MyService? _myService = _serviceProvider.GetService<MyService>();
 
-        if (myService is not null)
+        if (_myService is not null)
         {
             Debug.WriteLine($"Calling {nameof(MyService)} With {value}");
-            var result = await myService.MyMethodAsync(value);
+            bool _result = await _myService.MyMethodAsync(value);
 
             Debug.WriteLine($"Asserting Result Is {value}");
-            result.Should().Be(value);
+            _result.Should().Be(value);
         }
         else
         {
@@ -104,7 +104,7 @@ public sealed class MyIntegrationTests : TestBase
     public async Task WebHostTests(bool value, string environmentName, string version)
     {
         Debug.WriteLine($"Building Web Host");
-        using var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
+        using WebApplicationFactory<Program> _application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {
             builder.UseEnvironment(environmentName);
             builder.ConfigureKestrel(serverOptions =>
@@ -117,16 +117,16 @@ public sealed class MyIntegrationTests : TestBase
         });
 
         Debug.WriteLine($"Creating Client");
-        using var client = application.CreateClient(new WebApplicationFactoryClientOptions
+        using HttpClient _client = _application.CreateClient(new WebApplicationFactoryClientOptions
         {
             BaseAddress = new Uri("https://localhost:5001")
         });
 
         // TODO: Decide on naming standard for variables, fields, etc.
         Debug.WriteLine($"Generating Bearer Token");
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes($"/{new string('*', 4096 / 8)}");
-        var tokenDescriptor = new SecurityTokenDescriptor
+        JwtSecurityTokenHandler tokenHandler = new();
+        byte[] key = Encoding.UTF8.GetBytes($"/{new string('*', 4096 / 8)}");
+        SecurityTokenDescriptor _tokenDescriptor = new()
         {
             Subject = new ClaimsIdentity([new Claim("MyClaimType", "MyClaimValue")]),
             Expires = DateTime.UtcNow.AddMinutes(30),
@@ -134,35 +134,35 @@ public sealed class MyIntegrationTests : TestBase
             Issuer = "yourIssuer",
             Audience = "yourAudience"
         };
-        var _token = tokenHandler.CreateToken(tokenDescriptor);
-        var _tokenString = tokenHandler.WriteToken(_token);
+        SecurityToken _token = tokenHandler.CreateToken(_tokenDescriptor);
+        string _tokenString = tokenHandler.WriteToken(_token);
         Debug.WriteLine(_tokenString);
 
         Debug.WriteLine($"Sending GET Request With {value}");
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _tokenString);
-        using var response = await client.GetAsync($"/v{version}/{nameof(MyService)}?input={value}");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _tokenString);
+        using HttpResponseMessage _response = await _client.GetAsync($"/v{version}/{nameof(MyService)}?input={value}");
 
         Debug.WriteLine($"Asserting HTTP Status Code Is {HttpStatusCode.OK}");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        _response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        foreach (var header in response.Headers)
+        foreach (KeyValuePair<string, IEnumerable<string>> header in _response.Headers)
         {
             Debug.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
         }
 
         Debug.WriteLine($"Asserting Header");
-        if (response.Headers.TryGetValues("MyHeader", out var values))
+        if (_response.Headers.TryGetValues("MyHeader", out var values))
         {
             values.First().Should<string>().Be($"MyHeader ({environmentName})");
         }
 
         Debug.WriteLine($"Asserting API Supported Versions Header");
-        if (response.Headers.TryGetValues("api-supported-versions", out var values2))
+        if (_response.Headers.TryGetValues("api-supported-versions", out var values2))
         {
             values2.First().Should<string>().Be("1, 2");
         }
 
         Debug.WriteLine($"Asserting Result Is {value}");
-        Boolean.Parse(response.Content.ReadAsStringAsync().Result).Should().Be(value);
+        Boolean.Parse(_response.Content.ReadAsStringAsync().Result).Should().Be(value);
     }
 }

@@ -12,25 +12,25 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
 
         logger.LogDebug("myInput = {myInput}", myInput);
 
-        string? myConfiguration;
+        string? _myConfiguration;
         try
         {
-            logger.LogInformation("Getting MyConfiguration From Configuration");
-            myConfiguration = configuration["MyConfiguration"];
-            logger.LogDebug("myConfiguration = {myConfiguration}", myConfiguration);
+            logger.LogInformation("Configuring MyConfiguration");
+            _myConfiguration = configuration["MyConfiguration"];
+            logger.LogDebug("_myConfiguration = {_myConfiguration}", _myConfiguration);
         }
         catch (Exception ex)
         {
-            logger.LogError("Error Getting MyConfiguration Because {message}", ex.Message);
+            logger.LogError("Error Configuring MyConfiguration Because {message}", ex.Message);
             throw;
         }
 
-        string? mySecret;
+        string? _mySecret;
         try
         {
-            logger.LogInformation("Getting MySecret From Configuration");
-            mySecret = configuration["MySecret"];
-            logger.LogDebug("mySecret = {mySecret}", mySecret);
+            logger.LogInformation("Configuring MySecret");
+            _mySecret = configuration["MySecret"];
+            logger.LogDebug("_mySecret = {_mySecret}", _mySecret);
         }
         catch (Exception ex)
         {
@@ -38,12 +38,12 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
             throw;
         }
 
-        bool? myFeature;
+        bool? _myFeature;
         try
         {
-            logger.LogInformation("Getting MyFeature From Configuration");
-            myFeature = featureManager.IsEnabledAsync("MyFeature").Result;
-            logger.LogDebug("myFeature = {myFeature}", myFeature);
+            logger.LogInformation("Configuring MyFeature");
+            _myFeature = featureManager.IsEnabledAsync("MyFeature").Result;
+            logger.LogDebug("_myFeature = {_myFeature}", _myFeature);
         }
         catch (Exception ex)
         {
