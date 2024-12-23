@@ -28,6 +28,15 @@
         },
         "workspaceName": {
             "value": "law-ronhowe-0"
+        },
+        "sqlServerName": {
+            "value": "sql-ronhowe-0"
+        },
+        "sqlDatabaseName": {
+            "value": "sqldb-ronhowe-0"
+        },
+        "sqlAdminUsername": {
+            "value": "sqladmin"
         }
     }
 }

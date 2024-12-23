@@ -19,7 +19,7 @@ public class Program
     {
         if (args.Length == 0 || !Uri.TryCreate(args[0], UriKind.Absolute, out Uri? uri))
         {
-            uri = new Uri("https://LOCALHOST:444/healthcheck");
+            uri = new Uri("https://localhost:444/healthcheck");
         }
 
         _benchmark = args.Contains("--benchmark");
