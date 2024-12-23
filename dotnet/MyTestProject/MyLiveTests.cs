@@ -12,8 +12,8 @@ public sealed class MyLiveTests
     [TestMethod]
     [TestCategory("LiveTest")]
     [DataTestMethod]
-    [DataRow("https://app-ronhowe-0.azurewebsites.net:443/healthcheck", "MyHeader (Production)")]
-    public void LiveSiteTests(string uri, string headerValue)
+    [DataRow("https://app-ronhowe-0.azurewebsites.net:443/healthcheck", "MyHeader (Production)", HttpStatusCode.OK)]
+    public void LiveSiteTests(string uriString, string headerValue, HttpStatusCode httpStatusCode)
     {
         // TODO: Read retry settings from configuration.
         const int _maxRetries = 2;
@@ -41,11 +41,11 @@ public sealed class MyLiveTests
         using var response = retryPolicy.ExecuteAsync(async () =>
         {
             Debug.WriteLine($"Sending HTTP GET Request");
-            return await client.GetAsync(new Uri(uri));
+            return await client.GetAsync(new Uri(uriString));
         }).Result;
 
-        Debug.WriteLine($"Asserting HTTP Status Code Is {HttpStatusCode.OK}");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        Debug.WriteLine($"Asserting HTTP Status Code Is {httpStatusCode}");
+        response.StatusCode.Should().Be(httpStatusCode);
 
         Debug.WriteLine($"Logging Headers");
         foreach (var header in response.Headers)
