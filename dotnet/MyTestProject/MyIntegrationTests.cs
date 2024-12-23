@@ -49,7 +49,7 @@ public sealed class MyIntegrationTests : TestBase
         var configurationSettings = new Dictionary<string, string?>
         {
             { "ConnectionStrings:MyAzureStorage", "UseDevelopmentStorage=true;" },
-            { "ConnectionStrings:MyDatabase", "Server=LOCALHOST;Database=MyDatabase;Integrated Security=True;Application Name=MyTestProject;Encrypt=False;Connect Timeout=1;Command Timeout=0;" },
+            { "ConnectionStrings:MyDatabase", "Server=localhost;Database=MyDatabase;Integrated Security=True;Application Name=MyTestProject;Encrypt=False;Connect Timeout=1;Command Timeout=0;" },
             { "FeatureManagement:MyFeature", $"{value}" },
             { "MyConfiguration", "MyTestProject" },
             { "MyHeader", "MyHeader" },
@@ -119,7 +119,7 @@ public sealed class MyIntegrationTests : TestBase
         Debug.WriteLine($"Creating Client");
         using var client = application.CreateClient(new WebApplicationFactoryClientOptions
         {
-            BaseAddress = new Uri("https://LOCALHOST:5001")
+            BaseAddress = new Uri("https://localhost:5001")
         });
 
         // TODO: Decide on naming standard for variables, fields, etc.

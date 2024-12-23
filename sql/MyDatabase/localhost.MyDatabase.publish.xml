@@ -4,7 +4,7 @@
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseName>MyDatabase</TargetDatabaseName>
     <DeployScriptFileName>MyDatabase.sql</DeployScriptFileName>
-    <TargetConnectionString>Server=LOCALHOST;Database=MyDatabase;Integrated Security=True;Application Name=MyDatabase;Encrypt=False;Connect Timeout=1;Command Timeout=0;</TargetConnectionString>
+    <TargetConnectionString>Server=localhost;Database=MyDatabase;Integrated Security=True;Application Name=MyDatabase;Encrypt=False;Connect Timeout=1;Command Timeout=0;</TargetConnectionString>
     <ProfileVersionNumber>1</ProfileVersionNumber>
   </PropertyGroup>
 </Project>

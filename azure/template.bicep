@@ -4,6 +4,11 @@ param automationAccountName string = 'aa-ronhowe-0'
 param configStoreName string
 param location string
 param planName string
+@secure()
+param sqlAdminPassword string
+param sqlAdminUsername string
+param sqlDatabaseName string
+param sqlServerName string
 param storageAccountName string
 param vaultName string
 param workspaceName string
@@ -145,6 +150,41 @@ resource key 'Microsoft.KeyVault/vaults/keys@2024-04-01-preview' = {
     keyOps: keyOps
     keySize: keySize
     curveName: curveName
+  }
+}
+
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers?pivots=deployment-language-bicep
+resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
+  name: sqlServerName
+  location: location
+  properties: {
+    administratorLogin: sqlAdminUsername
+    administratorLoginPassword: sqlAdminPassword
+  }
+}
+
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers/databases?pivots=deployment-language-bicep
+resource sqlDatabase 'Microsoft.Sql/servers/databases@2024-05-01-preview' = {
+  parent: sqlServer
+  name: sqlDatabaseName
+  location: location
+  properties: {
+    collation: 'SQL_Latin1_General_CP1_CI_AS'
+    maxSizeBytes: 2147483648
+  }
+  sku: {
+    name: 'S0'
+    tier: 'Standard'
+  }
+}
+
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers/firewallrules?pivots=deployment-language-bicep
+resource sqlFirewallRule 'Microsoft.Sql/servers/firewallRules@2024-05-01-preview' = {
+  parent: sqlServer
+  name: 'MyFirewallRule'
+  properties: {
+    startIpAddress: '69.207.185.73'
+    endIpAddress: '69.207.185.73'
   }
 }
 
