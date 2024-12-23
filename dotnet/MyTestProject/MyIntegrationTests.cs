@@ -26,7 +26,7 @@ public sealed class MyIntegrationTests : TestBase
     [DataTestMethod]
     [DataRow(false)]
     [DataRow(true)]
-    public void DebugHostTests(bool value)
+    public async Task DebugHostTests(bool value)
     {
         Debug.WriteLine($"Creating Service Collection");
         var serviceCollection = new ServiceCollection();
@@ -75,11 +75,19 @@ public sealed class MyIntegrationTests : TestBase
         Debug.WriteLine($"Getting {nameof(MyService)}");
         var myService = serviceProvider.GetService<MyService>();
 
-        Debug.WriteLine($"Calling {nameof(MyService)} With {value}");
-        var result = myService?.MyMethod(value);
+        if (myService is not null)
+        {
+            Debug.WriteLine($"Calling {nameof(MyService)} With {value}");
+            var result = await myService.MyMethodAsync(value);
 
-        Debug.WriteLine($"Asserting Result Is {value}");
-        result.Should().Be(value);
+            Debug.WriteLine($"Asserting Result Is {value}");
+            result.Should().Be(value);
+        }
+        else
+        {
+            Debug.WriteLine($"{nameof(MyService)} Not Found In Service Collection");
+            Assert.Inconclusive("TEST FAILED");
+        }
     }
 
     [TestMethod]

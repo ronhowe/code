@@ -17,7 +17,7 @@ public sealed class MyUnitTests : TestBase
     [DataTestMethod]
     [DataRow(false)]
     [DataRow(true)]
-    public void MyServiceTests(bool value)
+    public async Task MyServiceTests(bool value)
     {
         Debug.WriteLine($"Mocking {nameof(ILogger<MyService>)}");
         var mockLogger = new Mock<ILogger<MyService>>();
@@ -44,7 +44,7 @@ public sealed class MyUnitTests : TestBase
         );
 
         Debug.WriteLine($"Calling {nameof(MyService)} With {value}");
-        bool result = myService.MyMethod(value);
+        bool result = await myService.MyMethodAsync(value);
 
         Debug.WriteLine($"Asserting Result Is {value}");
         result.Should().Be(value);

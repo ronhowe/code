@@ -5,7 +5,7 @@ namespace MyClassLibrary;
 
 public class MyHealthCheck(ILogger<MyService> logger, IMyService myService) : IHealthCheck
 {
-    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Entering {name}", nameof(MyHealthCheck));
 
@@ -14,7 +14,7 @@ public class MyHealthCheck(ILogger<MyService> logger, IMyService myService) : IH
         try
         {
             logger.LogInformation("Calling MyService.MyMethod(false)");
-            myService.MyMethod(false);
+            await myService.MyMethodAsync(false);
             _result = HealthCheckResult.Healthy("HEALTHY");
         }
         catch (Exception ex)
@@ -27,6 +27,6 @@ public class MyHealthCheck(ILogger<MyService> logger, IMyService myService) : IH
 
         logger.LogInformation("Exiting {name}", nameof(MyHealthCheck));
 
-        return Task.FromResult(_result);
+        return await Task.FromResult(_result);
     }
 }

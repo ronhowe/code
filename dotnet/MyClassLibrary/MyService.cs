@@ -6,7 +6,7 @@ namespace MyClassLibrary;
 
 public class MyService(ILogger<MyService> logger, IConfiguration configuration, IFeatureManager featureManager, IMyRepository repository) : IMyService
 {
-    public bool MyMethod(bool myInput)
+    public async Task<bool> MyMethodAsync(bool myInput)
     {
         logger.LogInformation("Entering {name}", nameof(MyService));
 
@@ -52,12 +52,12 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
 
         logger.LogInformation("Saving Input To Repository");
-        repository.Save(myInput);
+        await repository.SaveAsync(myInput);
 
         logger.LogInformation("Returning {result}", myInput);
 
         logger.LogInformation("Exiting {name}", nameof(MyService));
 
-        return myInput;
+        return await Task.FromResult(myInput);
     }
 }

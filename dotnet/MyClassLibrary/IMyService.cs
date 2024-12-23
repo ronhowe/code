@@ -2,5 +2,5 @@
 
 public interface IMyService
 {
-    public bool MyMethod(bool myInput);
+    public Task<bool> MyMethodAsync(bool myInput);
 }
