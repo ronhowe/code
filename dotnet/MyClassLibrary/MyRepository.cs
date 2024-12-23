@@ -8,7 +8,7 @@ namespace MyClassLibrary;
 
 public class MyRepository(ILogger<MyService> logger, IConfiguration configuration) : IMyRepository
 {
-    public void Save(bool myInput)
+    public async Task SaveAsync(bool myInput)
     {
         logger.LogInformation("Entering {name}", nameof(MyRepository));
 
@@ -58,7 +58,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         logger.LogInformation("Creating Retry Policy");
         var retryPolicy = Policy
             .Handle<SqlException>()
-            .WaitAndRetry(_maxRetries, retryAttempt => TimeSpan.FromMilliseconds(_retryMilliseconds),
+            .WaitAndRetryAsync(_maxRetries, retryAttempt => TimeSpan.FromMilliseconds(_retryMilliseconds),
                 (ex, timeSpan, retryAttempt, context) =>
                 {
                     logger.LogError("Save Failed Because {message}", ex.Message);
@@ -71,7 +71,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         try
         {
             logger.LogDebug("Executing With Retry Policy");
-            retryPolicy.Execute(() =>
+            await retryPolicy.ExecuteAsync(async () =>
             {
                 if (!_dbSaved)
                 {
@@ -79,14 +79,14 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
 
                     logger.LogInformation("Opening Connection");
                     using SqlConnection connection = new(dbConnectionString);
-                    connection.Open();
+                    await connection.OpenAsync();
 
                     logger.LogInformation("Executing Command");
                     using SqlCommand command = new("INSERT [dbo].[MyTable] ([PartitionKey], [RowKey], [MyInput]) VALUES (@PartitionKey, @RowKey, @MyInput);", connection);
                     command.Parameters.AddWithValue("@PartitionKey", DateTime.UtcNow);
                     command.Parameters.AddWithValue("@RowKey", rowKey);
                     command.Parameters.AddWithValue("@MyInput", myInput);
-                    command.ExecuteNonQuery();
+                    await command.ExecuteNonQueryAsync();
                 }
 
                 _dbSaved = true;
@@ -98,20 +98,19 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
 
                     logger.LogInformation("Creating Table");
                     var tableClient = new TableClient(azConnectionString, "MyCloudTable");
-                    tableClient.CreateIfNotExists();
+                    await tableClient.CreateIfNotExistsAsync();
 
                     logger.LogInformation("Adding Entity");
                     var tableEntity = new TableEntity(DateTime.UtcNow.ToString("yyyy-MM-dd"), rowKey)
                     {
                         { "MyInput", myInput }
                     };
-                    tableClient.AddEntity(tableEntity);
+                    await tableClient.AddEntityAsync(tableEntity);
                 }
 
                 _azSaved = true;
                 logger.LogInformation("Save To Azure Storage Succeeded");
-            }
-            );
+            });
         }
         catch (Exception ex)
         {

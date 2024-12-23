@@ -183,7 +183,7 @@ try
     {
         var apiVersion = context.GetRequestedApiVersion();
         app.Logger.LogInformation("Calling Version {apiVersion} Of {name} With {input}", apiVersion, nameof(MyService), input);
-        return myService.MyMethod(input);
+        return myService.MyMethodAsync(input);
     })
         .WithApiVersionSet(versionSet)
         .MapToApiVersion(_v1)
@@ -196,7 +196,7 @@ try
         var apiVersion = context.GetRequestedApiVersion();
 
         app.Logger.LogInformation("Calling Version {apiVersion} Of {name} With {input}", apiVersion, nameof(MyService), input);
-        return myService.MyMethod(input);
+        return myService.MyMethodAsync(input);
     })
         .WithApiVersionSet(versionSet)
         .MapToApiVersion(_v2)

@@ -2,5 +2,5 @@
 
 public interface IMyRepository
 {
-    public void Save(bool myInput);
+    public Task SaveAsync(bool myInput);
 }
