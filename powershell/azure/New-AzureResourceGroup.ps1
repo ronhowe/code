@@ -11,16 +11,15 @@ param(
     [string]
     $Location = "eastus2"
 )
-
 begin {
-    Write-Debug "Beginning $($MyInvocation.MyCommand.Name)"
+    Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
 
     Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
     Select-Object -Property @("Name", "Value") |
     ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
 }
 process {
-    Write-Debug "Processing $($MyInvocation.MyCommand.Name)"
+    Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
     try {
         Write-Verbose "Creating Azure Resource Group"
@@ -31,5 +30,5 @@ process {
     }
 }
 end {
-    Write-Debug "Ending $($MyInvocation.MyCommand.Name)"
+    Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
 }

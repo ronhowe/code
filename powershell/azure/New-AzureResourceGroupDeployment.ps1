@@ -15,16 +15,15 @@ param(
     [string]
     $DeploymentName = "MyDeployment"
 )
-
 begin {
-    Write-Debug "Beginning $($MyInvocation.MyCommand.Name)"
+    Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
 
     Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
     Select-Object -Property @("Name", "Value") |
     ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
 }
 process {
-    Write-Debug "Processing $($MyInvocation.MyCommand.Name)"
+    Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
     try {
         Write-Verbose "Adding Azure Resource Group Deployment"
@@ -45,5 +44,5 @@ process {
     }
 }
 end {
-    Write-Debug "Ending $($MyInvocation.MyCommand.Name)"
+    Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
 }
