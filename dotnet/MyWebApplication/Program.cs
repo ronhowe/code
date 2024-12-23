@@ -12,8 +12,11 @@ using Serilog.Events;
 using SerilogEnricherCollection.Enricher;
 using System.Text;
 
+const string _myClaimPolicy = "MyClaimPolicy";
+const string _myHeaderKey = "MyHeader";
 const string _outputTemplate = "[{UtcTimestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
 const string _sourceContext = nameof(Program);
+
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
@@ -24,50 +27,52 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console(outputTemplate: _outputTemplate)
     .CreateLogger();
 
-Log.ForContext("SourceContext", _sourceContext).Verbose("POST (1 of 6) => Verbose Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Debug("POST (2 of 6) => Debug Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Information("POST (3 of 6) => Information Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Warning("POST (4 of 6) => Warning Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Error("POST (5 of 6) => Error Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Fatal("POST (6 of 6) => Fatal Logging ON");
-Log.ForContext("SourceContext", _sourceContext).Information("{now} (LOCAL)", DateTime.Now);
-Log.ForContext("SourceContext", _sourceContext).Information("{utcNow} (UTC)", DateTime.UtcNow);
+Serilog.ILogger _logger = Log.ForContext("SourceContext", _sourceContext);
+
+_logger.Verbose("POST (1 of 6) => Verbose Logging ON");
+_logger.Debug("POST (2 of 6) => Debug Logging ON");
+_logger.Information("POST (3 of 6) => Information Logging ON");
+_logger.Warning("POST (4 of 6) => Warning Logging ON");
+_logger.Error("POST (5 of 6) => Error Logging ON");
+_logger.Fatal("POST (6 of 6) => Fatal Logging ON");
+_logger.Information("{now} (LOCAL)", DateTime.Now);
+_logger.Information("{utcNow} (UTC)", DateTime.UtcNow);
 
 try
 {
-    Log.ForContext("SourceContext", _sourceContext).Information("Creating Web Application Builder");
+    _logger.Information("Creating Web Application Builder");
     WebApplicationBuilder _builder = WebApplication.CreateBuilder(args);
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Logging Environment Name");
+    _logger.Information("Logging Environment Name");
     string _environmentName = _builder.Environment.EnvironmentName;
-    Log.ForContext("SourceContext", _sourceContext).Debug("_environmentName = {_environmentName}", _environmentName);
+    _logger.Debug("_environmentName = {_environmentName}", _environmentName);
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Using Serilog");
+    _logger.Information("Using Serilog");
     _builder.Host.UseSerilog((hostContext, loggerConfiguration) =>
     {
         loggerConfiguration.ReadFrom.Configuration(hostContext.Configuration);
         loggerConfiguration.Enrich.WithUtcTimestamp();
     });
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Configuring Application Insights Connection String");
+    _logger.Information("Configuring Application Insights Connection String");
     var _aiConnectionString = _builder.Configuration["ConnectionStrings:ApplicationInsights"];
 #if DEBUG
-    Log.ForContext("SourceContext", _sourceContext).Debug("_aiConnectionString = {_aiConnectionString}", _aiConnectionString);
+    _logger.Debug("_aiConnectionString = {_aiConnectionString}", _aiConnectionString);
 #endif
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding Application Insights Telemetry");
+    _logger.Information("Adding Application Insights Telemetry");
     _builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions
     {
         ConnectionString = _aiConnectionString
     });
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding Feature Management Services");
+    _logger.Information("Adding Feature Management Services");
     _builder.Services.AddFeatureManagement();
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding Health Check Services");
+    _logger.Information("Adding Health Check Services");
     _builder.Services.AddHealthChecks().AddCheck<MyHealthCheck>("MyHealthCheck");
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding API Versioning Services");
+    _logger.Information("Adding API Versioning Services");
     _builder.Services.AddApiVersioning(options =>
     {
         // TODO: Assert versionless route works.
@@ -76,17 +81,17 @@ try
         options.ApiVersionReader = new UrlSegmentApiVersionReader();
     });
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding Open API ServicesServices");
+    _logger.Information("Adding Open API ServicesServices");
     _builder.Services.AddOpenApi();
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding {name} Services", nameof(MyRepository));
+    _logger.Information("Adding {name} Services", nameof(MyRepository));
     // TODO: Learn the difference between AddSingleton and AddTransient.
     _builder.Services.AddSingleton<IMyRepository, MyRepository>();
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding {name} Services", nameof(MyService));
+    _logger.Information("Adding {name} Services", nameof(MyService));
     _builder.Services.AddSingleton<IMyService, MyService>();
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding Authentication Services");
+    _logger.Information("Adding Authentication Services");
     _builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
@@ -103,14 +108,12 @@ try
             };
         });
 
-    const string _myClaimPolicy = "MyClaimPolicy";
-
-    Log.ForContext("SourceContext", _sourceContext).Information("Adding Authorization Services");
+    _logger.Information("Adding Authorization Services");
     _builder.Services.AddAuthorizationBuilder()
         .AddPolicy(_myClaimPolicy, policy =>
             policy.RequireClaim("MyClaimType", "MyClaimValue"));
 
-    Log.ForContext("SourceContext", _sourceContext).Information("Building Web Application");
+    _logger.Information("Building Web Application");
     WebApplication _app = _builder.Build();
 
     _app.Logger.LogTrace("POST (1 of 6) => Trace Logging ON");
@@ -145,8 +148,6 @@ try
     _app.Logger.LogInformation("Using Header Middleware");
     _app.Use(async (context, next) =>
     {
-        const string _myHeaderKey = "MyHeader";
-
         _app.Logger.LogInformation("Configuring Header");
         string? _myHeaderValue = _app.Configuration.GetSection(_myHeaderKey).Value;
         _app.Logger.LogDebug("_myHeaderValue = {_myHeaderValue}", _myHeaderValue);
@@ -211,8 +212,8 @@ try
 }
 catch (Exception ex)
 {
-    Log.Error("Program Failed Because {message}", ex.Message);
-    Log.Fatal(ex, "FATAL ERROR");
+    _logger.Error("Program Failed Because {message}", ex.Message);
+    _logger.Fatal(ex, "FATAL ERROR");
 }
 finally
 {

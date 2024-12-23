@@ -122,9 +122,8 @@ public sealed class MyIntegrationTests : TestBase
             BaseAddress = new Uri("https://localhost:5001")
         });
 
-        // TODO: Decide on naming standard for variables, fields, etc.
         Debug.WriteLine($"Generating Bearer Token");
-        JwtSecurityTokenHandler tokenHandler = new();
+        JwtSecurityTokenHandler _tokenHandler = new();
         byte[] key = Encoding.UTF8.GetBytes($"/{new string('*', 4096 / 8)}");
         SecurityTokenDescriptor _tokenDescriptor = new()
         {
@@ -134,8 +133,8 @@ public sealed class MyIntegrationTests : TestBase
             Issuer = "yourIssuer",
             Audience = "yourAudience"
         };
-        SecurityToken _token = tokenHandler.CreateToken(_tokenDescriptor);
-        string _tokenString = tokenHandler.WriteToken(_token);
+        SecurityToken _token = _tokenHandler.CreateToken(_tokenDescriptor);
+        string _tokenString = _tokenHandler.WriteToken(_token);
         Debug.WriteLine(_tokenString);
 
         Debug.WriteLine($"Sending GET Request With {value}");
