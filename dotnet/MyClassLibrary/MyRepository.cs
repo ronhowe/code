@@ -18,7 +18,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         string? dbConnectionString;
         try
         {
-            logger.LogInformation("Getting Database Connection String");
+            logger.LogInformation("Getting Database Connection String From Configuration");
             dbConnectionString = configuration[$"ConnectionStrings:{_dbConnection}"];
 #if DEBUG
             logger.LogDebug("dbConnectionString = {dbConnectionString}", dbConnectionString);
@@ -34,7 +34,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         string? azConnectionString;
         try
         {
-            logger.LogInformation("Getting Azure Storage Connection String");
+            logger.LogInformation("Getting Azure Storage Connection String From Configuration");
             azConnectionString = configuration[$"ConnectionStrings:{_azConnection}"];
 #if DEBUG
             logger.LogDebug("azConnectionString = {azConnectionString}", azConnectionString);

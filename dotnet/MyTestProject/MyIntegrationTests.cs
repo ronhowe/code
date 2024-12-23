@@ -119,7 +119,7 @@ public sealed class MyIntegrationTests : TestBase
         Debug.WriteLine($"Creating Client");
         using var client = application.CreateClient(new WebApplicationFactoryClientOptions
         {
-            BaseAddress = new Uri("https://localhost:5001")
+            BaseAddress = new Uri("https://LOCALHOST:5001")
         });
 
         // TODO: Decide on naming standard for variables, fields, etc.

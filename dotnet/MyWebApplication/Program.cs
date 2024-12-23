@@ -150,7 +150,8 @@ try
         await next();
     });
 
-    app.Logger.LogInformation("Using HealthCheck");
+    app.UseSerilogRequestLogging();
+    app.Logger.LogInformation("Using Health Check Middleware");
     app.UseHealthChecks("/healthcheck");
 
     app.Logger.LogInformation("Using Authentication Middleware");
