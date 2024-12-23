@@ -1,6 +1,6 @@
-@MyWebApplication_HostAddress = http://LOCALHOST:5248
+@MyWebApplication_HostAddress = https://localhost:444
 
-GET {{MyWebApplication_HostAddress}}/weatherforecast/
+GET {{MyWebApplication_HostAddress}}/healthcheck
 Accept: application/json
 
 ###

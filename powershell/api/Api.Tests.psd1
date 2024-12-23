@@ -5,7 +5,7 @@
             Endpoint = @{
                 Name     = "MyWebApplication"
                 Platform = "Kestrel"
-                Uri      = "https://LOCALHOST:444"
+                Uri      = "https://localhost:444"
                 Header   = "MyHeader (Development)"
             }
         }

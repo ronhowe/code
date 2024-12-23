@@ -9,7 +9,7 @@ param(
     [string]$Platform = "Kestrel",
 
     [Parameter(Mandatory = $false)]
-    [Uri]$Uri = "https://LOCALHOST:444",
+    [Uri]$Uri = "https://localhost:444",
 
     [Parameter(Mandatory = $false)]
     [string]$Header = "MyHeader"
