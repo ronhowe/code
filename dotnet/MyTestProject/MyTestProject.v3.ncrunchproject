@@ -5,5 +5,13 @@
       <Value>AspNetTestHostCompatibility</Value>
       <Value>LongTestTimesWithoutParallelExecution</Value>
     </HiddenComponentWarnings>
+    <IgnoredTests>
+      <NamedTestSelector>
+        <TestName>MyTestProject.MyLiveTests.LiveSiteTests (3013128310621939563)</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>MyTestProject.MyLiveTests.LiveSiteTests (5145372329938219144)</TestName>
+      </NamedTestSelector>
+    </IgnoredTests>
   </Settings>
 </ProjectConfiguration>
