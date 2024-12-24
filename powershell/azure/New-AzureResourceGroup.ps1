@@ -1,6 +1,4 @@
-#requires -Module "Az.Accounts"
 #requires -Module "Az.Resources"
-
 [CmdletBinding()]
 param(
     [ValidateNotNullOrEmpty()]
