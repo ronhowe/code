@@ -1,14 +1,24 @@
-#requires -PSEdition "Core"
 #requires -Module "Pester"
-
+#requires -Module "Shell"
 [CmdletBinding()]
-param (
+param(
 )
+begin {
+    Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
 
-$ErrorActionPreference = "Stop"
-Write-Output "Running $($MyInvocation.MyCommand.Name)"
+    Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
+    Select-Object -Property @("Name", "Value") |
+    ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
+}
+process {
+    Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-Write-Output "Importing Configuration"
-. "$PSScriptRoot\Import-Configuration.ps1"
-
-Invoke-Pester -Path $testsPath -Output Detailed
+    ## TODO: Remove \module\ such as to include \dependencies\ Pester tests?
+    Get-ChildItem -Path "$PSScriptRoot\Tests\*.Tests.ps1" -Recurse |
+    ForEach-Object {
+        Invoke-Pester -Path $($_.FullName) -Output Detailed
+    }
+}
+end {
+    Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
+}

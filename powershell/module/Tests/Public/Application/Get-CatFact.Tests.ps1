@@ -1,17 +1,11 @@
 [CmdletBinding()]
 param(
 )
-Describe "Testing Get-CatFact" {
-    BeforeAll {
-        Write-Verbose "Importing Configuration"
-        . "$PSScriptRoot\..\..\..\Import-Configuration.ps1"
-    
-        Import-Module -Name "$modulePath\$moduleName" -Force
+Describe "Get-CatFact Tests" {
+    It "Asserting Call Returns Fact" {
+        Mock -ModuleName "Shell" Invoke-Request { return "[{'fact':'MOCK CAT FACT','length':13}]" }
 
-        Mock -ModuleName $moduleName Invoke-Request { return "[{'fact':'mock','length':4}]" }
-    }
-    It "Returns CatFact" {
         Get-CatFact |
-        Should -Be "mock"
+        Should -Be "MOCK CAT FACT"
     }
 }

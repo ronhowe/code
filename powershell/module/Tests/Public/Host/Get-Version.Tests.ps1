@@ -1,17 +1,11 @@
 [CmdletBinding()]
 param(
 )
-Describe "Testing Get-Version" {
-    BeforeAll {
-        Write-Verbose "Importing Configuration"
-        . "$PSScriptRoot\..\..\..\Import-Configuration.ps1"
-    
-        Import-Module -Name "$modulePath\$moduleName" -Force
+Describe "Get-Version Tests" {
+    It "Returns Mock Version" {
+        Mock -ModuleName "Shell" Get-Module { return @{ Version = "M.O.C.K" } }
 
-        Mock -ModuleName $moduleName Get-Module { return @{ Version = "x.x.x" } }
-    }
-    It "Returns Expected" {
         Get-Version |
-        Should -Be "x.x.x"
+        Should -Be "M.O.C.K"
     }
 }

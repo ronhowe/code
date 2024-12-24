@@ -1,18 +1,11 @@
 [CmdletBinding()]
 param(
 )
-Describe "Testing Get-Weather" {
-    BeforeAll {
-        Write-Verbose "Importing Configuration"
-        . "$PSScriptRoot\..\..\..\Import-Configuration.ps1"
-    
-        Import-Module -Name "$modulePath\$moduleName" -Force
-    }
-    It "Returns Weather" {
-        InModuleScope $moduleName {
-            Mock Invoke-Request { return "mock" }
-            Get-Weather |
-            Should -Be "mock"
-        }
+Describe "Get-Weather Tests" {
+    It "Asserting Call Returns Weather" {
+        Mock -ModuleName "Shell" Invoke-Request { return "MOCK" }
+
+        Get-Weather |
+        Should -Be "MOCK"
     }
 }

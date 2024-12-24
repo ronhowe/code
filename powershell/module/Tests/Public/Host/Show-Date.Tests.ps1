@@ -1,13 +1,7 @@
 [CmdletBinding()]
 param(
 )
-Describe "Testing Show-Date" {
-    BeforeAll {
-        Write-Verbose "Importing Configuration"
-        . "$PSScriptRoot\..\..\..\Import-Configuration.ps1"
-    
-        Import-Module -Name "$modulePath\$moduleName" -Force
-    }
+Describe "Show-Date Tests" {
     It "Invoke Does Not Throw" {
         { Show-Date } |
         Should -Not -Throw
