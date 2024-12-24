@@ -1,12 +1,14 @@
 ﻿using Azure.Data.Tables;
+using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Polly;
 
 namespace MyClassLibrary;
 
-public class MyRepository(ILogger<MyService> logger, IConfiguration configuration) : IMyRepository
+public class MyRepository(ILogger<MyRepository> logger, IConfiguration configuration, IHostEnvironment environment) : IMyRepository
 {
     public async Task SaveAsync(bool myInput)
     {
@@ -15,11 +17,11 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         logger.LogDebug("myInput = {myInput}", myInput);
 
         const string _dbConnection = "MyDatabase";
-        string? _dbConnectionString;
+        string _dbConnectionString;
         try
         {
             logger.LogInformation("Configuring Database Connection String");
-            _dbConnectionString = configuration[$"ConnectionStrings:{_dbConnection}"];
+            _dbConnectionString = configuration[$"ConnectionStrings:{_dbConnection}"] ?? throw new InvalidOperationException("Database Connection String Not Configured");
             logger.LogDebug("_dbConnectionString = {_dbConnectionString}", _dbConnectionString);
         }
         catch (Exception ex)
@@ -29,11 +31,11 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         }
 
         const string _azConnection = "MyAzureStorage";
-        string? _azConnectionString;
+        string _azConnectionString;
         try
         {
             logger.LogInformation("Configuring Azure Storage Connection String");
-            _azConnectionString = configuration[$"ConnectionStrings:{_azConnection}"];
+            _azConnectionString = configuration[$"ConnectionStrings:{_azConnection}"] ?? throw new InvalidOperationException("Azure Storage Connection String Not Configured");
             logger.LogDebug("_azConnectionString = {_azConnectionString}", _azConnectionString);
         }
         catch (Exception ex)
@@ -93,7 +95,16 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
                     logger.LogInformation("Saving To Azure Storage");
 
                     logger.LogInformation("Creating Table");
-                    TableClient _tableClient = new(_azConnectionString, "MyCloudTable");
+                    TableClient _tableClient;
+                    if (environment.IsDevelopment())
+                    {
+                        _tableClient = new(_azConnectionString, "MyCloudTable");
+                    }
+                    else
+                    {
+                        var _credential = new DefaultAzureCredential();
+                        _tableClient = new TableClient(new Uri(_azConnectionString), "MyCloudTable", _credential);
+                    }
                     await _tableClient.CreateIfNotExistsAsync();
 
                     logger.LogInformation("Adding Entity");

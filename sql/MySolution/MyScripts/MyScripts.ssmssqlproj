@@ -18,6 +18,21 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="sql-ronhowe-0.database.windows.net:sqladmin">
+          <Created>2024-12-24T07:42:28.1590522-05:00</Created>
+          <Type>SQL</Type>
+          <Server>sql-ronhowe-0.database.windows.net</Server>
+          <UserName>sqladmin</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>sqldb-ronhowe-0</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <TrustServerCertificate>False</TrustServerCertificate>
+          <HostNameInServerCertificate />
+          <EncryptionOption>True</EncryptionOption>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
