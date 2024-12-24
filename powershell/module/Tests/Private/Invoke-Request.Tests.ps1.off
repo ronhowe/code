@@ -1,0 +1,43 @@
+[CmdletBinding()]
+param(
+)
+Describe "Invoke-Request Tests" {
+    BeforeAll {
+        $ErrorActionPreference = "Stop"
+        . "$($PSCommandPath.Replace("\Tests\", "\Source\").Replace(".Tests.ps1",".ps1"))"
+    }
+    BeforeEach {
+        Mock Invoke-WebRequest {
+            throw "MockException"
+        }
+    }
+    It "Uri Invalid Throws" {
+        { Invoke-Request -Uri "https://b276ec7d-1d97-46a1-af03-4a0fbb646b63" } |
+        Should -Throw
+    }
+    It "Switch Present Returns" {
+        Mock Invoke-WebRequest {
+            [PSCustomObject]@{ Content = "MockContent" }
+        }
+        Invoke-Request -Uri "https://catfact.ninja/fact" -ContentOnly |
+        Should -Be "MockContent"
+    }
+    It "Switch Absent Returns" {
+        Mock Invoke-WebRequest {
+            [PSCustomObject]@{ Content = "MockContent" }
+        }
+        $response = Invoke-Request -Uri "https://catfact.ninja/fact"
+        $response.Content | Should -Be "MockContent"
+    }
+    It "Handles WebRequest Exception" {
+        { Invoke-Request -Uri "https://example.com" } |
+        Should -Throw "MockException"
+    }
+    It "Handles Successful Request" {
+        Mock Invoke-WebRequest {
+            [PSCustomObject]@{ Content = "Successful content" }
+        }
+        $response = Invoke-Request -Uri "https://example.com"
+        $response.Content | Should -Be "Successful content"
+    }
+}

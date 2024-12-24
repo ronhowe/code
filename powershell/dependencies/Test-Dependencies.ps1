@@ -12,17 +12,10 @@ begin {
 process {
     Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-    $ErrorActionPreference = "Stop"
-
-    Write-Verbose "Removing Module"
-    Get-Module -Name "Shell" |
-    Remove-Module -Force
-
-    Write-Verbose "Building Module"
-    & "$PSScriptRoot\Build-Module.ps1"
-
-    Write-Verbose "Building Module"
-    & "$PSScriptRoot\Test-Module.ps1"
+    Get-ChildItem -Path "$PSScriptRoot\*.Tests.ps1" -Recurse |
+    ForEach-Object {
+        Invoke-Pester -Path $($_.FullName) -Output Detailed
+    }
 }
 end {
     Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"

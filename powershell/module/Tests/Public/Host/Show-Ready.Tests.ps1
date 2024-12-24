@@ -1,13 +1,7 @@
 [CmdletBinding()]
 param(
 )
-Describe "Testing Show-Ready" {
-    BeforeAll {
-        Write-Verbose "Importing Configuration"
-        . "$PSScriptRoot\..\..\..\Import-Configuration.ps1"
-    
-        Import-Module -Name "$modulePath\$moduleName" -Force
-    }
+Describe "Show-Ready Tests" {
     It "Invoke Does Not Throw" {
         { Show-Ready } |
         Should -Not -Throw
