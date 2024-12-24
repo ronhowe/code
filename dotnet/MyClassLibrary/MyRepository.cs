@@ -20,9 +20,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         {
             logger.LogInformation("Configuring Database Connection String");
             _dbConnectionString = configuration[$"ConnectionStrings:{_dbConnection}"];
-#if DEBUG
             logger.LogDebug("_dbConnectionString = {_dbConnectionString}", _dbConnectionString);
-#endif
         }
         catch (Exception ex)
         {
@@ -36,9 +34,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         {
             logger.LogInformation("Configuring Azure Storage Connection String");
             _azConnectionString = configuration[$"ConnectionStrings:{_azConnection}"];
-#if DEBUG
             logger.LogDebug("_azConnectionString = {_azConnectionString}", _azConnectionString);
-#endif
         }
         catch (Exception ex)
         {
@@ -47,7 +43,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         }
 
         logger.LogInformation("Generating Row Key");
-        var _rowKey = Guid.CreateVersion7().ToString();
+        string _rowKey = Guid.CreateVersion7().ToString();
 
         logger.LogInformation("Saving {_rowKey}", _rowKey);
 
@@ -116,9 +112,7 @@ public class MyRepository(ILogger<MyService> logger, IConfiguration configuratio
         {
             logger.LogError("Save Failed Because {message}", ex.Message);
             logger.LogCritical("CRITICAL ERROR");
-#if DEBUG
             throw;
-#endif
         }
 
         logger.LogInformation("Exiting {name}", nameof(MyRepository));

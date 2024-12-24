@@ -20,23 +20,23 @@ public sealed class MyUnitTests : TestBase
     public async Task MyServiceTests(bool value)
     {
         Debug.WriteLine($"Mocking {nameof(ILogger<MyService>)}");
-        var mockLogger = new Mock<ILogger<MyService>>();
+        Mock<ILogger<MyService>> mockLogger = new();
 
         Debug.WriteLine($"Mocking {nameof(IConfiguration)}");
-        var mockConfiguration = new Mock<IConfiguration>();
+        Mock<IConfiguration> mockConfiguration = new();
         mockConfiguration.Setup(x => x["ConnectionStrings.MyDatabase"]).Returns("MYMOCKDATABASECONNECTIONSTRING");
         mockConfiguration.Setup(x => x["ConnectionStrings.MyAzureStorage"]).Returns("MYMOCKAZURESTORAGECONNECTIONSTRING;");
         mockConfiguration.Setup(x => x["MySecret"]).Returns("MYMOCKSECRET");
 
         Debug.WriteLine($"Mocking {nameof(IFeatureManager)}");
-        var mockFeatureManager = new Mock<IFeatureManager>();
+        Mock<IFeatureManager> mockFeatureManager = new();
         mockFeatureManager.Setup(x => x.IsEnabledAsync("MyFeature").Result).Returns(value);
 
         Debug.WriteLine($"Mocking {nameof(IMyRepository)}");
-        var mockRepository = new Mock<IMyRepository>();
+        Mock<IMyRepository> mockRepository = new();
 
         Debug.WriteLine($"Creating {nameof(MyService)}");
-        var myService = new MyService(
+        MyService myService = new(
             mockLogger.Object,
             mockConfiguration.Object,
             mockFeatureManager.Object,

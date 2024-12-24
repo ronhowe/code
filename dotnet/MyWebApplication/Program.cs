@@ -56,9 +56,7 @@ try
 
     _logger.Information("Configuring Application Insights Connection String");
     var _aiConnectionString = _builder.Configuration["ConnectionStrings:ApplicationInsights"];
-#if DEBUG
     _logger.Debug("_aiConnectionString = {_aiConnectionString}", _aiConnectionString);
-#endif
 
     _logger.Information("Adding Application Insights Telemetry");
     _builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions

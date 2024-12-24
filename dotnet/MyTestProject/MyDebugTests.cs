@@ -5,11 +5,11 @@ using System.Security.Cryptography;
 namespace MyTestProject;
 
 [TestClass]
-public sealed class MyTests : TestBase
+public sealed class MyDebugTests : TestBase
 {
     [TestMethod]
     [TestCategory("DebugTest")]
-    public void MyTest()
+    public void MyDebugTest()
     {
         Debug.WriteLine($"Debugging");
 
@@ -21,9 +21,9 @@ public sealed class MyTests : TestBase
         Debug.WriteLine(Guid.CreateVersion7());
 
         Debug.WriteLine($"Generating Random Number");
-        var key = new byte[4096 / 8];
+        byte[] key = new byte[4096 / 8];
         RandomNumberGenerator.Fill(key);
-        var base64Key = Convert.ToBase64String(key);
+        string base64Key = Convert.ToBase64String(key);
         Debug.WriteLine(base64Key);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Polly;
+using Polly.Retry;
 using System.Diagnostics;
 using System.Net;
 
@@ -21,7 +22,7 @@ public sealed class MyLiveTests : TestBase
         const int _retryMilliseconds = 1;
 
         Debug.WriteLine("Creating Retry Policy");
-        var retryPolicy = Policy
+        AsyncRetryPolicy retryPolicy = Policy
             .Handle<HttpRequestException>()
             .WaitAndRetryAsync(_maxRetries, retryAttempt => TimeSpan.FromMilliseconds(_retryMilliseconds),
                 (ex, timeSpan, retryAttempt, context) =>
@@ -30,16 +31,14 @@ public sealed class MyLiveTests : TestBase
                     Debug.WriteLine($"Retry Attempt # {retryAttempt} Of {_maxRetries}");
                 });
 
-        var handler = new HttpClientHandler()
+        HttpClientHandler handler = new()
         {
-#if DEBUG
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-#endif
+            //ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         };
 
-        using var client = new HttpClient(handler);
+        using HttpClient client = new(handler);
 
-        using var response = retryPolicy.ExecuteAsync(async () =>
+        using HttpResponseMessage response = retryPolicy.ExecuteAsync(async () =>
         {
             Debug.WriteLine($"Sending HTTP GET Request");
             return await client.GetAsync(new Uri(uriString));
