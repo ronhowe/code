@@ -8,10 +8,8 @@ Describe "Alias Tests" -ForEach @(
     @{ Alias = "catfact" }
     @{ Alias = "date" }
     @{ Alias = "help" }
-    @{ Alias = "logo" }
-    @{ Alias = "pshell" }
+    @{ Alias = "shell" }
     @{ Alias = "quote" }
-    @{ Alias = "ready" }
     @{ Alias = "version" }
     @{ Alias = "weather" }
 ) {

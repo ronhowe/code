@@ -2,7 +2,7 @@
 param(
 )
 Describe "Get-Version Tests" {
-    It "Returns Mock Version" {
+    It "Asserting Version Is Returned" {
         Mock -ModuleName "Shell" Get-Module { return @{ Version = "M.O.C.K" } }
 
         Get-Version |

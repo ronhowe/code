@@ -2,11 +2,11 @@
 param(
 )
 Describe "Show-Logo Tests" {
-    It "Invoke Does Not Throw" {
+    It "Asserting Show Does Not Throw" {
         { Show-Logo } |
         Should -Not -Throw
     }
-    It "Invoke Returns Nothing" {
+    It "Asserting Show Returns Nothing" {
         Show-Logo |
         Should -BeNullOrEmpty
     }

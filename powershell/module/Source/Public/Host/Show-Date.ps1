@@ -12,8 +12,9 @@ function Show-Date {
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-        Write-Host $(Get-Date -AsUTC)
-    }
+        Write-Host "$([DateTime]::Now.ToString(`"yyyy-MM-dd HH:mm:ss.fff`")) (LOCAL)"
+        Write-Host "$([DateTime]::UtcNow.ToString(`"yyyy-MM-dd HH:mm:ss.fff`")) (UTC)"
+}
     end {
         Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
     }

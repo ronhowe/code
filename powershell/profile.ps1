@@ -79,11 +79,10 @@ function Get-DevOpsStatus {
     dotnet list $HOME\repos\ronhowe\code\dotnet\MySolution.sln package --outdated
 
     Write-Verbose "Testing Dependencies"
-    & "$HOME\repos\ronhowe\code\powershell\dependencies\Invoke-PesterTests.ps1"
+    & "$HOME\repos\ronhowe\code\powershell\dependencies\Test-Dependencies.ps1"
 
-    ## TODO: Enable Module Testing
-    # Write-Verbose "Testing Module"
-    # & "$HOME\repos\ronhowe\code\powershell\module\Test-Module.ps1"
+    Write-Verbose "Debugging Module"
+    & "$HOME\repos\ronhowe\code\powershell\module\Debug-Module.ps1"
 
     Write-Verbose "Running WinGet Upgrade"
     winget upgrade

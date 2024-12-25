@@ -21,7 +21,10 @@ process {
     Write-Verbose "Building Module"
     & "$PSScriptRoot\Build-Module.ps1"
 
-    Write-Verbose "Building Module"
+    Write-Verbose "Importing Module"
+    Import-Module -Name "$PSScriptRoot\Output\Shell" -Force
+
+    Write-Verbose "Testing Module"
     & "$PSScriptRoot\Test-Module.ps1"
 }
 end {

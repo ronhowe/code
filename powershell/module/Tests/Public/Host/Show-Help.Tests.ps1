@@ -2,11 +2,11 @@
 param(
 )
 Describe "Show-Help Tests" {
-    It "Invoke Does Not Throw" {
+    It "Asserting Show Does Not Throw" {
         { Show-Help } |
         Should -Not -Throw
     }
-    It "Invoke Returns Nothing" {
+    It "Asserting Show Returns Nothing" {
         Show-Help |
         Should -BeNullOrEmpty
     }
