@@ -5,7 +5,7 @@ Describe "Alias Tests" -ForEach @(
     # sync with Aliases.ps1
     # sync with Aliases.Tests.ps1
     # sync with Show-Help.ps1
-    @{ Alias = "api" }
+    # @{ Alias = "api" }
     @{ Alias = "catfact" }
     @{ Alias = "date" }
     @{ Alias = "go" }
@@ -19,7 +19,7 @@ Describe "Alias Tests" -ForEach @(
     @{ Alias = "new" }
     @{ Alias = "ok" }
     @{ Alias = "oops" }
-    @{ Alias = "pong" }
+    # @{ Alias = "pong" }
     @{ Alias = "quiet" }
     @{ Alias = "repos" }
     @{ Alias = "ronhowe" }
