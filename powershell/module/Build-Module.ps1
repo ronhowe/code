@@ -1,6 +1,9 @@
 #requires -Module "ModuleBuilder"
 [CmdletBinding()]
 param(
+    [ValidateNotNullOrEmpty()]
+    [string]
+    $Version = "0.0.0"
 )
 begin {
     Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
@@ -33,7 +36,7 @@ process {
         SourcePath                 = "$PSScriptRoot\Source\Shell.psd1"
         UnversionedOutputDirectory = $true
         Verbose                    = $false
-        Version                    = "0.0.0"
+        Version                    = $Version
     }
     Build-Module @parameters
 }
