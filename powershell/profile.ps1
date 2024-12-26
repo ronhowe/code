@@ -11,15 +11,18 @@ begin {
 process {
     Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-    $ErrorActionPreference = "Stop"
-    $ProgressPreference = "SilentlyContinue"
-    $VerbosePreference = "SilentlyContinue"
-    
+    Write-Host "Loading Profile ; Please Wait" -ForegroundColor DarkGray
+
+    $ErrorActionPreference = "Stop" # changed from Continue
+    $ProgressPreference = "SilentlyContinue" # changed from Continue
+    $VerbosePreference = "SilentlyContinue" # unchanged
+    $WarningPreference = "Continue" # unchanged
+
     Write-Verbose "Asserting PowerShell Core"
     if ($PSVersionTable.PSEdition -ne "Core") {
         Write-Warning "PowerShell Core Not Detected" -WarningAction Continue
     }
-    
+
     Write-Verbose "Importing Az.Tools.Predictor"
     if (Get-Module -Name "Az.Tools.Predictor" -ListAvailable) {
         Import-Module -Name "Az.Tools.Predictor" -Verbose:$false
@@ -27,7 +30,7 @@ process {
     else {
         Write-Warning "Skipping Az.Tools.Predictor"
     }
-    
+
     Write-Verbose "Importing Az.Tools.Predictor"
     if (Get-Module -Name "Microsoft.PowerShell.SecretManagement" -ListAvailable) {
         Import-Module -Name "Microsoft.PowerShell.SecretManagement" -Verbose:$false
@@ -35,7 +38,7 @@ process {
     else {
         Write-Warning "Skipping Microsoft.PowerShell.SecretManagement"
     }
-    
+
     Write-Verbose "Importing Az.Tools.Predictor"
     if (Get-Module -Name "Microsoft.PowerShell.SecretStore" -ListAvailable) {
         Import-Module -Name "Microsoft.PowerShell.SecretStore" -Verbose:$false
@@ -43,7 +46,7 @@ process {
     else {
         Write-Warning "Skipping Microsoft.PowerShell.SecretStore"
     }
-    
+
     Write-Verbose "Importing Az.Tools.Predictor"
     if (Get-Module -Name "posh-git" -ListAvailable) {
         Import-Module -Name "posh-git" -Verbose:$false
@@ -51,7 +54,7 @@ process {
     else {
         Write-Warning "Skipping posh-git"
     }
-    
+
     ## NOTE: Work shim.
     if ($host.Name -eq "Windows PowerShell ISE Host") {
         Write-Verbose "Importing Az.Tools.Predictor"
@@ -61,11 +64,11 @@ process {
         else {
             Write-Warning "Skipping ISESteroids"
         }
-    
+        
         Write-Verbose "Defining Root Global Variable"
         New-Variable -Name "Root" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
     }
-    
+
     Write-Verbose "Setting PSReadLine Options"
     if ($PSVersionTable.PSEdition -eq "Core") {
         Set-PSReadLineOption -PredictionSource HistoryAndPlugin
@@ -83,7 +86,7 @@ process {
 
         Write-Verbose "Importing Shell Module"
         Import-Module -Name "$HOME\repos\ronhowe\code\powershell\module\Output\Shell" -Force
-
+    
         Write-Verbose "Starting Shell"
         Start-Shell
     }

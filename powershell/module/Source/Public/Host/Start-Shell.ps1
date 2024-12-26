@@ -26,7 +26,7 @@ function Start-Shell {
             Write-Verbose "Setting Location To Home"
             Set-Location -Path $HOME
 
-            Clear-Host
+            # Clear-Host
             Show-Header
             Show-Date
             Show-Version
