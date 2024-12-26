@@ -12,21 +12,15 @@ function Start-Shell {
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
         try {
-            # Write-Verbose "Importing Power Configuration"
-    
-            # https://github.com/JustinGrote/PowerConfig/issues/7
-            # Import-PowerConfiguration -Name "Shell" -Path "$PSScriptRoot\Shell.json" |
-            # Out-Null
-    
-            # Write-Verbose "Showing Configuration"
-    
-            # $ShellConfiguration |
-            # Format-Table -AutoSize
-    
+            # Clear-Host
+
+            Write-Verbose "Importing Shell Configuration"
+            Import-ShellConfiguration -WarningAction "SilentlyContinue" |
+            Out-Null
+
             Write-Verbose "Setting Location To Home"
             Set-Location -Path $HOME
 
-            # Clear-Host
             Show-Header
             Show-Date
             Show-Version

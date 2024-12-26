@@ -1,8 +1,7 @@
-// {
-//     "Email": "user@domain.com",
-//     "Name": "default",
-//     "Organization": "default",
-//     "SecretServerCloudEndpoint": "https://<instance>.secretservercloud.com/",
-//     "SecretServerCloudUsername": "user@domain.com",
-//     "TenantId": "00000000-0000-0000-0000-000000000000"
-// }
+{
+    "Email": "MOCKUSER@MOCKDOMAIN.COM",
+    "Name": "MOCKNAME",
+    "Organization": "MOCKORAGNIZATION",
+    "TenantId": "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF",
+    "SubscriptionId": "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"
+}
