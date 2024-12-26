@@ -2,11 +2,12 @@
 param(
 )
 Describe "Import-ShellConfiguration Tests" {
-    It "Asserting Configuration Does Not Throw" {
+    ## TODO: Add tests for default configuration.
+    It "Asserting Import Does Not Throw" {
         { Import-ShellConfiguration -Path "$PSScriptRoot\MockPowerConfiguration.json" } |
         Should -Not -Throw
     }
-    It "Asserting Configuration Is Not Null Or Empty" {
+    It "Asserting Import Is Not Null Or Empty" {
         Import-ShellConfiguration -Path "$PSScriptRoot\MockPowerConfiguration.json" |
         Should -Not -BeNullOrEmpty
     }
@@ -29,5 +30,8 @@ Describe "Import-ShellConfiguration Tests" {
     It "Asserting Mock SubscriptionId Configuration" {
         (Import-ShellConfiguration -Path "$PSScriptRoot\MockPowerConfiguration.json").SubscriptionId |
         Should -Be "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"
+    }
+    afterall{
+        Import-ShellConfiguration
     }
 }
