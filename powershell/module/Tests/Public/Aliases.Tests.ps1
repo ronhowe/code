@@ -16,6 +16,7 @@ Describe "Alias Tests" -ForEach @(
     @{ Alias = "list" }
     @{ Alias = "logo" }
     @{ Alias = "matrix" }
+    @{ Alias = "menu" }
     @{ Alias = "new" }
     @{ Alias = "ok" }
     @{ Alias = "oops" }
