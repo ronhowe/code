@@ -18,12 +18,9 @@ Describe "Alias Tests" -ForEach @(
     @{ Alias = "matrix" }
     @{ Alias = "menu" }
     @{ Alias = "new" }
-    @{ Alias = "ok" }
     @{ Alias = "oops" }
-    # @{ Alias = "pong" }
     @{ Alias = "quiet" }
     @{ Alias = "repos" }
-    @{ Alias = "ronhowe" }
     @{ Alias = "shell" }
     @{ Alias = "silence" }
     @{ Alias = "version" }
