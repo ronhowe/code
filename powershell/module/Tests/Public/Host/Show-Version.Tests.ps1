@@ -2,11 +2,11 @@
 param(
 )
 Describe "Show-Version Tests" {
-    It "Invoke Does Not Throw" {
+    It "Asserting Show Does Not Throw" {
         { Show-Version } |
         Should -Not -Throw
     }
-    It "Invoke Returns Nothing" {
+    It "Asserting Show Returns Nothing" {
         Show-Version |
         Should -BeNullOrEmpty
     }

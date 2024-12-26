@@ -1,52 +1,44 @@
 function Start-Shell {
     [CmdletBinding()]
-    param (
+    param(
     )
     begin {
-        Write-Debug "Begin $($MyInvocation.MyCommand.Name)"
-
+        Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
+    
         Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
         Select-Object -Property @("Name", "Value") |
-        ForEach-Object { Write-Debug "`$$($_.Name)=$($_.Value)" }
+        ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
     }
     process {
-        Write-Debug "Process $($MyInvocation.MyCommand.Name)"
-
+        Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
         try {
             # Write-Verbose "Importing Power Configuration"
-
+    
             # https://github.com/JustinGrote/PowerConfig/issues/7
             # Import-PowerConfiguration -Name "Shell" -Path "$PSScriptRoot\Shell.json" |
             # Out-Null
-
+    
             # Write-Verbose "Showing Configuration"
-
+    
             # $ShellConfiguration |
             # Format-Table -AutoSize
-
-            Write-Verbose "Starting Shell"
-            Clear-Host
-            # module fails with a Sort command on Linux
-            if ($PSVersionTable.Platform -ne "Unix") {
-                Write-Ascii "pshell" -ForegroundColor Green
-            }
-            else {
-                Write-Host "pshell" -ForegroundColor Green
-            }
-            Show-Logo
-            Show-Version
-            Show-Date
-            Show-Ready
+    
+            Write-Verbose "Setting Location To Home"
             Set-Location -Path $HOME
-            if ($PSVersionTable.Platform -ne "Unix") {
-                [System.Console]::Beep(500, 100)
-            }
+
+            # Clear-Host
+            Show-Header
+            Show-Date
+            Show-Version
+            Write-Host "Type 'help' for more Shell commands." -ForegroundColor DarkGray
+            Show-Logo
+            Show-Ready
         }
         catch {
-            Write-Error "Starting Shell Failed"
+            Write-Error "Shell Failed Because $($_.Exception.Message)"
         }
     }
     end {
-        Write-Debug "End $($MyInvocation.MyCommand.Name)"
+        Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
     }
 }
