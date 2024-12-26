@@ -23,7 +23,7 @@ process {
     Write-Debug "destination = $destination"
     Start-BitsTransfer -Source $Source -Destination $destination
 
-    Write-Verbose "Installing PowerShell"
+    Write-Verbose "Starting PowerShell Installer"
     $parameters = @{
         FilePath         = "msiexec.exe"
         ArgumentList     = @(

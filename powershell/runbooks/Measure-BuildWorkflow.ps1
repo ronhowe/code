@@ -10,6 +10,7 @@ begin {
 }
 process {
     Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
+
     $ErrorActionPreference = "Stop"
 
     Write-Verbose "Measuring Build Workflow"

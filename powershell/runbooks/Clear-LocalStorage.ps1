@@ -23,7 +23,7 @@ process {
     Get-AzStorageTable -Name "MyCloudTable" -ErrorAction SilentlyContinue |
     Remove-AzStorageTable -Name "MyCloudTable" -Force
     
-    Write-Verbose "Removing Logs"
+    Write-Verbose "Removing Log Files"
     Get-ChildItem -Path "$HOME\repos\ronhowe\code\logs" -Recurse |
     Remove-Item -Force
 }

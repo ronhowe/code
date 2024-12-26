@@ -11,6 +11,8 @@ begin {
 process {
     Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
+    $ErrorActionPreference = "Continue"
+
     Write-Verbose "Getting DevOps Tools"
     & "$HOME\repos\ronhowe\code\powershell\runbooks\Get-DevOpsTools.ps1" -Verbose
 

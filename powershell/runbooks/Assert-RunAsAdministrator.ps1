@@ -11,8 +11,11 @@ begin {
 process {
     Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
+    Write-Verbose "Getting Current Identity"
     $identity = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent())
+    Write-Debug "`$identity = $identity"
 
+    Write-Verbose "Asserting Identity Is Administrator"
     if (-not $identity.IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator")) {
         throw [System.UnauthorizedAccessException] "Not Running As Administrator"
     }

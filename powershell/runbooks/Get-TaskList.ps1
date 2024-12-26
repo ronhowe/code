@@ -11,8 +11,7 @@ begin {
 process {
     Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-    ## TODO: Add tasks alias to profile.
-    ## TODO: Add abilit to filter by pattern as parameter.
+    ## TODO: Add ability to exclude filters by -Skip* parameters.
     Get-ChildItem -Path "$HOME\repos\ronhowe\code" -Include @("*.bicep", "*.cs", "*.json", "*.md", "*.ps*", "*.sql", "*.txt", "*.xml") -Recurse |
     Where-Object { $_.FullName -notlike "*\bin\*" -and $_.FullName -notlike "*\obj\*" } |
     Sort-Object -Property "FullName" |
