@@ -4,7 +4,7 @@ function Show-Logo {
     )
     begin {
         Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
-    
+
         Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
         Select-Object -Property @("Name", "Value") |
         ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
@@ -12,9 +12,14 @@ function Show-Logo {
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-        Write-Host "********************************************************************************" -ForegroundColor Green
-        Write-Host "https://github.com/ronhowe" -ForegroundColor Green
-        Write-Host "********************************************************************************" -ForegroundColor Green
+        Write-Host "r" -BackgroundColor Red -ForegroundColor Black -NoNewline
+        Write-Host "o" -BackgroundColor DarkYellow -ForegroundColor Black -NoNewline
+        Write-Host "n" -BackgroundColor Yellow -ForegroundColor Black -NoNewline
+        Write-Host "h" -BackgroundColor Green -ForegroundColor Black -NoNewline
+        Write-Host "o" -BackgroundColor DarkBlue -ForegroundColor Black -NoNewline
+        Write-Host "w" -BackgroundColor Blue -ForegroundColor Black -NoNewline
+        Write-Host "e" -BackgroundColor Cyan -ForegroundColor Black -NoNewline
+        Write-Host ".net"
     }
     end {
         Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"

@@ -23,18 +23,15 @@ function Start-Shell {
             # $ShellConfiguration |
             # Format-Table -AutoSize
     
-            Write-Verbose "Starting Shell"
-    
+            Write-Verbose "Setting Location To Home"
             Set-Location -Path $HOME
-    
+
             Clear-Host
-    
-            Show-Logo
-    
+            Show-Header
             Show-Date
-    
             Show-Version
-    
+            Write-Host "Type 'help' for more Shell commands." -ForegroundColor DarkGray
+            Show-Logo
             Show-Ready
         }
         catch {

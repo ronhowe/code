@@ -7,7 +7,7 @@
     CompanyName          = 'Ron Howe.NET'
     Copyright            = '(c) Ron Howe. All rights reserved.'
     Description          = 'A shell in PowerShell.'
-    PowerShellVersion    = '7.3'
+    PowerShellVersion    = '7.4'
     # PowerShellHostName = ''
     # PowerShellHostVersion = ''
     # DotNetFrameworkVersion = ''
@@ -46,5 +46,5 @@
         }
     }
     # HelpInfoURI = ''
-    # DefaultCommandPrefix = ''
+    # DefaultCommandPrefix = 'My'
 }
