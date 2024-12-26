@@ -5,11 +5,3 @@
 #!pwsh
 
 & "$HOME\repos\ronhowe\code\powershell\runbooks\Debug-Runbook.ps1" -Verbose -Debug
-
-#!pwsh
-
-& "$HOME\repos\ronhowe\code\powershell\runbooks\Get-TaskList.ps1"
-
-#!pwsh
-
-& "$HOME\repos\ronhowe\code\powershell\dependencies\Test-dependencies.ps1"
