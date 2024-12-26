@@ -17,7 +17,7 @@ process {
     & "$PSScriptRoot\Rebuild-Module.ps1"
 
     Write-Verbose "Importing Module"
-    Import-Module -Name "$PSScriptRoot\Output\Shell" -Force
+    Import-Module -Name "$PSScriptRoot\Output\Shell" -Global -Force
 
     Write-Verbose "Testing Module"
     & "$PSScriptRoot\Test-Module.ps1"

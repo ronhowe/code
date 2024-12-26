@@ -1,6 +1,15 @@
-function Get-DevOpsStatus {
-    [CmdletBinding()]
-    param()
+[CmdletBinding()]
+param(
+)
+begin {
+    Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
+
+    Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
+    Select-Object -Property @("Name", "Value") |
+    ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
+}
+process {
+    Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
     Write-Verbose "Getting DevOps Tools"
     & "$HOME\repos\ronhowe\code\powershell\runbooks\Get-DevOpsTools.ps1" -Verbose
@@ -9,7 +18,7 @@ function Get-DevOpsStatus {
     & "$HOME\repos\ronhowe\code\powershell\runbooks\Invoke-BuildWorkflow.ps1" -Verbose
 
     Write-Verbose "Running .NET List"
-    dotnet list $HOME\repos\ronhowe\code\dotnet\MySolution.sln package --outdated
+    dotnet list "$HOME\repos\ronhowe\code\dotnet\MySolution.sln" package --outdated
 
     Write-Verbose "Testing Dependencies"
     & "$HOME\repos\ronhowe\code\powershell\dependencies\Test-Dependencies.ps1"
@@ -19,4 +28,7 @@ function Get-DevOpsStatus {
 
     Write-Verbose "Running WinGet Upgrade"
     winget upgrade
+}
+end {
+    Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
 }

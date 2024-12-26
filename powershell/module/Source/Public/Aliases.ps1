@@ -16,7 +16,6 @@ New-Alias -Name "menu" -Value "Start-Menu" -Force -Scope Global
 New-Alias -Name "new" -Value "Show-New" -Force -Scope Global
 New-Alias -Name "ok" -Value "Get-DevOpsStatus" -Force -Scope Global
 New-Alias -Name "oops" -Value "Open-PSReadLineHistory" -Force -Scope Global
-# New-Alias -Name "pong" -Value Invoke-ApiTest -Force
 New-Alias -Name "quiet" -Value "Hide-PromptMinimal" -Force -Scope Global
 New-Alias -Name "repos" -Value "Push-LocationRepos" -Force -Scope Global
 New-Alias -Name "ronhowe" -Value "Show-Logo" -Force -Scope Global
