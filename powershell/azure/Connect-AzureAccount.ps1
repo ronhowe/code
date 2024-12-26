@@ -1,13 +1,15 @@
 #requires -Module "Az.Accounts"
 [CmdletBinding()]
 param(
+    [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $TenantId = "d3efb988-727d-47ea-adb8-cce6dc17857d",
+    $TenantId = $ShellConfig.TenantId,
 
+    [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $SubscriptionId = "32824cab-0279-4368-a5e3-d9921d3d1331"
+    $SubscriptionId = $ShellConfig.SubscriptionId
 )
 begin {
     Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
