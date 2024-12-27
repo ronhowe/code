@@ -14,34 +14,54 @@ process {
     $ErrorActionPreference = "Continue"
 
     Write-Verbose "Getting .NET (dotnet) Version"
-    dotnet --version
+    $(dotnet --version) |
+    Out-String |
+    Write-Verbose -Verbose
 
     Write-Verbose "Getting Azure CLI (az) Version"
-    az --version
+    $(az --version) |
+    Out-String |
+    Write-Verbose -Verbose
 
     Write-Verbose "Getting Bicep CLI (bicep) Version"
-    bicep --version
+    $(bicep --version) |
+    Out-String |
+    Write-Verbose -Verbose
 
     Write-Verbose "Getting Git CLI (git) Version"
-    git --version
+    $(git --version) |
+    Out-String |
+    Write-Verbose -Verbose
 
     Write-Verbose "Getting GitHub CLI (gh) Version"
-    gh --version
+    $(gh --version) |
+    Out-String |
+    Write-Verbose -Verbose
 
     Write-Verbose "Getting NuGet (nuget) Version"
-    nuget | Select-String -SimpleMatch "NuGet Version"
+    $(nuget | Select-String -SimpleMatch "NuGet Version") |
+    Out-String |
+    Write-Verbose -Verbose
 
     Write-Verbose "Getting PowerShell (pwsh) Version"
-    pwsh --version
+    $(pwsh --version) |
+    Out-String |
+    Write-Verbose -Verbose
 
     Write-Verbose "Getting Python (python) Version"
-    python --version
+    $(python --version) |
+    Out-String |
+    Write-Verbose -Verbose
 
     Write-Verbose "Getting Visual Studio Code (code) Version"
-    code --version
+    $(code --version) |
+    Out-String |
+    Write-Verbose -Verbose
 
     Write-Verbose "Getting Windows Subsystem For Linux (wsl) Version"
-    wsl --version
+    $(wsl --version) |
+    Out-String |
+    Write-Verbose -Verbose
 }
 end {
     Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"

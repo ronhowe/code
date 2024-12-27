@@ -148,6 +148,8 @@ function Start-Menu {
                 Write-Output "## Write-Output" # visible after (to pipeline)
                 dotnet --version # visible after (to pipeline)
                 Write-Host $(pwsh --version) # visible
+                Write-Debug $(pwsh --version) -Debug # visible
+                Write-Verbose $(pwsh --version) -Verbose # visible
                 Show-Menu -MenuName "DebugMenu"
             }
             DisableConfirm = $true
@@ -212,10 +214,10 @@ function Start-Menu {
         Add-MenuItem -Menu "DevOpsMenu"
 
         $parameters = @{
-            Name           = "GetDevOpsStatusMenuItem"
-            DisplayName    = "Get DevOps Status"
+            Name           = "GetDevOpsToolsMenuItem"
+            DisplayName    = "Get DevOps Tools"
             Action         = {
-                & "$HOME\repos\ronhowe\code\powershell\runbooks\Get-DevOpsStatus.ps1" -Verbose
+                & "$HOME\repos\ronhowe\code\powershell\runbooks\Get-DevOpsTools.ps1" -Verbose
                 Show-Menu -MenuName "DevOpsMenu"
             }
             DisableConfirm = $true
