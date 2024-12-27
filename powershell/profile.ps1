@@ -85,13 +85,13 @@ process {
     Write-Verbose "Asserting PowerShell Core"
     if ($PSVersionTable.PSEdition -eq "Core") {
         Write-Verbose "Asserting Shell Module Exists"
-        if (Test-Path -Path "$HOME\repos\ronhowe\code\powershell\module\Output\Shell\Shell.psm1") {
+        if (Test-Path -Path "$HOME\repos\ronhowe\code\powershell\module\bin\Shell\Shell.psm1") {
             Write-Verbose "Removing Shell Module"
             Get-Module -Name "Shell" |
             Remove-Module -Force
 
             Write-Verbose "Importing Shell Module"
-            Import-Module -Name "$HOME\repos\ronhowe\code\powershell\module\Output\Shell" -Force
+            Import-Module -Name "$HOME\repos\ronhowe\code\powershell\module\bin\Shell" -Force
     
             Write-Verbose "Starting Shell"
             Start-Shell

@@ -18,13 +18,13 @@ process {
     $ErrorActionPreference = "Stop"
 
     Write-Verbose "Removing Output"
-    Remove-Item -Path "$PSScriptRoot\Output" -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item -Path "$PSScriptRoot\bin" -Recurse -Force -ErrorAction SilentlyContinue
 
     Write-Verbose "Building Module"
     $parameters = @{
         CopyPaths                  = @(
-            "$PSScriptRoot\Source\Shell.json",
-            "$PSScriptRoot\Source\Shell.nuspec",
+            "$PSScriptRoot\src\Shell.json",
+            "$PSScriptRoot\src\Shell.nuspec",
             "$PSScriptRoot\..\dependencies\Dependencies.psd1",
             "$PSScriptRoot\..\dependencies\Dependencies.Tests.ps1",
             "$PSScriptRoot\..\dependencies\Install-Dependencies.ps1",
@@ -32,8 +32,8 @@ process {
             "$PSScriptRoot\LICENSE*"
             # "$PSScriptRoot\README.md"
         )
-        OutputDirectory            = "$PSScriptRoot\Output"
-        SourcePath                 = "$PSScriptRoot\Source\Shell.psd1"
+        OutputDirectory            = "$PSScriptRoot\bin"
+        SourcePath                 = "$PSScriptRoot\src\Shell.psd1"
         UnversionedOutputDirectory = $true
         Verbose                    = $false
         Version                    = $Version
