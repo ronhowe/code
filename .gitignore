@@ -10,6 +10,9 @@
 *.userosscache
 *.sln.docstates
 
+# Holotable
+*.cdf
+
 logs
 
 # TODO: Eventually ignore VS Code settings?
