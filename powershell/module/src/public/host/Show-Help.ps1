@@ -15,28 +15,25 @@ function Show-Help {
         # sync with Aliases.ps1
         # sync with Aliases.Tests.ps1
         # sync with Show-Help.ps1
-        Write-Host "api" -ForegroundColor Green
-        Write-Host "catfact" -ForegroundColor Green
-        Write-Host "date" -ForegroundColor Green
-        Write-Host "go" -ForegroundColor Green
-        Write-Host "header" -ForegroundColor Green
-        Write-Host "help" -ForegroundColor Green
-        Write-Host "home" -ForegroundColor Green
-        Write-Host "line" -ForegroundColor Green
-        Write-Host "list" -ForegroundColor Green
-        Write-Host "logo" -ForegroundColor Green
-        Write-Host "matrix" -ForegroundColor Green
-        Write-Host "new" -ForegroundColor Green
-        Write-Host "ok" -ForegroundColor Green
-        Write-Host "oops" -ForegroundColor Green
-        Write-Host "pong" -ForegroundColor Green
-        Write-Host "quiet" -ForegroundColor Green
-        Write-Host "repos" -ForegroundColor Green
-        Write-Host "ronhowe" -ForegroundColor Green
-        Write-Host "shell" -ForegroundColor Green
-        Write-Host "silence" -ForegroundColor Green
-        Write-Host "version" -ForegroundColor Green
-        Write-Host "weather" -ForegroundColor Green
+        Write-Host "catfact`n`t- Displays a random fact about cats."
+        Write-Host "date`n`t- Displays local and UTC times."
+        Write-Host "go`n`t- Locates the standard code folder."
+        Write-Host "header`n`t- Displays the Shell header."
+        Write-Host "help`n`t- Displays the Shell help."
+        Write-Host "home`n`t- Locates the standard home folder."
+        Write-Host "line`n`t- Sets the PowerShell read line predictor to inline format."
+        Write-Host "list`n`t- Sets the PowerShell read line predictor to list format."
+        Write-Host "logo`n`t- Displays the Shell logo."
+        Write-Host "matrix`n`t- Take the blue pill or red pill?  (requires wsl and cmatrix)"
+        Write-Host "menu`n`t- Starts the Shell menu"
+        Write-Host "new`n`t- Refreshes the screen."
+        Write-Host "oops`n`t- Opens Notepad to edit command history."
+        Write-Host "quiet`n`t- Minimizes the PowerShell prompt."
+        Write-Host "repos`n`t- Locates the standard repos folder."
+        Write-Host "shell`n`t- Starts the Shell."
+        Write-Host "silence`n`t- Hides the PowerShell prompt."
+        Write-Host "version`n`t- Displays the version of PowerShell and the Shell."
+        Write-Host "weather`n`t- Displays the weather."
     }
     end {
         Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
