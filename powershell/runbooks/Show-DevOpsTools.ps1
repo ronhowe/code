@@ -16,52 +16,52 @@ process {
     Write-Verbose "Getting .NET (dotnet) Version"
     $(dotnet --version) |
     Out-String |
-    Write-Verbose -Verbose
+    Write-Host
 
     Write-Verbose "Getting Azure CLI (az) Version"
     $(az --version) |
     Out-String |
-    Write-Verbose -Verbose
+    Write-Host
 
     Write-Verbose "Getting Bicep CLI (bicep) Version"
     $(bicep --version) |
     Out-String |
-    Write-Verbose -Verbose
+    Write-Host
 
     Write-Verbose "Getting Git CLI (git) Version"
     $(git --version) |
     Out-String |
-    Write-Verbose -Verbose
+    Write-Host
 
     Write-Verbose "Getting GitHub CLI (gh) Version"
     $(gh --version) |
     Out-String |
-    Write-Verbose -Verbose
+    Write-Host
 
     Write-Verbose "Getting NuGet (nuget) Version"
     $(nuget | Select-String -SimpleMatch "NuGet Version") |
     Out-String |
-    Write-Verbose -Verbose
+    Write-Host
 
     Write-Verbose "Getting PowerShell (pwsh) Version"
     $(pwsh --version) |
     Out-String |
-    Write-Verbose -Verbose
+    Write-Host
 
     Write-Verbose "Getting Python (python) Version"
     $(python --version) |
     Out-String |
-    Write-Verbose -Verbose
+    Write-Host
 
     Write-Verbose "Getting Visual Studio Code (code) Version"
     $(code --version) |
     Out-String |
-    Write-Verbose -Verbose
+    Write-Host
 
     Write-Verbose "Getting Windows Subsystem For Linux (wsl) Version"
     $(wsl --version) |
     Out-String |
-    Write-Verbose -Verbose
+    Write-Host
 }
 end {
     Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"

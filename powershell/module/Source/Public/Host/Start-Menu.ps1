@@ -215,10 +215,23 @@ function Start-Menu {
         Add-MenuItem -Menu "ConfigurationMenu"
 
         $parameters = @{
-            Name           = "ConfigurationMenuMenuItem"
-            DisplayName    = "Configuration Menu"
+            Name           = "ShowShellConfiguration"
+            DisplayName    = "Show Shell Configuration"
             Action         = {
-                & "$HOME\repos\ronhowe\code\powershell\configuration\Import-ShellConfiguration.ps1" -Verbose
+                Show-ShellConfiguration
+                Show-Menu -MenuName "ConfigurationMenu"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "ConfigurationMenu"
+
+        $parameters = @{
+            Name           = "ImportShellConfigurationMenuMenuItem"
+            DisplayName    = "Import Shell Configuration"
+            Action         = {
+                Import-ShellConfiguration -Verbose |
+                Out-Null
                 Show-Menu -MenuName "ConfigurationMenu"
             }
             DisableConfirm = $true
@@ -244,7 +257,7 @@ function Start-Menu {
 
         $parameters = @{
             Name           = "DebugMenuMenuItem"
-            DisplayName    = "Debug Menu"
+            DisplayName    = "Debug"
             Action         = {
                 Write-Host "## Write-Host" # visible
                 Write-Debug "## Write-Debug" # visible if $DebugPreference = "Continue"
@@ -311,10 +324,10 @@ function Start-Menu {
         Add-MenuItem -Menu "DevOpsMenu"
 
         $parameters = @{
-            Name           = "GetDevOpsToolsMenuItem"
-            DisplayName    = "Get DevOps Tools"
+            Name           = "ShowDevOpsToolsMenuItem"
+            DisplayName    = "Show DevOps Tools"
             Action         = {
-                & "$HOME\repos\ronhowe\code\powershell\runbooks\Get-DevOpsTools.ps1" -Verbose
+                & "$HOME\repos\ronhowe\code\powershell\runbooks\Show-DevOpsTools.ps1" -Verbose
                 Show-Menu -MenuName "DevOpsMenu"
             }
             DisableConfirm = $true
