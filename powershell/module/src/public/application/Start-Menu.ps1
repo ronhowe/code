@@ -84,19 +84,6 @@ function Start-Menu {
         Add-MenuItem -Menu "MainMenu"
 
         $parameters = @{
-            Name           = "ConnectAzureAccountMenuItem"
-            DisplayName    = "Connect Azure Account"
-            Action         = {
-                & "$HOME\repos\ronhowe\code\powershell\azure\Connect-AzureAccount.ps1" -Verbose |
-                Out-Null
-                Show-Menu -MenuName "MainMenu"
-            }
-            DisableConfirm = $false
-        }
-        New-MenuItem @parameters |
-        Add-MenuItem -Menu "MainMenu"
-
-        $parameters = @{
             Name           = "AzureMenuMenuItem"
             DisplayName    = "Azure Menu"
             Action         = { Show-Menu -MenuName "AzureMenu" }
@@ -141,6 +128,18 @@ function Start-Menu {
         New-MenuItem @parameters |
         Add-MenuItem -Menu "MainMenu"
 
+        $parameters = @{
+            Name           = "ShowDateMenuItem"
+            DisplayName    = "Show Date"
+            Action         = {
+                Show-Date
+                Show-Menu -MenuName "MainMenu"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "MainMenu"
+
         #endregion Main Menu
         ################################################################################
 
@@ -155,6 +154,32 @@ function Start-Menu {
         Out-Null
 
         $MainMenuMenuItem  |
+        Add-MenuItem -Menu "AzureMenu"
+
+        $parameters = @{
+            Name           = "ConnectAzureAccountMenuItem"
+            DisplayName    = "Connect Azure Account"
+            Action         = {
+                Connect-AzureAccount -Verbose |
+                Out-Null
+                Show-Menu -MenuName "AzureMenu"
+            }
+            DisableConfirm = $false
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "AzureMenu"
+
+        $parameters = @{
+            Name           = "DisconnectAzureAccountMenuItem"
+            DisplayName    = "Disconnect Azure Account"
+            Action         = {
+                Disconnect-AzureAccount -Verbose |
+                Out-Null
+                Show-Menu -MenuName "AzureMenu"
+            }
+            DisableConfirm = $false
+        }
+        New-MenuItem @parameters |
         Add-MenuItem -Menu "AzureMenu"
 
         $parameters = @{
