@@ -28,11 +28,8 @@ function Import-ShellConfiguration {
                 Write-Verbose "Asserting Shell Configuration Source Exists"
                 if (Test-Path -Path $_) {
                     Write-Verbose "Adding Shell Configuration Source"
-                    $config = Get-Content -Path $_ |
+                    $global:ShellConfig = Get-Content -Path $_ |
                     ConvertFrom-Json
-
-                    Write-Verbose "Defining Shell Configuration Global Variable"
-                    New-Variable -Name "ShellConfig" -Value $config -Force -Scope "Global"
                 }
                 else {
                     Write-Verbose "Shell Configuration Source Not Found"
@@ -42,6 +39,9 @@ function Import-ShellConfiguration {
         catch {
             Write-Error "Import Failed Because $($_.Exception.Message)"
         }
+
+        Write-Verbose "Returning Shell Configuration"
+        return $global:ShellConfig
     }
     end {
         Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
