@@ -227,6 +227,18 @@ function Start-Menu {
         Add-MenuItem -Menu "ConfigurationMenu"
 
         $parameters = @{
+            Name           = "NewShellConfiguration"
+            DisplayName    = "New Shell Configuration"
+            Action         = {
+                New-ShellConfiguration -Verbose
+                Show-Menu -MenuName "ConfigurationMenu"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "ConfigurationMenu"
+
+        $parameters = @{
             Name           = "ImportShellConfigurationMenuMenuItem"
             DisplayName    = "Import Shell Configuration"
             Action         = {
