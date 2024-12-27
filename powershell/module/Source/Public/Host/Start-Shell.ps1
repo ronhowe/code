@@ -14,6 +14,8 @@ function Start-Shell {
         try {
             # Clear-Host
 
+            ## TODO: Adopt Improt-ShellPowerConfiguration if it supports .NET Standard.
+            ## LINK: https://github.com/JustinGrote/PowerConfig/issues/7
             Write-Verbose "Importing Shell Configuration"
             Import-ShellConfiguration -WarningAction "SilentlyContinue" |
             Out-Null

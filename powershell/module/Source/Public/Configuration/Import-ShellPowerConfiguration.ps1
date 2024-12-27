@@ -1,4 +1,4 @@
-function Import-ShellConfiguration {
+function Import-ShellPowerConfiguration {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $false)]
@@ -17,6 +17,9 @@ function Import-ShellConfiguration {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
         try {
+            Write-Verbose "Creating New Shell Configuration Builder"
+            $configBuilder = New-PowerConfig
+
             Write-Verbose "Adding Shell Configuration Sources"
             @(
                 "$PSScriptRoot\Shell.json",
@@ -28,16 +31,25 @@ function Import-ShellConfiguration {
                 Write-Verbose "Asserting Shell Configuration Source Exists"
                 if (Test-Path -Path $_) {
                     Write-Verbose "Adding Shell Configuration Source"
-                    $config = Get-Content -Path $_ |
-                    ConvertFrom-Json
-
-                    Write-Verbose "Defining Shell Configuration Global Variable"
-                    New-Variable -Name "ShellConfig" -Value $config -Force -Scope "Global"
+                    $configBuilder |
+                    Add-PowerConfigJsonSource -Path $_ |
+                    Out-Null
                 }
                 else {
                     Write-Verbose "Shell Configuration Source Not Found"
                 }
             }
+
+            Write-Verbose "Building Shell Configuration"
+            $config = $configBuilder |
+            Get-PowerConfig
+            Write-Debug "`$config = $config"
+
+            Write-Verbose "Defining Shell Configuration Global Variable"
+            New-Variable -Name "ShellConfig" -Value $config -Force -Scope "Global"
+
+            Write-Verbose "Returning Shell Configuration"
+            return $config
         }
         catch {
             Write-Error "Import Failed Because $($_.Exception.Message)"

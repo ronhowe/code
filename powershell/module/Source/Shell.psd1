@@ -13,14 +13,7 @@
     # DotNetFrameworkVersion = ''
     # ClrVersion = ''
     # ProcessorArchitecture = ''
-    RequiredModules      = @(
-        'Az.Accounts',
-        'CliMenu',
-        'Microsoft.PowerShell.SecretManagement',
-        'Microsoft.PowerShell.SecretStore',
-        'Pester',
-        'WriteAscii'
-    )
+    # RequiredModules      = @()
     # RequiredAssemblies = @()
     # ScriptsToProcess     = @()
     # TypesToProcess = @()
