@@ -18,7 +18,7 @@ process {
     Remove-Module -Force
 
     Write-Verbose "Removing Output"
-    Remove-Item -Path "$PSScriptRoot\Output" -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item -Path "$PSScriptRoot\bin" -Recurse -Force -ErrorAction SilentlyContinue
 }
 end {
     Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
