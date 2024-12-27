@@ -36,7 +36,7 @@ function Import-ShellConfiguration {
                     Out-Null
                 }
                 else {
-                    Write-Warning "Shell Configuration Source Not Found"
+                    Write-Verbose "Shell Configuration Source Not Found"
                 }
             }
 

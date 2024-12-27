@@ -11,123 +11,247 @@ function Start-Menu {
     }
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
-        Write-Debug "Process $($MyInvocation.MyCommand.Name)"
+
+        $ErrorActionPreference = "Continue"
+
+        Write-Verbose "Removing CliMenu Module"
+        Remove-Module -Name "CliMenu" -Force -ErrorAction SilentlyContinue
+
+        Write-Verbose "Asserting CliMenu Module Exists"
+        if (Get-Module -Name "CliMenu" -ListAvailable) {
+            Write-Verbose "Importing CliMenu"
+            Import-Module -Name "CliMenu" -Verbose:$false
+        }
+        else {
+            Write-Error "Import Failed Becuase CliMenu Module Does Not Exist"
+        }
+    
+        ################################################################################
+        #region Menu Options
+
+        Write-Verbose "Setting Menu Options"
+        $parameters = @{
+            FooterTextColor = "DarkGray"
+            Heading         = "Shell Menu"
+            HeadingColor    = "Blue"
+            MaxWith         = 80
+            MenuFillChar    = "#"
+            MenuFillColor   = "DarkGreen"
+            MenuNameColor   = "Yellow"
+            SubHeading      = "https://github.com/ronhowe"
+            SubHeadingColor = "Green"
+        }
+        Set-MenuOption @parameters
+
+        #endregion Menu Options
+        ################################################################################
+
+        ############################################################
+        #region Common Menu Items
+
+        $ExitMenuItem = @{
+            Name           = "ExitMenuItem"
+            DisplayName    = "Exit"
+            Action         = { }
+            DisableConfirm = $true
+        }
+        $ExitMenuItem = New-MenuItem @ExitMenuItem
+
+        $MainMenuMenuItem = @{
+            Name           = "MainMenuMenuItem"
+            DisplayName    = "Main Menu"
+            Action         = { Show-Menu }
+            DisableConfirm = $true
+        }
+        $MainMenuMenuItem = New-MenuItem @MainMenuMenuItem
+
+        #endregion Common Menu Items
+        ############################################################
+
+        ################################################################################
+        #region Main Menu
+
+        $parameters = @{
+            Name        = "MainMenu"
+            DisplayName = "Main Menu"
+        }
+        New-Menu @parameters |
+        Out-Null
+
+        $ExitMenuItem |
+        Add-MenuItem -Menu "MainMenu"
+
+        $parameters = @{
+            Name           = "DebugMenuMenuItem"
+            DisplayName    = "Debug Menu"
+            Action         = { Show-Menu -MenuName "DebugMenu" }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "MainMenu"
+
+        $parameters = @{
+            Name           = "DependenciesMenuMenuItem"
+            DisplayName    = "Dependencies Menu"
+            Action         = { Show-Menu -MenuName "DependenciesMenu" }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "MainMenu"
+
+        $parameters = @{
+            Name           = "DevOpsMenuMenuItem"
+            DisplayName    = "DevOps Menu"
+            Action         = { Show-Menu -MenuName "DevOpsMenu" }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "MainMenu"
+
+        $parameters = @{
+            Name           = "OpenLogsFolderMenuItem"
+            DisplayName    = "Open Logs Folder"
+            Action         = {
+                explorer.exe "$HOME\repos\ronhowe\code\logs"
+                Show-Menu -MenuName "MainMenu"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "MainMenu"
+
+        #endregion Main Menu
+        ################################################################################
+
+        ################################################################################
+        #region Debug Menu
+
+        $parameters = @{
+            Name        = "DebugMenu"
+            DisplayName = "Debug Menu"
+        }
+        New-Menu @parameters |
+        Out-Null
+
+        $MainMenuMenuItem  |
+        Add-MenuItem -Menu "DebugMenu"
+
+        $parameters = @{
+            Name           = "DebugMenuMenuItem"
+            DisplayName    = "Debug Menu"
+            Action         = {
+                Write-Host "## Write-Host" # visible
+                Write-Debug "## Write-Debug" # visible if $DebugPreference = "Continue"
+                Write-Debug "## Write-Debug -Debug" -Debug # visible
+                Write-Verbose "## Write-Verbose" # visible if $VerbosePreference = "Continue"
+                Write-Verbose "## Write-Verbose -Verbose" -Verbose # visible
+                Write-Output "## Write-Output" # visible after (to pipeline)
+                dotnet --version # visible after (to pipeline)
+                Write-Host $(pwsh --version) # visible
+                Show-Menu -MenuName "DebugMenu"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "DebugMenu"
+
+        #endregion Debug Menu
+        ################################################################################
+
+        ################################################################################
+        #region Dependencies Menu
+
+        $parameters = @{
+            Name        = "DependenciesMenu"
+            DisplayName = "Dependencies Menu"
+        }
+        New-Menu @parameters |
+        Out-Null
+
+        $MainMenuMenuItem |
+        Add-MenuItem -Menu "DependenciesMenu"
+
+        $parameters = @{
+            Name           = "TestDependenciesMenuItem"
+            DisplayName    = "Test Dependencies"
+            Action         = {
+                & "$HOME\repos\ronhowe\code\powershell\dependencies\Test-Dependencies.ps1"
+                Show-Menu -MenuName "DependenciesMenu"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "DependenciesMenu"
+
+        #endregion Dependencies Menu
+        ################################################################################
+
+        ################################################################################
+        #region DevOps Menu
+
+        $parameters = @{
+            Name        = "DevOpsMenu"
+            DisplayName = "DevOps Menu"
+        }
+        New-Menu @parameters |
+        Out-Null
+
+        $MainMenuMenuItem |
+        Add-MenuItem -Menu "DevOpsMenu"
+
+        $parameters = @{
+            Name           = "ClearLocalStorageMenuItem"
+            DisplayName    = "Clear Local Storage"
+            Action         = {
+                & "$HOME\repos\ronhowe\code\powershell\runbooks\Clear-LocalStorage.ps1" -Verbose
+                Show-Menu -MenuName "DevOpsMenu"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "DevOpsMenu"
+
+        $parameters = @{
+            Name           = "GetDevOpsStatusMenuItem"
+            DisplayName    = "Get DevOps Status"
+            Action         = {
+                & "$HOME\repos\ronhowe\code\powershell\runbooks\Get-DevOpsStatus.ps1" -Verbose
+                Show-Menu -MenuName "DevOpsMenu"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "DevOpsMenu"
+
+        #endregion DevOps Menu
+        ################################################################################
 
         Clear-Host
 
-        Write-Verbose "Starting Transcript"
         try {
+            Write-Verbose "Stopping Transcript"
             Stop-Transcript -ErrorAction SilentlyContinue
         }
         catch {
         }
         finally {
+            Write-Verbose "Starting Transcript"
             Start-Transcript
         }
-
-        Write-Verbose "Removing CliMenu Module"
-        Remove-Module -Name "CliMenu" -Force -ErrorAction SilentlyContinue
-
-        Write-Verbose "Setting Menu Options"
-        Set-MenuOption -Heading "Shell Menu" -SubHeading "https://github.com/ronhowe" -MenuFillChar "#" -MenuFillColor Cyan
-        Set-MenuOption -HeadingColor DarkCyan -MenuNameColor DarkGray -SubHeadingColor Green -FooterTextColor DarkGray
-        Set-MenuOption -MaxWith 80
-
-        ############################################################
-        #region Common Menu Items
-
-        $ExitMainMenuMenuItem = @{
-            Name           = "ExitMainMenuMenuItem"
-            DisplayName    = "Exit"
-            Action         = { }
-            DisableConfirm = $true
-        }
-        $ExitMainMenuMenuItem = New-MenuItem @ExitMainMenuMenuItem
-
-        $GoToMainMenuMenuItem = @{
-            Name           = "GoToMainMenuMenuItem"
-            DisplayName    = "Main Menu"
-            Action         = { Show-Menu }
-            DisableConfirm = $true
-        }
-        $GoToMainMenuMenuItem = New-MenuItem @GoToMainMenuMenuItem
-
-        #endregion Common Menu Items
-        ############################################################
-
-        ############################################################
-        #region Main Menu
-
-        # NOTE: DisplayName cannot exceed the MaxWidth value defined above by Set-MenuOption.
-
-        #region Main Menu
-        $MainMenu = @{
-            Name        = "MainMenu"
-            DisplayName = "Main Menu"
-        }
-        $MainMenu = New-Menu @MainMenu
-        $ExitMainMenuMenuItem | Add-MenuItem -Menu "MainMenu"
-        #endregion Main Menu
-
-        #region Dependencies Menu
-        $GoToDependenciesMenuMenuItem = @{
-            Name           = "GoToDependenciesMenuMenuItem"
-            DisplayName    = "Dependencies Menu"
-            Action         = { Show-Menu -MenuName "DependenciesMenu" }
-            DisableConfirm = $true
-        }
-        $GoToDependenciesMenuMenuItem = New-MenuItem @GoToDependenciesMenuMenuItem
-        $GoToDependenciesMenuMenuItem | Add-MenuItem -Menu "MainMenu"
-        #endregion Dependencies Menu
-
-        #region Open Log Folder
-        $OpenLogFolderMenuItem = @{
-            Name           = "OpenLogFolderMenuItem"
-            DisplayName    = "Open Log Folder"
-            Action         = { explorer.exe "$HOME\repos\ronhowe\code\logs" ; Show-Menu -MenuName "MainMenu" }
-            DisableConfirm = $true
-        }
-        $OpenLogFolderMenuItem = New-MenuItem @OpenLogFolderMenuItem
-        $OpenLogFolderMenuItem | Add-MenuItem -Menu "MainMenu"
-        #endregion Open Log Folder
-
-        #endregion Main Menu
-        ############################################################
-
-        ############################################################
-        #region Dependencies Menu
-
-        #region Dependencies Menu
-        $DependenciesMenu = @{
-            Name        = "DependenciesMenu"
-            DisplayName = "Dependencies Menu"
-        }
-        $DependenciesMenu = New-Menu @DependenciesMenu
-        $GoToMainMenuMenuItem | Add-MenuItem -Menu "DependenciesMenu"
-        #endregion Dependencies Menu
-
-        #region Test Module Dependencies
-        $TestModuleDependenciesMenuItem = @{
-            Name           = "TestModuleDependenciesMenuItem"
-            DisplayName    = "Test Module Dependencies"
-            Action         = { & "$HOME\repos\ronhowe\code\powershell\dependencies\Test-Dependencies.ps1" ; Show-Menu -MenuName "DependenciesMenu" }
-            DisableConfirm = $true
-        }
-        $TestModuleDependenciesMenuItem = New-MenuItem @TestModuleDependenciesMenuItem
-        $TestModuleDependenciesMenuItem | Add-MenuItem -Menu "DependenciesMenu"
-        #endregion Test Module Dependencies
-
-        #endregion Dependencies Menu
-        ############################################################
 
         Write-Verbose "Showing Menu"
         Show-Menu -Verbose:$false
 
-        Write-Verbose "Stopping Transcript"
-        Stop-Transcript
-
         Write-Verbose "Removing CliMenu Module"
         Remove-Module -Name "CliMenu" -Force -ErrorAction SilentlyContinue
+
+        Write-Verbose "Stopping Transcript"
+        try {
+            Write-Verbose "Stopping Transcript"
+            Stop-Transcript -ErrorAction SilentlyContinue
+        }
+        catch {
+        }
     }
     end {
         Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"

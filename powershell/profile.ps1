@@ -27,7 +27,7 @@ process {
         Import-Module -Name "Az.Tools.Predictor" -Verbose:$false
     }
     else {
-        Write-Warning "Skipping Az.Tools.Predictor"
+        Write-Warning "Skipping Az.Tools.Predictor Module"
     }
 
     Write-Verbose "Asserting Microsoft.PowerShell.SecretManagement Module Exists"
@@ -36,7 +36,7 @@ process {
         Import-Module -Name "Microsoft.PowerShell.SecretManagement" -Verbose:$false
     }
     else {
-        Write-Warning "Skipping Microsoft.PowerShell.SecretManagement"
+        Write-Warning "Skipping Microsoft.PowerShell.SecretManagement Module"
     }
 
     Write-Verbose "Asserting Microsoft.PowerShell.SecretStore Module Exists"
@@ -45,7 +45,7 @@ process {
         Import-Module -Name "Microsoft.PowerShell.SecretStore" -Verbose:$false
     }
     else {
-        Write-Warning "Skipping Microsoft.PowerShell.SecretStore"
+        Write-Warning "Skipping Microsoft.PowerShell.SecretStore Module"
     }
 
     Write-Verbose "Asserting posh-git Module Exists"
@@ -57,7 +57,7 @@ process {
         Write-Warning "Skipping posh-git"
     }
 
-    ## NOTE: Work shim.
+    ## NOTE: Work shims.
     Write-Verbose "Asserting Windows PowerShell ISE Host"
     if ($host.Name -eq "Windows PowerShell ISE Host") {
         Write-Verbose "Asserting ISESteroids Module Exists"
@@ -66,7 +66,7 @@ process {
             Import-Module -Name "ISESteroids" -Verbose:$false
         }
         else {
-            Write-Warning "Skipping ISESteroids"
+            Write-Warning "Skipping ISESteroids Module"
         }
         
         Write-Verbose "Defining Root Global Variable"
@@ -101,7 +101,7 @@ process {
         }
     }
     else {
-        Write-Warning "Skipping Shell"
+        Write-Warning "Skipping Shell Module"
     }
 }
 end {
