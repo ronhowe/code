@@ -30,6 +30,7 @@ process {
             "$PSScriptRoot\..\dependencies\Install-Dependencies.ps1",
             "$PSScriptRoot\..\dependencies\Test-Dependencies.ps1",
             "$PSScriptRoot\LICENSE*"
+            ## TODO: Add README.md to the list of files to copy.
             # "$PSScriptRoot\README.md"
         )
         OutputDirectory            = "$PSScriptRoot\bin"
