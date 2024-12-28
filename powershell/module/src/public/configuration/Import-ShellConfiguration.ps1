@@ -23,6 +23,7 @@ function Import-ShellConfiguration {
                 "$HOME\Shell.json",
                 $Path
             ) |
+            Where-Object { $_ -and $_ -ne ""} |
             ForEach-Object {
                 Write-Debug "`$_ = $_"
                 Write-Verbose "Asserting Shell Configuration Source Exists"

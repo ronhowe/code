@@ -57,7 +57,7 @@ process {
         Write-Warning "Skipping posh-git"
     }
 
-    ## NOTE: Work shims.
+    ## NOTE: Work shim.
     Write-Verbose "Asserting Windows PowerShell ISE Host"
     if ($host.Name -eq "Windows PowerShell ISE Host") {
         Write-Verbose "Asserting ISESteroids Module Exists"
@@ -68,10 +68,13 @@ process {
         else {
             Write-Warning "Skipping ISESteroids Module"
         }
-        
-        Write-Verbose "Defining Root Global Variable"
-        New-Variable -Name "Root" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
     }
+
+    ## NOTE: Work shims.
+    Write-Verbose "Defining Global Variables"
+    New-Variable -Name "Repos" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
+    New-Variable -Name "Root" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
+    New-Variable -Name "VSTS" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
 
     Write-Verbose "Setting PSReadLine Options"
     if ($PSVersionTable.PSEdition -eq "Core") {
@@ -82,26 +85,20 @@ process {
         Set-PSReadLineOption -PredictionViewStyle InlineView -WarningAction SilentlyContinue
     }
 
-    Write-Verbose "Asserting PowerShell Core"
-    if ($PSVersionTable.PSEdition -eq "Core") {
-        Write-Verbose "Asserting Shell Module Exists"
-        if (Test-Path -Path "$HOME\repos\ronhowe\code\powershell\module\bin\Shell\Shell.psm1") {
-            Write-Verbose "Removing Shell Module"
-            Get-Module -Name "Shell" |
-            Remove-Module -Force
+    Write-Verbose "Asserting Shell Module Exists"
+    if (Test-Path -Path "$HOME\repos\ronhowe\code\powershell\module\bin\Shell\Shell.psm1") {
+        Write-Verbose "Removing Shell Module"
+        Get-Module -Name "Shell" |
+        Remove-Module -Force
 
-            Write-Verbose "Importing Shell Module"
-            Import-Module -Name "$HOME\repos\ronhowe\code\powershell\module\bin\Shell" -Force
+        Write-Verbose "Importing Shell Module"
+        Import-Module -Name "$HOME\repos\ronhowe\code\powershell\module\bin\Shell" -Force
     
-            Write-Verbose "Starting Shell"
-            Start-Shell
-        }
-        else {
-            Write-Warning "Shell Module Not Found"
-        }
+        Write-Verbose "Starting Shell"
+        Start-Shell
     }
     else {
-        Write-Warning "Skipping Shell Module"
+        Write-Warning "Shell Module Not Found"
     }
 }
 end {
