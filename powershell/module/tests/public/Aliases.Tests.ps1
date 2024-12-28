@@ -20,6 +20,7 @@ Describe "Alias Tests" -ForEach @(
     @{ Alias = "new" }
     @{ Alias = "oops" }
     @{ Alias = "quiet" }
+    @{ Alias = "redact" }
     @{ Alias = "repos" }
     @{ Alias = "shell" }
     @{ Alias = "silence" }

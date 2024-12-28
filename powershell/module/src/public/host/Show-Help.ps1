@@ -29,6 +29,7 @@ function Show-Help {
         Write-Host "new`n`t- Refreshes the screen."
         Write-Host "oops`n`t- Opens Notepad to edit command history."
         Write-Host "quiet`n`t- Minimizes the PowerShell prompt."
+        Write-Host "redact`n`t- Removes the last issued command from the PowerShell history."
         Write-Host "repos`n`t- Locates the standard repos folder."
         Write-Host "shell`n`t- Starts the Shell."
         Write-Host "silence`n`t- Hides the PowerShell prompt."
