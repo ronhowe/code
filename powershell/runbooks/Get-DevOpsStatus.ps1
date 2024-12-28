@@ -13,8 +13,8 @@ process {
 
     $ErrorActionPreference = "Continue"
 
-    Write-Verbose "Getting DevOps Tools"
-    & "$HOME\repos\ronhowe\code\powershell\runbooks\Get-DevOpsTools.ps1" -Verbose
+    Write-Verbose "Showing DevOps Tools"
+    & "$HOME\repos\ronhowe\code\powershell\runbooks\Show-DevOpsTools.ps1" -Verbose
 
     Write-Verbose "Invoking Build Workflow"
     & "$HOME\repos\ronhowe\code\powershell\runbooks\Invoke-BuildWorkflow.ps1" -Verbose
