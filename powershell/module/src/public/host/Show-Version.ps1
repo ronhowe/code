@@ -12,7 +12,7 @@ function Show-Version {
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
     
-        if ($PSVersionTable.Editition -eq "Core") {
+        if ($PSVersionTable.PSEdition -eq "Core") {
             Write-Host "Running PowerShell Core $($PSVersionTable.PSVersion)" -ForegroundColor DarkGray
         }
         else {
