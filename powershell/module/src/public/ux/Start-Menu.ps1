@@ -186,7 +186,7 @@ function Start-Menu {
             Name           = "NewAzureResourceGroupMenuItem"
             DisplayName    = "New Azure Resource Group"
             Action         = {
-                & "$HOME\repos\ronhowe\code\powershell\azure\New-AzureResourceGroup.ps1" -Verbose |
+                New-AzureResourceGroup -Verbose |
                 Out-Null
                 Show-Menu -MenuName "AzureMenu"
             }
@@ -199,7 +199,7 @@ function Start-Menu {
             Name           = "NewAzureResourceDeploymentGroupMenuItem"
             DisplayName    = "New Azure Resource Group Deployment"
             Action         = {
-                & "$HOME\repos\ronhowe\code\powershell\azure\New-AzureResourceGroupDeployment.ps1" -Verbose |
+                New-AzureResourceGroupDeployment -Verbose |
                 Out-Null
                 Show-Menu -MenuName "AzureMenu"
             }
@@ -212,9 +212,9 @@ function Start-Menu {
             Name           = "RemoveAzureResourceGroupMenuItem"
             DisplayName    = "Remove Azure Resource Group"
             Action         = {
-                & "$HOME\repos\ronhowe\code\powershell\azure\Remove-AzureResourceGroup.ps1" -Verbose -ErrorAction Continue |
+                Remove-AzureResourceGroup -Verbose -ErrorAction Continue |
                 Out-Null
-                & "$HOME\repos\ronhowe\code\powershell\azure\Clear-AzureAppConfigurationDeletedStore.ps1" -Verbose -ErrorAction Continue |
+                Clear-AzureAppConfigurationDeletedStore -Verbose -ErrorAction Continue |
                 Out-Null
                 Show-Menu -MenuName "AzureMenu"
             }
