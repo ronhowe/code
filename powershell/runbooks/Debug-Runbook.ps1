@@ -14,25 +14,32 @@ begin {
 process {
     Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-    Write-Verbose "Writing Who"
-    Write-Output $env:USERNAME
-    
-    Write-Verbose "Writing What"
-    Write-Output $PSVersionTable.PSEdition
-    
-    Write-Verbose "Writing Where"
+    Write-Host "Writing Who (`$env:USERNAME)"
+    Write-Host $env:USERNAME
+
+    Write-Host "Writing What (`$PSVersionTable.PSEdition`)"
+    Write-Host $PSVersionTable.PSEdition
+
+    Write-Host "Writing What (`$PSVersionTable.PSVersion`)"
+    Write-Host $PSVersionTable.PSVersion
+
+    Write-Host "Writing Where (`$env:COMPUTERNAME`)"
     Write-Output $env:COMPUTERNAME
-    
-    Write-Verbose "Writing When"
-    Write-Output (Get-Date -AsUTC).Date
-    
-    Write-Verbose "Writing Why"
-    Write-Output $Why
-    
-    Write-Verbose "Writing How"
-    Write-Output $MyInvocation.MyCommand.Name
-    ## NOTE: PowerShell Core Only
-    Write-Output $PSCommandPath
+
+    Write-Host "Writing When"
+    Write-Host (Get-Date -AsUTC).Date
+
+    Write-Host "Writing Why (`$Why`)"
+    Write-Host $Why
+
+    Write-Host "Writing How (`$MyInvocation.MyCommand.Name`)"
+    Write-Host $MyInvocation.MyCommand.Name
+
+    Write-Host "Writing How (`$PSCommandPath`)"
+    Write-Host $PSCommandPath
+
+    Write-Host "Writing How (`$PSScriptRoot`)"
+    Write-Host $PSScriptRoot
 }
 end {
     Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
