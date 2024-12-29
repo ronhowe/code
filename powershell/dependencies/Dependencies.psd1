@@ -15,6 +15,7 @@
         @{ Name = 'posh-git' ; Version = '1.1.0' ; Repository = 'PSGallery' ; Scope = 'CurrentUser' },
         @{ Name = 'PowerConfig' ; Version = '0.1.6' ; Repository = 'PSGallery' ; Scope = 'CurrentUser' },
         @{ Name = 'PSPolly' ; Version = '0.0.2' ; Repository = 'PSGallery' ; Scope = 'CurrentUser' },
+        ## NOTE: Visual Studio Code is loading PSReadLinie 2.4.0 beta0.  If it works, it works.
         @{ Name = 'PSReadLine' ; Version = '2.3.6' ; Repository = 'PSGallery' ; Scope = 'CurrentUser' },
         @{ Name = 'PSWindowsUpdate' ; Version = '2.2.1.5' ; Repository = 'PSGallery' ; Scope = 'CurrentUser' },
         @{ Name = 'SqlServer' ; Version = '22.3.0' ; Repository = 'PSGallery' ; Scope = 'CurrentUser' },

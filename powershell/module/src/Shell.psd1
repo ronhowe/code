@@ -13,7 +13,17 @@
     # DotNetFrameworkVersion = ''
     # ClrVersion = ''
     # ProcessorArchitecture = ''
-    # RequiredModules      = @()
+    RequiredModules      = @(
+        ## NOTE: Import at runtime (except Pester), but document critical dependencies here.
+        ## TODO: Formalize and document this strategy.
+        # 'Az.Accounts',
+        # 'Az.Resources',
+        # 'CliMenu',
+        # 'Microsoft.PowerShell.SecretManagement',
+        # 'Microsoft.PowerShell.SecretStore',
+        'Pester'
+        # 'WriteAscii'
+    )
     # RequiredAssemblies = @()
     # ScriptsToProcess     = @()
     # TypesToProcess = @()

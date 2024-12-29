@@ -11,15 +11,34 @@ begin {
 process {
     Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-    Write-Host "Loading Profile ; Please Wait" -ForegroundColor DarkGray
-
     $ErrorActionPreference = "Stop" # changed from Continue
     $ProgressPreference = "SilentlyContinue" # changed from Continue
+
+    Write-Host "Loading Profile ; Please Wait" -ForegroundColor DarkGray
 
     Write-Verbose "Asserting PowerShell Core"
     if ($PSVersionTable.PSEdition -ne "Core") {
         Write-Warning "PowerShell Core Not Detected"
     }
+
+    ## NOTE: Loaded by Az.Tools.Predictor.  Importing intentionally just for clarity.
+    Write-Verbose "Asserting Az.Accounts Module Exists"
+    if (Get-Module -Name "Az.Accounts" -ListAvailable) {
+        Write-Verbose "Importing Az.Accounts"
+        Import-Module -Name "Az.Accounts" -Verbose:$false
+    }
+    else {
+        Write-Warning "Skipping Az.Accounts Module"
+    }
+
+    # Write-Verbose "Asserting Az.Resources Module Exists"
+    # if (Get-Module -Name "Az.Resources" -ListAvailable) {
+    #     Write-Verbose "Importing Az.Resources"
+    #     Import-Module -Name "Az.Resources" -Verbose:$false
+    # }
+    # else {
+    #     Write-Warning "Skipping Az.Resources Module"
+    # }
 
     Write-Verbose "Asserting Az.Tools.Predictor Module Exists"
     if (Get-Module -Name "Az.Tools.Predictor" -ListAvailable) {
@@ -30,31 +49,41 @@ process {
         Write-Warning "Skipping Az.Tools.Predictor Module"
     }
 
-    Write-Verbose "Asserting Microsoft.PowerShell.SecretManagement Module Exists"
-    if (Get-Module -Name "Microsoft.PowerShell.SecretManagement" -ListAvailable) {
-        Write-Verbose "Importing Az.Tools.Predictor"
-        Import-Module -Name "Microsoft.PowerShell.SecretManagement" -Verbose:$false
-    }
-    else {
-        Write-Warning "Skipping Microsoft.PowerShell.SecretManagement Module"
-    }
+    # Write-Verbose "Asserting Microsoft.PowerShell.SecretManagement Module Exists"
+    # if (Get-Module -Name "Microsoft.PowerShell.SecretManagement" -ListAvailable) {
+    #     Write-Verbose "Importing Microsoft.PowerShell.SecretManagement"
+    #     Import-Module -Name "Microsoft.PowerShell.SecretManagement" -Verbose:$false
+    # }
+    # else {
+    #     Write-Warning "Skipping Microsoft.PowerShell.SecretManagement Module"
+    # }
 
-    Write-Verbose "Asserting Microsoft.PowerShell.SecretStore Module Exists"
-    if (Get-Module -Name "Microsoft.PowerShell.SecretStore" -ListAvailable) {
-        Write-Verbose "Importing Az.Tools.Predictor"
-        Import-Module -Name "Microsoft.PowerShell.SecretStore" -Verbose:$false
+    # Write-Verbose "Asserting Microsoft.PowerShell.SecretStore Module Exists"
+    # if (Get-Module -Name "Microsoft.PowerShell.SecretStore" -ListAvailable) {
+    #     Write-Verbose "Importing Microsoft.PowerShell.SecretStore"
+    #     Import-Module -Name "Microsoft.PowerShell.SecretStore" -Verbose:$false
+    # }
+    # else {
+    #     Write-Warning "Skipping Microsoft.PowerShell.SecretStore Module"
+    # }
+
+    ## NOTE: Loaded by usual hosts automatically.  Importing intentionally just for clarity.
+    Write-Verbose "Asserting Pester Module Exists"
+    if (Get-Module -Name "Pester" -ListAvailable) {
+        Write-Verbose "Importing Pester"
+        Import-Module -Name "Pester" -Verbose:$false
     }
     else {
-        Write-Warning "Skipping Microsoft.PowerShell.SecretStore Module"
+        Write-Warning "Skipping Pester Module"
     }
 
     Write-Verbose "Asserting posh-git Module Exists"
     if (Get-Module -Name "posh-git" -ListAvailable) {
-        Write-Verbose "Importing Az.Tools.Predictor"
+        Write-Verbose "Importing posh-git"
         Import-Module -Name "posh-git" -Verbose:$false
     }
     else {
-        Write-Warning "Skipping posh-git"
+        Write-Warning "Skipping posh-git Module"
     }
 
     ## NOTE: Work shim.
@@ -70,10 +99,10 @@ process {
         }
     }
 
-    ## NOTE: Work shims.
     Write-Verbose "Defining Global Variables"
-    New-Variable -Name "Repos" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
-    New-Variable -Name "Root" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
+    New-Variable -Name "CODE" -Value "$HOME\repos\ronhowe\code" -Scope Global -Force -ErrorAction SilentlyContinue
+    New-Variable -Name "REPOS" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
+    ## NOTE: Work shim.
     New-Variable -Name "VSTS" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
 
     Write-Verbose "Setting PSReadLine Options"

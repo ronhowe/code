@@ -14,13 +14,13 @@ process {
     $ErrorActionPreference = "Stop"
 
     Write-Verbose "Rebuilding Module"
-    & "$PSScriptRoot\Rebuild-Module.ps1"
+    & "$PSScriptRoot\Rebuild-Module.ps1" -Verbose -Debug
 
     Write-Verbose "Importing Module"
-    Import-Module -Name "$PSScriptRoot\bin\Shell" -Global -Force
+    Import-Module -Name "$PSScriptRoot\bin\Shell" -Global -Force -Verbose -Debug
 
     Write-Verbose "Testing Module"
-    & "$PSScriptRoot\Test-Module.ps1"
+    & "$PSScriptRoot\Test-Module.ps1" -Verbose -Debug
 }
 end {
     Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"

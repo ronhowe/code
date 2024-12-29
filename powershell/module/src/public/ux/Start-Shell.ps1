@@ -12,8 +12,6 @@ function Start-Shell {
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
         try {
-            # Clear-Host
-
             ## TODO: Adopt Improt-ShellPowerConfiguration if it supports .NET Standard.
             ## LINK: https://github.com/JustinGrote/PowerConfig/issues/7
             Write-Verbose "Importing Shell Configuration"
@@ -26,7 +24,7 @@ function Start-Shell {
             Show-Header
             Show-Date
             Show-Version
-            Write-Host "Type 'help' for more Shell commands." -ForegroundColor DarkGray
+            Write-Host "Type 'help' for Shell commands." -ForegroundColor DarkGray
             Show-Logo
             Show-Ready
         }
