@@ -3,15 +3,15 @@
 param(
     [ValidateNotNullOrEmpty()]
     [string]
-    $ResourceGroupName = "rg-ronhowe-0",
+    $ResourceGroupName = $ShellConfig.ResourceGroupName,
 
     [ValidateNotNullOrEmpty()]
     [string]
-    $Location = "eastus2",
+    $Location = $ShellConfig.Location,
 
     [ValidateNotNullOrEmpty()]
     [string]
-    $DeploymentName = "MyDeployment"
+    $DeploymentName = $ShellConfig.DeploymentName
 )
 begin {
     Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"

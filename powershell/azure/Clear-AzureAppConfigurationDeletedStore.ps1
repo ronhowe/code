@@ -3,11 +3,11 @@
 param(
     [ValidateNotNullOrEmpty()]
     [string]
-    $Location = "eastus2",
+    $Location = $ShellConfig.Location,
 
     [ValidateNotNullOrEmpty()]
     [string]
-    $AppConfigurationName = "appc-ronhowe-0"
+    $AppConfigurationName = $ShellConfig.AppConfigurationName
 )
 begin {
     Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"

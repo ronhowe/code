@@ -3,7 +3,7 @@
 param(
     [ValidateNotNullOrEmpty()]
     [string]
-    $ResourceGroupName = "rg-ronhowe-0"
+    $ResourceGroupName = $ShellConfig.ResourceGroupName
 )
 begin {
     Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"

@@ -3,5 +3,9 @@
     "Name": "default",
     "Organization": "default",
     "TenantId": "00000000-0000-0000-0000-000000000000",
-    "SubscriptionId": "00000000-0000-0000-0000-000000000000"
+    "SubscriptionId": "00000000-0000-0000-0000-000000000000",
+    "ResourceGroupName": "default",
+    "Location": "default",
+    "DeploymentName": "default",
+    "AppConfigurationName": "default"
 }
