@@ -16,6 +16,7 @@ function Show-Help {
         # sync with Aliases.Tests.ps1
         # sync with Show-Help.ps1
         Write-Host "catfact`n`t- Displays a random fact about cats."
+        Write-Host "clock`n`t- Displays local and UTC times."
         Write-Host "date`n`t- Displays local and UTC times."
         Write-Host "go`n`t- Locates the standard code folder."
         Write-Host "header`n`t- Displays the Shell header."

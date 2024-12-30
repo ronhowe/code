@@ -3,6 +3,7 @@
 # sync with Show-Help.ps1
 # New-Alias -Name "api" -Value "Invoke-ApiTest" -Force
 New-Alias -Name "catfact" -Value "Get-CatFact" -Force -Scope Global
+New-Alias -Name "clock" -Value "Show-Date" -Force -Scope Global
 New-Alias -Name "date" -Value "Show-Date" -Force -Scope Global
 New-Alias -Name "go" -Value "Push-LocationCode" -Force -Scope Global
 New-Alias -Name "go" -Value "Push-LocationCode" -Force -Scope Global

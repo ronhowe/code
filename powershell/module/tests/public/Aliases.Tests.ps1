@@ -7,6 +7,7 @@ Describe "Alias Tests" -ForEach @(
     # sync with Show-Help.ps1
     # @{ Alias = "api" }
     @{ Alias = "catfact" }
+    @{ Alias = "clock" }
     @{ Alias = "date" }
     @{ Alias = "go" }
     @{ Alias = "header" }
