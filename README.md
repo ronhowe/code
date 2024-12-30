@@ -12,7 +12,7 @@
 
 # Mission
 
-Good, not perfect.
+Good.  Not perfect.
 
 # Ideas
 
@@ -58,6 +58,8 @@ Good, not perfect.
   - Scripts for operating [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/).
 
 # Costs
+
+https://azure.microsoft.com/en-us/pricing/calculator/
 
 - [Azure](https://azure.microsoft.com/en-us)
   - App Service - $54.75 per month / $1.80 per day / $657 per year
@@ -163,95 +165,95 @@ Please support these creators and communities.
     ********************************************************************************
     https://github.com/ronhowe
     ********************************************************************************
-    2024-12-23 16:02:36.980 (LOCAL)
-    2024-12-23 21:02:36.980 (UTC)
+    2024-12-29 13:37:53.491 (LOCAL)
+    2024-12-29 18:37:53.491 (UTC)
     Initializing Test
     Building Web Host
     Creating Client
-    [2024-12-23 21:02:36.981] [VRB] [DEATHSTAR] [Program] POST (1 of 6) => Verbose Logging ON
-    [2024-12-23 21:02:36.983] [DBG] [DEATHSTAR] [Program] POST (2 of 6) => Debug Logging ON
-    [2024-12-23 21:02:36.984] [INF] [DEATHSTAR] [Program] POST (3 of 6) => Information Logging ON
-    [2024-12-23 21:02:36.985] [WRN] [DEATHSTAR] [Program] POST (4 of 6) => Warning Logging ON
-    [2024-12-23 21:02:36.986] [ERR] [DEATHSTAR] [Program] POST (5 of 6) => Error Logging ON
-    [2024-12-23 21:02:36.987] [FTL] [DEATHSTAR] [Program] POST (6 of 6) => Fatal Logging ON
-    [2024-12-23 21:02:36.988] [INF] [DEATHSTAR] [Program] 12/23/2024 16:02:36 (LOCAL)
-    [2024-12-23 21:02:36.990] [INF] [DEATHSTAR] [Program] 12/23/2024 21:02:36 (UTC)
-    [2024-12-23 21:02:36.991] [INF] [DEATHSTAR] [Program] Creating Web Application Builder
-    [2024-12-23 21:02:36.996] [INF] [DEATHSTAR] [Program] Logging Environment Name
-    [2024-12-23 21:02:36.997] [DBG] [DEATHSTAR] [Program] _environmentName = "Development"
-    [2024-12-23 21:02:36.998] [INF] [DEATHSTAR] [Program] Using Serilog
-    [2024-12-23 21:02:37.000] [INF] [DEATHSTAR] [Program] Configuring Application Insights Connection String
-    [2024-12-23 21:02:37.001] [DBG] [DEATHSTAR] [Program] _aiConnectionString = ""
-    [2024-12-23 21:02:37.003] [INF] [DEATHSTAR] [Program] Adding Application Insights Telemetry
-    [2024-12-23 21:02:37.004] [INF] [DEATHSTAR] [Program] Adding Feature Management Services
-    [2024-12-23 21:02:37.005] [INF] [DEATHSTAR] [Program] Adding Health Check Services
-    [2024-12-23 21:02:37.006] [INF] [DEATHSTAR] [Program] Adding API Versioning Services
-    [2024-12-23 21:02:37.008] [INF] [DEATHSTAR] [Program] Adding Open API ServicesServices
-    [2024-12-23 21:02:37.009] [INF] [DEATHSTAR] [Program] Adding "MyRepository" Services
-    [2024-12-23 21:02:37.010] [INF] [DEATHSTAR] [Program] Adding "MyService" Services
-    [2024-12-23 21:02:37.012] [INF] [DEATHSTAR] [Program] Adding Authentication Services
-    [2024-12-23 21:02:37.013] [INF] [DEATHSTAR] [Program] Adding Authorization Services
-    [2024-12-23 21:02:37.014] [INF] [DEATHSTAR] [Program] Building Web Application
-    [2024-12-23 21:02:37.027] [VRB] [DEATHSTAR] [MyWebApplication] POST (1 of 6) => Trace Logging ON
-    [2024-12-23 21:02:37.040] [DBG] [DEATHSTAR] [MyWebApplication] POST (2 of 6) => Debug Logging ON
-    [2024-12-23 21:02:37.041] [INF] [DEATHSTAR] [MyWebApplication] POST (3 of 6) => Information Logging ON
-    [2024-12-23 21:02:37.042] [WRN] [DEATHSTAR] [MyWebApplication] POST (4 of 6) => Warning Logging ON
-    [2024-12-23 21:02:37.043] [ERR] [DEATHSTAR] [MyWebApplication] POST (5 of 6) => Error Logging ON
-    [2024-12-23 21:02:37.045] [FTL] [DEATHSTAR] [MyWebApplication] POST (6 of 6) => Critical Logging ON
-    [2024-12-23 21:02:37.046] [INF] [DEATHSTAR] [MyWebApplication] 12/23/2024 16:02:37 (LOCAL)
-    [2024-12-23 21:02:37.048] [INF] [DEATHSTAR] [MyWebApplication] 12/23/2024 21:02:37 (UTC)
-    [2024-12-23 21:02:37.049] [INF] [DEATHSTAR] [MyWebApplication] Using Request Logging Middleware
-    [2024-12-23 21:02:37.051] [INF] [DEATHSTAR] [MyWebApplication] Mapping Open API
-    [2024-12-23 21:02:37.052] [INF] [DEATHSTAR] [MyWebApplication] Using HTTPS Redirection Middleware
-    [2024-12-23 21:02:37.054] [INF] [DEATHSTAR] [MyWebApplication] Using Serilog Request Logging Middleware
-    [2024-12-23 21:02:37.055] [INF] [DEATHSTAR] [MyWebApplication] Using Header Middleware
-    [2024-12-23 21:02:37.056] [INF] [DEATHSTAR] [MyWebApplication] Using Health Check Middleware
-    [2024-12-23 21:02:37.058] [INF] [DEATHSTAR] [MyWebApplication] Using Authentication Middleware
-    [2024-12-23 21:02:37.059] [INF] [DEATHSTAR] [MyWebApplication] Using Claims Logger Middleware
-    [2024-12-23 21:02:37.060] [INF] [DEATHSTAR] [MyWebApplication] Using Authorization Middleware
-    [2024-12-23 21:02:37.062] [INF] [DEATHSTAR] [MyWebApplication] Mapping Version 1 GET Requests To "MyService"
-    [2024-12-23 21:02:37.064] [INF] [DEATHSTAR] [MyWebApplication] Mapping Version 2 GET Requests To "MyService"
+    [2024-12-29 18:37:53.493] [VRB] [DEATHSTAR] [Program] POST (1 of 6) => Verbose Logging ON
+    [2024-12-29 18:37:53.494] [DBG] [DEATHSTAR] [Program] POST (2 of 6) => Debug Logging ON
+    [2024-12-29 18:37:53.495] [INF] [DEATHSTAR] [Program] POST (3 of 6) => Information Logging ON
+    [2024-12-29 18:37:53.496] [WRN] [DEATHSTAR] [Program] POST (4 of 6) => Warning Logging ON
+    [2024-12-29 18:37:53.497] [ERR] [DEATHSTAR] [Program] POST (5 of 6) => Error Logging ON
+    [2024-12-29 18:37:53.498] [FTL] [DEATHSTAR] [Program] POST (6 of 6) => Fatal Logging ON
+    [2024-12-29 18:37:53.500] [INF] [DEATHSTAR] [Program] 12/29/2024 13:37:53 (LOCAL)
+    [2024-12-29 18:37:53.501] [INF] [DEATHSTAR] [Program] 12/29/2024 18:37:53 (UTC)
+    [2024-12-29 18:37:53.503] [INF] [DEATHSTAR] [Program] Creating Web Application Builder
+    [2024-12-29 18:37:53.507] [INF] [DEATHSTAR] [Program] Logging Environment Name
+    [2024-12-29 18:37:53.509] [DBG] [DEATHSTAR] [Program] _environmentName = "Development"
+    [2024-12-29 18:37:53.510] [INF] [DEATHSTAR] [Program] Using Serilog
+    [2024-12-29 18:37:53.511] [INF] [DEATHSTAR] [Program] Configuring Application Insights Connection String
+    [2024-12-29 18:37:53.512] [DBG] [DEATHSTAR] [Program] _aiConnectionString = ""
+    [2024-12-29 18:37:53.514] [INF] [DEATHSTAR] [Program] Adding Application Insights Telemetry
+    [2024-12-29 18:37:53.515] [INF] [DEATHSTAR] [Program] Adding Feature Management Services
+    [2024-12-29 18:37:53.517] [INF] [DEATHSTAR] [Program] Adding Health Check Services
+    [2024-12-29 18:37:53.518] [INF] [DEATHSTAR] [Program] Adding API Versioning Services
+    [2024-12-29 18:37:53.520] [INF] [DEATHSTAR] [Program] Adding Open API ServicesServices
+    [2024-12-29 18:37:53.521] [INF] [DEATHSTAR] [Program] Adding "MyRepository" Services
+    [2024-12-29 18:37:53.522] [INF] [DEATHSTAR] [Program] Adding "MyService" Services
+    [2024-12-29 18:37:53.524] [INF] [DEATHSTAR] [Program] Adding Authentication Services
+    [2024-12-29 18:37:53.525] [INF] [DEATHSTAR] [Program] Adding Authorization Services
+    [2024-12-29 18:37:53.526] [INF] [DEATHSTAR] [Program] Building Web Application
+    [2024-12-29 18:37:53.540] [VRB] [DEATHSTAR] [MyWebApplication] POST (1 of 6) => Trace Logging ON
+    [2024-12-29 18:37:53.557] [DBG] [DEATHSTAR] [MyWebApplication] POST (2 of 6) => Debug Logging ON
+    [2024-12-29 18:37:53.558] [INF] [DEATHSTAR] [MyWebApplication] POST (3 of 6) => Information Logging ON
+    [2024-12-29 18:37:53.559] [WRN] [DEATHSTAR] [MyWebApplication] POST (4 of 6) => Warning Logging ON
+    [2024-12-29 18:37:53.560] [ERR] [DEATHSTAR] [MyWebApplication] POST (5 of 6) => Error Logging ON
+    [2024-12-29 18:37:53.563] [FTL] [DEATHSTAR] [MyWebApplication] POST (6 of 6) => Critical Logging ON
+    [2024-12-29 18:37:53.565] [INF] [DEATHSTAR] [MyWebApplication] 12/29/2024 13:37:53 (LOCAL)
+    [2024-12-29 18:37:53.566] [INF] [DEATHSTAR] [MyWebApplication] 12/29/2024 18:37:53 (UTC)
+    [2024-12-29 18:37:53.568] [INF] [DEATHSTAR] [MyWebApplication] Using Request Logging Middleware
+    [2024-12-29 18:37:53.569] [INF] [DEATHSTAR] [MyWebApplication] Mapping Open API
+    [2024-12-29 18:37:53.571] [INF] [DEATHSTAR] [MyWebApplication] Using HTTPS Redirection Middleware
+    [2024-12-29 18:37:53.572] [INF] [DEATHSTAR] [MyWebApplication] Using Serilog Request Logging Middleware
+    [2024-12-29 18:37:53.573] [INF] [DEATHSTAR] [MyWebApplication] Using Header Middleware
+    [2024-12-29 18:37:53.574] [INF] [DEATHSTAR] [MyWebApplication] Using Health Check Middleware
+    [2024-12-29 18:37:53.576] [INF] [DEATHSTAR] [MyWebApplication] Using Authentication Middleware
+    [2024-12-29 18:37:53.578] [INF] [DEATHSTAR] [MyWebApplication] Using Claims Logger Middleware
+    [2024-12-29 18:37:53.579] [INF] [DEATHSTAR] [MyWebApplication] Using Authorization Middleware
+    [2024-12-29 18:37:53.580] [INF] [DEATHSTAR] [MyWebApplication] Mapping Version 1 GET Requests To "MyService"
+    [2024-12-29 18:37:53.582] [INF] [DEATHSTAR] [MyWebApplication] Mapping Version 2 GET Requests To "MyService"
     Generating Bearer Token
-    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNeUNsYWltVHlwZSI6Ik15Q2xhaW1WYWx1ZSIsIm5iZiI6MTczNDk4Nzc1NywiZXhwIjoxNzM0OTg5NTU3LCJpYXQiOjE3MzQ5ODc3NTcsImlzcyI6InlvdXJJc3N1ZXIiLCJhdWQiOiJ5b3VyQXVkaWVuY2UifQ.Smd3bgpHkZomWY_zEtr9hRaYB0iOJiszWNe2AT7b4ME
+    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNeUNsYWltVHlwZSI6Ik15Q2xhaW1WYWx1ZSIsIm5iZiI6MTczNTQ5NzQ3MywiZXhwIjoxNzM1NDk5MjczLCJpYXQiOjE3MzU0OTc0NzMsImlzcyI6InlvdXJJc3N1ZXIiLCJhdWQiOiJ5b3VyQXVkaWVuY2UifQ.GJ1QaE2aAqq6HVG-pSCfeNDtwZRPOgyLZVsf8MnXP5I
     Sending GET Request With True
-    [2024-12-23 21:02:37.177] [INF] [DEATHSTAR] [MyWebApplication.RequestLoggingMiddleware] Incoming HTTP Request
-    [2024-12-23 21:02:37.178] [INF] [DEATHSTAR] [MyWebApplication] Configuring Header
-    [2024-12-23 21:02:37.180] [DBG] [DEATHSTAR] [MyWebApplication] _myHeaderValue = "MyHeader (Development)"
-    [2024-12-23 21:02:37.181] [INF] [DEATHSTAR] [MyWebApplication] Appending Header
-    [2024-12-23 21:02:37.183] [INF] [DEATHSTAR] [MyWebApplication] Selecting Claims From Context
-    [2024-12-23 21:02:37.185] [DBG] [DEATHSTAR] [MyWebApplication] _claims = [{Type="MyClaimType", Value="MyClaimValue"}, {Type="nbf", Value="1734987757"}, {Type="exp", Value="1734989557"}, {Type="iat", Value="1734987757"}, {Type="iss", Value="yourIssuer"}, {Type="aud", Value="yourAudience"}]
-    [2024-12-23 21:02:37.194] [INF] [DEATHSTAR] [MyWebApplication] Calling Version "2" Of "MyService" With True
-    [2024-12-23 21:02:37.195] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Entering "MyService"
-    [2024-12-23 21:02:37.196] [DBG] [DEATHSTAR] [MyClassLibrary.MyService] myInput = True
-    [2024-12-23 21:02:37.198] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Configuring MyConfiguration
-    [2024-12-23 21:02:37.199] [DBG] [DEATHSTAR] [MyClassLibrary.MyService] _myConfiguration = "MyWebApplication (Development)"
-    [2024-12-23 21:02:37.201] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Configuring MySecret
-    [2024-12-23 21:02:37.202] [DBG] [DEATHSTAR] [MyClassLibrary.MyService] _mySecret = "MyWebApplication"
-    [2024-12-23 21:02:37.203] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Configuring MyFeature
-    [2024-12-23 21:02:37.205] [DBG] [DEATHSTAR] [MyClassLibrary.MyService] _myFeature = True
-    [2024-12-23 21:02:37.206] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Saving Input To Repository
-    [2024-12-23 21:02:37.207] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Entering "MyRepository"
-    [2024-12-23 21:02:37.209] [DBG] [DEATHSTAR] [MyClassLibrary.MyService] myInput = True
-    [2024-12-23 21:02:37.210] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Configuring Database Connection String
-    [2024-12-23 21:02:37.211] [DBG] [DEATHSTAR] [MyClassLibrary.MyService] _dbConnectionString = "Server=localhost;Database=MyDatabase;Integrated Security=True;Application Name=MyWebApplication (Development);Encrypt=False;Connect Timeout=1;Command Timeout=0;"
-    [2024-12-23 21:02:37.213] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Configuring Azure Storage Connection String
-    [2024-12-23 21:02:37.214] [DBG] [DEATHSTAR] [MyClassLibrary.MyService] _azConnectionString = "UseDevelopmentStorage=true;"
-    [2024-12-23 21:02:37.216] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Generating Row Key
-    [2024-12-23 21:02:37.217] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Saving "0193f554-36a1-769b-a032-b9a044fa6242"
-    [2024-12-23 21:02:37.218] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Creating Retry Policy
-    [2024-12-23 21:02:37.220] [DBG] [DEATHSTAR] [MyClassLibrary.MyService] Executing With Retry Policy
-    [2024-12-23 21:02:37.221] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Saving To Database
-    [2024-12-23 21:02:37.222] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Opening Connection
-    [2024-12-23 21:02:37.224] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Executing Command
-    [2024-12-23 21:02:37.226] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Save To Database Succeeded
-    [2024-12-23 21:02:37.227] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Saving To Azure Storage
-    [2024-12-23 21:02:37.228] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Creating Table
-    [2024-12-23 21:02:37.238] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Adding Entity
-    [2024-12-23 21:02:37.259] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Save To Azure Storage Succeeded
-    [2024-12-23 21:02:37.260] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Exiting "MyRepository"
-    [2024-12-23 21:02:37.262] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Returning True
-    [2024-12-23 21:02:37.263] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Exiting "MyService"
-    [2024-12-23 21:02:37.265] [INF] [DEATHSTAR] [MyWebApplication.RequestLoggingMiddleware] Outgoing HTTP Response
+    [2024-12-29 18:37:53.718] [INF] [DEATHSTAR] [MyWebApplication.RequestLoggingMiddleware] Incoming HTTP Request
+    [2024-12-29 18:37:53.719] [INF] [DEATHSTAR] [MyWebApplication] Configuring Header
+    [2024-12-29 18:37:53.720] [DBG] [DEATHSTAR] [MyWebApplication] _myHeaderValue = "MyHeader (Development)"
+    [2024-12-29 18:37:53.721] [INF] [DEATHSTAR] [MyWebApplication] Appending Header
+    [2024-12-29 18:37:53.724] [INF] [DEATHSTAR] [MyWebApplication] Selecting Claims From Context
+    [2024-12-29 18:37:53.725] [DBG] [DEATHSTAR] [MyWebApplication] _claims = [{Type="MyClaimType", Value="MyClaimValue"}, {Type="nbf", Value="1735497473"}, {Type="exp", Value="1735499273"}, {Type="iat", Value="1735497473"}, {Type="iss", Value="yourIssuer"}, {Type="aud", Value="yourAudience"}]
+    [2024-12-29 18:37:53.734] [INF] [DEATHSTAR] [MyWebApplication] Calling Version "2" Of "MyService" With True
+    [2024-12-29 18:37:53.736] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Entering "MyService"
+    [2024-12-29 18:37:53.737] [DBG] [DEATHSTAR] [MyClassLibrary.MyService] myInput = True
+    [2024-12-29 18:37:53.738] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Configuring MyConfiguration
+    [2024-12-29 18:37:53.739] [DBG] [DEATHSTAR] [MyClassLibrary.MyService] _myConfiguration = "MyWebApplication (Development)"
+    [2024-12-29 18:37:53.740] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Configuring MySecret
+    [2024-12-29 18:37:53.741] [DBG] [DEATHSTAR] [MyClassLibrary.MyService] _mySecret = "MyWebApplication"
+    [2024-12-29 18:37:53.743] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Configuring MyFeature
+    [2024-12-29 18:37:53.744] [DBG] [DEATHSTAR] [MyClassLibrary.MyService] _myFeature = True
+    [2024-12-29 18:37:53.745] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Saving Input To Repository
+    [2024-12-29 18:37:53.746] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Entering "MyRepository"
+    [2024-12-29 18:37:53.748] [DBG] [DEATHSTAR] [MyClassLibrary.MyRepository] myInput = True
+    [2024-12-29 18:37:53.750] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Configuring Database Connection String
+    [2024-12-29 18:37:53.751] [DBG] [DEATHSTAR] [MyClassLibrary.MyRepository] _dbConnectionString = "Server=localhost;Database=MyDatabase;Integrated Security=True;Application Name=MyWebApplication (Development);Encrypt=False;Connect Timeout=1;Command Timeout=0;"
+    [2024-12-29 18:37:53.752] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Configuring Azure Storage Connection String
+    [2024-12-29 18:37:53.753] [DBG] [DEATHSTAR] [MyClassLibrary.MyRepository] _azConnectionString = "UseDevelopmentStorage=true;"
+    [2024-12-29 18:37:53.755] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Generating Row Key
+    [2024-12-29 18:37:53.756] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Saving "019413b5-dedc-7ed2-b8fb-b4c17ccff7f4"
+    [2024-12-29 18:37:53.757] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Creating Retry Policy
+    [2024-12-29 18:37:53.759] [DBG] [DEATHSTAR] [MyClassLibrary.MyRepository] Executing With Retry Policy
+    [2024-12-29 18:37:53.760] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Saving To Database
+    [2024-12-29 18:37:53.761] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Opening Connection
+    [2024-12-29 18:37:53.762] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Executing Command
+    [2024-12-29 18:37:53.765] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Save To Database Succeeded
+    [2024-12-29 18:37:53.766] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Saving To Azure Storage
+    [2024-12-29 18:37:53.767] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Creating Table
+    [2024-12-29 18:37:53.776] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Adding Entity
+    [2024-12-29 18:37:53.800] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Save To Azure Storage Succeeded
+    [2024-12-29 18:37:53.802] [INF] [DEATHSTAR] [MyClassLibrary.MyRepository] Exiting "MyRepository"
+    [2024-12-29 18:37:53.803] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Returning True
+    [2024-12-29 18:37:53.804] [INF] [DEATHSTAR] [MyClassLibrary.MyService] Exiting "MyService"
+    [2024-12-29 18:37:53.806] [INF] [DEATHSTAR] [MyWebApplication.RequestLoggingMiddleware] Outgoing HTTP Response
     Asserting HTTP Status Code Is OK
     MyHeader: MyHeader (Development)
     api-supported-versions: 1, 2
@@ -259,3 +261,57 @@ Please support these creators and communities.
     Asserting API Supported Versions Header
     Asserting Result Is True
     Cleaning Test
+
+# Shell Menu
+
+    - Login
+    - Applications
+        - Cat Fact
+        - Weather
+        - MyService (False)
+        - MyService (True)
+    - Azure
+        - Connect
+        - Disconnect
+        - Show Context
+        - Switch Context
+        - Mount File Share
+    - DevOps
+        - .NET
+            - Measure
+            - CI/CD
+        - Notepad
+            - Open
+            - New
+            - Zip
+            - Email -Zip
+            - Publish -Zip
+        - Pester
+            - API
+            - Module
+            - Resources
+    - Games
+        - Solitaire
+    - Streaming
+        - Start OBS
+        - Ping OBS
+        - Stop OBS
+        - Transcode
+    - Help
+        - Commands
+        - Configuration
+            - New
+            - Edit
+            - Import
+            - Show
+        - Dependencies
+        - Profile
+            - Auto Run On
+            - Auto Run Off
+        - Debug
+        - About
+    * Clock (global)
+
+# Getting Started
+
+-- TODO: Add steps to enlist the repo, profile and Shell.
