@@ -178,7 +178,7 @@ function Start-Menu {
             Action         = {
                 Remove-PSDrive -Name $ShellConfig.DriveLetter -Force -ErrorAction SilentlyContinue -Verbose
                 Mount-AzureFileShare -Verbose
-                explorer $ShellConfig.DriveLetter
+                explorer "$($ShellConfig.DriveLetter):\"
                 Show-Menu -MenuName "Azure"
             }
             DisableConfirm = $false
