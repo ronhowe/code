@@ -11,7 +11,11 @@ function Mount-AzureFileShare {
 
         [ValidateNotNullOrEmpty()]
         [string]
-        $FileShareName = $ShellConfig.FileShareName
+        $FileShareName = $ShellConfig.FileShareName,
+
+        [ValidateNotNullOrEmpty()]
+        [string]
+        $DriveLetter = $ShellConfig.DriveLetter
     )
     begin {
         Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
@@ -23,18 +27,27 @@ function Mount-AzureFileShare {
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-        Write-Verbose "Getting Azure Storage Account Key"
-        $storageAccountKey = (Get-AzStorageAccountKey -ResourceGroupName $ResourceGroupName -Name $StorageAccountName)[0].Value
+        Write-Verbose "Testing Connection To Azure Storage Account"
+        $connectTestResult = Test-NetConnection -ComputerName "$StorageAccountName.file.core.windows.net" -Port 445
 
-        Write-Verbose "Mounting Azure File Share"
-        $parameters = @{
-            Name       = "Z"
-            PSProvider = "FileSystem"
-            Root       = "\\$StorageAccountName.file.core.windows.net\$FileShareName"
-            Persist    = $true
-            Credential = (New-Object System.Management.Automation.PSCredential("Azure\$StorageAccountName", (ConvertTo-SecureString $storageAccountKey -AsPlainText -Force)))
+        Write-Verbose "Asserting Connection To Azure Storage Account"
+        if ($connectTestResult.TcpTestSucceeded) {
+            Write-Verbose "Getting Azure Storage Account Key"
+            $storageAccountKey = (Get-AzStorageAccountKey -ResourceGroupName $ResourceGroupName -Name $StorageAccountName)[0].Value
+
+            Write-Verbose "Mounting Azure File Share ; Please Wait"
+            $parameters = @{
+                Name       = $DriveLetter
+                PSProvider = "FileSystem"
+                Root       = "\\$StorageAccountName.file.core.windows.net\$FileShareName"
+                Persist    = $true
+                Credential = (New-Object System.Management.Automation.PSCredential("Azure\$StorageAccountName", (ConvertTo-SecureString $storageAccountKey -AsPlainText -Force)))
+            }
+            New-PSDrive @parameters
         }
-        New-PSDrive @parameters
+        else {
+            Write-Error "Connection To Azure Storage Account Failed"
+        }
     }
     end {
         Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"

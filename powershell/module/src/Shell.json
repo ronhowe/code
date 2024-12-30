@@ -9,5 +9,6 @@
     "DeploymentName": "default",
     "StorageAccountName": "default",
     "FileShareName": "default",
-    "AppConfigurationName": "default"
+    "AppConfigurationName": "default",
+    "DriveLetter": "Z"
 }

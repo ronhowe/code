@@ -173,11 +173,12 @@ function Start-Menu {
         Add-MenuItem -Menu "Azure"
 
         $parameters = @{
-            Name           = "ConnectAzureFileShare"
+            Name           = "MountAzureFileShare"
             DisplayName    = "Share"
             Action         = {
-                Connect-AzureFileShare -Verbose
-                explorer Z:\
+                Remove-PSDrive -Name $ShellConfig.DriveLetter -Force -ErrorAction SilentlyContinue -Verbose
+                Mount-AzureFileShare -Verbose
+                explorer $ShellConfig.DriveLetter
                 Show-Menu -MenuName "Azure"
             }
             DisableConfirm = $false
