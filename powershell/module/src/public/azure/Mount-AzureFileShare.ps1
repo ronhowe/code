@@ -41,6 +41,7 @@ function Mount-AzureFileShare {
                 PSProvider = "FileSystem"
                 Root       = "\\$StorageAccountName.file.core.windows.net\$FileShareName"
                 Persist    = $true
+                Scope     = "Global"
                 Credential = (New-Object System.Management.Automation.PSCredential("Azure\$StorageAccountName", (ConvertTo-SecureString $storageAccountKey -AsPlainText -Force)))
             }
             New-PSDrive @parameters
