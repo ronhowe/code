@@ -14,6 +14,9 @@
         "configStoreName": {
             "value": "appc-ronhowe-0"
         },
+        "fileShareName": {
+            "value": "fsrhowe0"
+        },
         "location": {
             "value": "eastus2"
         },

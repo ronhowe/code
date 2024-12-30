@@ -2,6 +2,7 @@ param appInsightsName string
 param appName string
 param automationAccountName string = 'aa-ronhowe-0'
 param configStoreName string
+param fileShareName string
 param location string
 param planName string
 @secure()
@@ -114,6 +115,19 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   kind: 'StorageV2'
   sku: {
     name: 'Standard_LRS'
+  }
+}
+
+resource fileServices 'Microsoft.Storage/storageAccounts/fileServices@2023-05-01' = {
+  parent: storageAccount
+  name: 'default'
+}
+
+resource fileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2021-09-01' = {
+  parent: fileServices
+  name: fileShareName
+  properties: {
+    shareQuota: 100 // smallest size in GB
   }
 }
 

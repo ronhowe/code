@@ -7,5 +7,7 @@
     "ResourceGroupName": "default",
     "Location": "default",
     "DeploymentName": "default",
+    "StorageAccountName": "default",
+    "FileShareName": "default",
     "AppConfigurationName": "default"
 }

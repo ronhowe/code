@@ -121,6 +121,9 @@ function Start-Menu {
             Action         = {
                 Connect-AzureAccount -Verbose |
                 Out-Null
+                Get-AzContext |
+                Out-String |
+                Write-Host
                 Show-Menu -MenuName "Azure"
             }
             DisableConfirm = $false
@@ -162,6 +165,19 @@ function Start-Menu {
                 Set-AzContext -Subscription $(Read-Host -Prompt "Subscription") |
                 Out-String |
                 Write-Host
+                Show-Menu -MenuName "Azure"
+            }
+            DisableConfirm = $false
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "Azure"
+
+        $parameters = @{
+            Name           = "ConnectAzureFileShare"
+            DisplayName    = "Share"
+            Action         = {
+                Connect-AzureFileShare -Verbose
+                explorer Z:\
                 Show-Menu -MenuName "Azure"
             }
             DisableConfirm = $false
