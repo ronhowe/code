@@ -17,7 +17,7 @@ function Open-ShellConfiguration {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
         Write-Verbose "Opening Shell Configuration"
-        notepad "$PSScriptRoot\Shell.json"
+        notepad $Path
     }
     end {
         Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"

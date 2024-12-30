@@ -27,9 +27,9 @@ function Start-Menu {
         else {
             Write-Error "Import Failed Becuase CliMenu Module Does Not Exist"
         }
-    
+
         ################################################################################
-        #region Menu Options
+        #region Options
 
         Write-Verbose "Setting Menu Options"
         $parameters = @{
@@ -45,268 +45,415 @@ function Start-Menu {
         }
         Set-MenuOption @parameters
 
-        #endregion Menu Options
+        #endregion Options
         ################################################################################
 
         ############################################################
-        #region Common Menu Items
-
-        $ExitMenuItem = @{
-            Name           = "ExitMenuItem"
-            DisplayName    = "Exit"
-            Action         = { }
-            DisableConfirm = $true
-        }
-        $ExitMenuItem = New-MenuItem @ExitMenuItem
-
-        $MainMenuMenuItem = @{
-            Name           = "MainMenuMenuItem"
-            DisplayName    = "Main Menu"
-            Action         = { Show-Menu }
-            DisableConfirm = $true
-        }
-        $MainMenuMenuItem = New-MenuItem @MainMenuMenuItem
-
-        #endregion Common Menu Items
-        ############################################################
-
-        ################################################################################
-        #region Main Menu
+        #region Common
 
         $parameters = @{
-            Name        = "MainMenu"
-            DisplayName = "Main Menu"
+            Name           = "Exit"
+            DisplayName    = "Exit"
+            Action         = {
+                Show-Date
+            }
+            DisableConfirm = $true
+        }
+        $ExitMenuItem = New-MenuItem @parameters
+
+        $parameters = @{
+            Name           = "Main"
+            DisplayName    = "Main"
+            Action         = {
+                Show-Date
+                Show-Menu
+            }
+            DisableConfirm = $true
+        }
+        $MainMenuItem = New-MenuItem @parameters
+
+        #endregion Common
+        ############################################################
+
+        ################################################################################
+        #region Main
+
+        $parameters = @{
+            Name        = "Main"
+            DisplayName = "Main"
         }
         New-Menu @parameters |
         Out-Null
 
         $ExitMenuItem |
-        Add-MenuItem -Menu "MainMenu"
-
-        $parameters = @{
-            Name           = "AzureMenuMenuItem"
-            DisplayName    = "Azure Menu"
-            Action         = { Show-Menu -MenuName "AzureMenu" }
-            DisableConfirm = $true
-        }
-        New-MenuItem @parameters |
-        Add-MenuItem -Menu "MainMenu"
-
-        $parameters = @{
-            Name           = "ConfigurationMenuMenuItem"
-            DisplayName    = "Configuration Menu"
-            Action         = { Show-Menu -MenuName "ConfigurationMenu" }
-            DisableConfirm = $true
-        }
-        New-MenuItem @parameters |
-        Add-MenuItem -Menu "MainMenu"
-
-        $parameters = @{
-            Name           = "DebugMenuMenuItem"
-            DisplayName    = "Debug Menu"
-            Action         = { Show-Menu -MenuName "DebugMenu" }
-            DisableConfirm = $true
-        }
-        New-MenuItem @parameters |
-        Add-MenuItem -Menu "MainMenu"
-
-        $parameters = @{
-            Name           = "DependenciesMenuMenuItem"
-            DisplayName    = "Dependencies Menu"
-            Action         = { Show-Menu -MenuName "DependenciesMenu" }
-            DisableConfirm = $true
-        }
-        New-MenuItem @parameters |
-        Add-MenuItem -Menu "MainMenu"
-
-        $parameters = @{
-            Name           = "DevOpsMenuMenuItem"
-            DisplayName    = "DevOps Menu"
-            Action         = { Show-Menu -MenuName "DevOpsMenu" }
-            DisableConfirm = $true
-        }
-        New-MenuItem @parameters |
-        Add-MenuItem -Menu "MainMenu"
-
-        $parameters = @{
-            Name           = "ShowDateMenuItem"
-            DisplayName    = "Show Date"
-            Action         = {
-                Show-Date
-                Show-Menu -MenuName "MainMenu"
-            }
-            DisableConfirm = $true
-        }
-        New-MenuItem @parameters |
-        Add-MenuItem -Menu "MainMenu"
-
-        #endregion Main Menu
-        ################################################################################
+        Add-MenuItem -Menu "Main"
 
         ################################################################################
-        #region Azure Menu
+        #region Main | Azure
 
         $parameters = @{
-            Name        = "AzureMenu"
-            DisplayName = "Azure Menu"
+            Name        = "Azure"
+            DisplayName = "Azure"
         }
         New-Menu @parameters |
         Out-Null
 
-        $MainMenuMenuItem  |
-        Add-MenuItem -Menu "AzureMenu"
+        $parameters = @{
+            Name           = "Azure"
+            DisplayName    = "Azure"
+            Action         = {
+                Show-Menu -MenuName "Azure"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "Main"
+
+        ################################################################################
+        #region Main | Azure | *
+
+        $MainMenuItem  |
+        Add-MenuItem -Menu "Azure"
 
         $parameters = @{
-            Name           = "ConnectAzureAccountMenuItem"
-            DisplayName    = "Connect Azure Account"
+            Name           = "ConnectAzureAccount"
+            DisplayName    = "Connect"
             Action         = {
                 Connect-AzureAccount -Verbose |
                 Out-Null
-                Show-Menu -MenuName "AzureMenu"
+                Show-Menu -MenuName "Azure"
             }
             DisableConfirm = $false
         }
         New-MenuItem @parameters |
-        Add-MenuItem -Menu "AzureMenu"
+        Add-MenuItem -Menu "Azure"
 
         $parameters = @{
-            Name           = "DisconnectAzureAccountMenuItem"
-            DisplayName    = "Disconnect Azure Account"
+            Name           = "DisconnectAzureAccount"
+            DisplayName    = "Disconnect"
             Action         = {
                 Disconnect-AzureAccount -Verbose |
                 Out-Null
-                Show-Menu -MenuName "AzureMenu"
+                Show-Menu -MenuName "Azure"
             }
             DisableConfirm = $false
         }
         New-MenuItem @parameters |
-        Add-MenuItem -Menu "AzureMenu"
+        Add-MenuItem -Menu "Azure"
 
         $parameters = @{
-            Name           = "NewAzureResourceGroupMenuItem"
+            Name           = "ShowAzureContext"
+            DisplayName    = "Show"
+            Action         = {
+                Get-AzContext |
+                Out-String |
+                Write-Host
+                Show-Menu -MenuName "Azure"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "Azure"
+
+        $parameters = @{
+            Name           = "SetAzureContext"
+            DisplayName    = "Switch"
+            Action         = {
+                Set-AzContext -Subscription $(Read-Host -Prompt "Subscription") |
+                Out-String |
+                Write-Host
+                Show-Menu -MenuName "Azure"
+            }
+            DisableConfirm = $false
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "Azure"
+
+        $parameters = @{
+            Name           = "NewAzureResourceGroup"
             DisplayName    = "New Azure Resource Group"
             Action         = {
                 New-AzureResourceGroup -Verbose |
                 Out-Null
-                Show-Menu -MenuName "AzureMenu"
+                Show-Menu -MenuName "Azure"
             }
             DisableConfirm = $false
         }
         New-MenuItem @parameters |
-        Add-MenuItem -Menu "AzureMenu"
+        Add-MenuItem -Menu "Azure"
 
         $parameters = @{
-            Name           = "NewAzureResourceDeploymentGroupMenuItem"
+            Name           = "NewAzureResourceDeploymentGroup"
             DisplayName    = "New Azure Resource Group Deployment"
             Action         = {
                 New-AzureResourceGroupDeployment -Verbose |
                 Out-Null
-                Show-Menu -MenuName "AzureMenu"
+                Show-Menu -MenuName "Azure"
             }
             DisableConfirm = $false
         }
         New-MenuItem @parameters |
-        Add-MenuItem -Menu "AzureMenu"
+        Add-MenuItem -Menu "Azure"
 
         $parameters = @{
-            Name           = "RemoveAzureResourceGroupMenuItem"
+            Name           = "RemoveAzureResourceGroup"
             DisplayName    = "Remove Azure Resource Group"
             Action         = {
                 Remove-AzureResourceGroup -Verbose -ErrorAction Continue |
                 Out-Null
                 Clear-AzureAppConfigurationDeletedStore -Verbose -ErrorAction Continue |
                 Out-Null
-                Show-Menu -MenuName "AzureMenu"
+                Show-Menu -MenuName "Azure"
             }
             DisableConfirm = $false
         }
         New-MenuItem @parameters |
-        Add-MenuItem -Menu "AzureMenu"
+        Add-MenuItem -Menu "Azure"
 
-        #endregion Azure Menu
+        #endregion Main | Azure | *
+        ################################################################################
+
+        #endregion Main | Azure
         ################################################################################
 
         ################################################################################
-        #region Configuration Menu
+        #region Main | DevOps
 
         $parameters = @{
-            Name        = "ConfigurationMenu"
-            DisplayName = "Configuration Menu"
+            Name        = "DevOps"
+            DisplayName = "DevOps"
         }
         New-Menu @parameters |
         Out-Null
 
-        $MainMenuMenuItem  |
-        Add-MenuItem -Menu "ConfigurationMenu"
+        $parameters = @{
+            Name           = "DevOps"
+            DisplayName    = "DevOps"
+            Action         = {
+                Show-Menu -MenuName "DevOps"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "Main"
+
+        ################################################################################
+        #region Main | DevOps | *
+
+        $MainMenuItem |
+        Add-MenuItem -Menu "DevOps"
+
+        $parameters = @{
+            Name           = "ShowDevOpsTools"
+            DisplayName    = "Show DevOps Tools"
+            Action         = {
+                & "$HOME\repos\ronhowe\code\powershell\runbooks\Show-DevOpsTools.ps1" -Verbose
+                Show-Menu -MenuName "DevOps"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "DevOps"
+
+        $parameters = @{
+            Name           = "ClearLocalStorage"
+            DisplayName    = "Clear Local Storage"
+            Action         = {
+                & "$HOME\repos\ronhowe\code\powershell\runbooks\Clear-LocalStorage.ps1" -Verbose
+                Show-Menu -MenuName "DevOps"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "DevOps"
+
+        $parameters = @{
+            Name           = "OpenLogsFolder"
+            DisplayName    = "Open Logs Folder"
+            Action         = {
+                explorer.exe "$HOME\repos\ronhowe\code\logs"
+                Show-Menu -MenuName "DevOps"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "DevOps"
+
+        #endregion Main | DevOps | *
+        ################################################################################
+
+        #endregion Main | DevOps
+        ################################################################################
+
+        ################################################################################
+        #region Main | Help
+
+        $parameters = @{
+            Name        = "Help"
+            DisplayName = "Help"
+        }
+        New-Menu @parameters |
+        Out-Null
+
+        $parameters = @{
+            Name           = "Help"
+            DisplayName    = "Help"
+            Action         = {
+                Show-Menu -MenuName "Help"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "Main"
+
+        ################################################################################
+        #region Main | Help | *
+
+        $MainMenuItem |
+        Add-MenuItem -Menu "Help"
+
+        ################################################################################
+        #region Main | Help | Configuration
+
+        $parameters = @{
+            Name        = "Configuration"
+            DisplayName = "Configuration"
+        }
+        New-Menu @parameters |
+        Out-Null
+
+        $parameters = @{
+            Name           = "Configuration"
+            DisplayName    = "Configuration"
+            Action         = {
+                Show-Menu -MenuName "Configuration"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "Help"
+
+        ################################################################################
+        #region Main | Help | Configuration | *
+
+        $MainMenuItem  |
+        Add-MenuItem -Menu "Configuration"
 
         $parameters = @{
             Name           = "ShowShellConfiguration"
-            DisplayName    = "Show Shell Configuration"
+            DisplayName    = "Show"
             Action         = {
                 Show-ShellConfiguration
-                Show-Menu -MenuName "ConfigurationMenu"
+                Show-Menu -MenuName "Configuration"
             }
             DisableConfirm = $true
         }
         New-MenuItem @parameters |
-        Add-MenuItem -Menu "ConfigurationMenu"
+        Add-MenuItem -Menu "Configuration"
 
         $parameters = @{
             Name           = "NewShellConfiguration"
-            DisplayName    = "New Shell Configuration"
+            DisplayName    = "New"
             Action         = {
                 New-ShellConfiguration -Verbose
-                Show-Menu -MenuName "ConfigurationMenu"
+                Show-Menu -MenuName "Configuration"
             }
-            DisableConfirm = $true
+            DisableConfirm = $false
         }
         New-MenuItem @parameters |
-        Add-MenuItem -Menu "ConfigurationMenu"
+        Add-MenuItem -Menu "Configuration"
 
         $parameters = @{
             Name           = "OpenShellConfiguration"
-            DisplayName    = "Open Shell Configuration"
+            DisplayName    = "Open"
             Action         = {
                 Open-ShellConfiguration -Verbose
-                Show-Menu -MenuName "ConfigurationMenu"
+                Show-Menu -MenuName "Configuration"
             }
             DisableConfirm = $true
         }
         New-MenuItem @parameters |
-        Add-MenuItem -Menu "ConfigurationMenu"
+        Add-MenuItem -Menu "Configuration"
 
         $parameters = @{
-            Name           = "ImportShellConfigurationMenuMenuItem"
-            DisplayName    = "Import Shell Configuration"
+            Name           = "ImportShellConfiguration"
+            DisplayName    = "Import"
             Action         = {
                 Import-ShellConfiguration -Verbose |
                 Out-Null
                 Show-ShellConfiguration
-                Show-Menu -MenuName "ConfigurationMenu"
+                Show-Menu -MenuName "Configuration"
             }
             DisableConfirm = $true
         }
         New-MenuItem @parameters |
-        Add-MenuItem -Menu "ConfigurationMenu"
+        Add-MenuItem -Menu "Configuration"
 
-        #endregion Configuration Menu
+        #endregion Main | Help | Configuration | *
+        ################################################################################
+
+        #endregion Main | Help | Configuration
         ################################################################################
 
         ################################################################################
-        #region Debug Menu
+        #region Main | Help | Dependencies
 
         $parameters = @{
-            Name        = "DebugMenu"
-            DisplayName = "Debug Menu"
+            Name        = "Dependencies"
+            DisplayName = "Dependencies"
         }
         New-Menu @parameters |
         Out-Null
 
-        $MainMenuMenuItem  |
-        Add-MenuItem -Menu "DebugMenu"
+        $parameters = @{
+            Name           = "Dependencies"
+            DisplayName    = "Dependencies"
+            Action         = {
+                Show-Menu -MenuName "Dependencies"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "Help"
+
+        ################################################################################
+        #region Main | Help | Dependencies | *
+
+        $MainMenuItem |
+        Add-MenuItem -Menu "Dependencies"
 
         $parameters = @{
-            Name           = "DebugMenuMenuItem"
+            Name           = "TestDependencies"
+            DisplayName    = "Test"
+            Action         = {
+                & "$HOME\repos\ronhowe\code\powershell\dependencies\Test-Dependencies.ps1"
+                Show-Menu -MenuName "Dependencies"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "Dependencies"
+
+        $parameters = @{
+            Name           = "InstallDependencies"
+            DisplayName    = "Install"
+            Action         = {
+                & "$HOME\repos\ronhowe\code\powershell\dependencies\Install-Dependencies.ps1"
+                Show-Menu -MenuName "Dependencies"
+            }
+            DisableConfirm = $true
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "Dependencies"
+
+        #endregion Main | Help | Dependencies
+        ################################################################################
+
+        #endregion Main | Help | Dependencies
+        ################################################################################
+
+        $parameters = @{
+            Name           = "Debug"
             DisplayName    = "Debug"
             Action         = {
                 Write-Host "## Write-Host" # visible
@@ -322,95 +469,33 @@ function Start-Menu {
                 $(pwsh --version) |
                 Out-String |
                 Write-Verbose -Verbose
-                Show-Menu -MenuName "DebugMenu"
+                Show-Menu -MenuName "Help"
             }
             DisableConfirm = $true
         }
         New-MenuItem @parameters |
-        Add-MenuItem -Menu "DebugMenu"
+        Add-MenuItem -Menu "Help"
 
-        #endregion Debug Menu
+        #endregion Main | Help | *
         ################################################################################
 
+        #endregion Main | Help
         ################################################################################
-        #region Dependencies Menu
 
         $parameters = @{
-            Name        = "DependenciesMenu"
-            DisplayName = "Dependencies Menu"
-        }
-        New-Menu @parameters |
-        Out-Null
-
-        $MainMenuMenuItem |
-        Add-MenuItem -Menu "DependenciesMenu"
-
-        $parameters = @{
-            Name           = "TestDependenciesMenuItem"
-            DisplayName    = "Test Dependencies"
+            Name           = "Clock"
+            DisplayName    = "Clock"
             Action         = {
-                & "$HOME\repos\ronhowe\code\powershell\dependencies\Test-Dependencies.ps1"
-                Show-Menu -MenuName "DependenciesMenu"
+                Show-Date
+                Show-Menu -MenuName "Main"
             }
             DisableConfirm = $true
         }
         New-MenuItem @parameters |
-        Add-MenuItem -Menu "DependenciesMenu"
+        Add-MenuItem -Menu "Main"
 
-        #endregion Dependencies Menu
-        ################################################################################
-
-        ################################################################################
-        #region DevOps Menu
-
-        $parameters = @{
-            Name        = "DevOpsMenu"
-            DisplayName = "DevOps Menu"
-        }
-        New-Menu @parameters |
-        Out-Null
-
-        $MainMenuMenuItem |
-        Add-MenuItem -Menu "DevOpsMenu"
-
-        $parameters = @{
-            Name           = "ShowDevOpsToolsMenuItem"
-            DisplayName    = "Show DevOps Tools"
-            Action         = {
-                & "$HOME\repos\ronhowe\code\powershell\runbooks\Show-DevOpsTools.ps1" -Verbose
-                Show-Menu -MenuName "DevOpsMenu"
-            }
-            DisableConfirm = $true
-        }
-        New-MenuItem @parameters |
-        Add-MenuItem -Menu "DevOpsMenu"
-
-        $parameters = @{
-            Name           = "ClearLocalStorageMenuItem"
-            DisplayName    = "Clear Local Storage"
-            Action         = {
-                & "$HOME\repos\ronhowe\code\powershell\runbooks\Clear-LocalStorage.ps1" -Verbose
-                Show-Menu -MenuName "DevOpsMenu"
-            }
-            DisableConfirm = $true
-        }
-        New-MenuItem @parameters |
-        Add-MenuItem -Menu "DevOpsMenu"
-
-        $parameters = @{
-            Name           = "OpenLogsFolderMenuItem"
-            DisplayName    = "Open Logs Folder"
-            Action         = {
-                explorer.exe "$HOME\repos\ronhowe\code\logs"
-                Show-Menu -MenuName "DevOpsMenu"
-            }
-            DisableConfirm = $true
-        }
-        New-MenuItem @parameters |
-        Add-MenuItem -Menu "DevOpsMenu"
-
-        #endregion DevOps Menu
-        ################################################################################
+        #endregion Main
+        ############################################################
 
         Clear-Host
 

@@ -4,12 +4,12 @@ function Connect-AzureAccount {
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]
-        $TenantId = $ShellConfig.TenantId,
+        $Tenant = $ShellConfig.Tenant,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]
-        $SubscriptionId = $ShellConfig.SubscriptionId
+        $Subscription = $ShellConfig.Subscription
     )
     begin {
         Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
@@ -22,7 +22,7 @@ function Connect-AzureAccount {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
         Write-Verbose "Connecting Azure Account"
-        Connect-AzAccount -Tenant $TenantId -Subscription $SubscriptionId -UseDeviceAuthentication
+        Connect-AzAccount -Tenant $Tenant -Subscription $Subscription -UseDeviceAuthentication
     }
     end {
         Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"

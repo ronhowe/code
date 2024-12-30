@@ -28,6 +28,7 @@ function Test-AzureResourceGroupDeployment {
             $parameters = @{
                 ResourceGroupName     = $ResourceGroupName
                 Location              = $Location
+                ## TODO: Replace references with $Env:SHELL_CODE_PATH variable.
                 TemplateFile          = "$HOME\repos\ronhowe\code\azure\template.bicep"
                 TemplateParameterFile = "$HOME\repos\ronhowe\code\azure\parameters.json"
                 Mode                  = "Incremental"

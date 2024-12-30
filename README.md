@@ -264,53 +264,53 @@ Please support these creators and communities.
 
 # Shell Menu
 
-    - Login
     - Applications
-        - Cat Fact
-        - Weather
-        - MyService (False)
-        - MyService (True)
+        Cat Fact
+        Weather
+        MyService
     - Azure
-        - Connect
-        - Disconnect
-        - Show Context
-        - Switch Context
-        - Mount File Share
+        Connect
+        Disconnect
+        Show
+        Switch
+        Share
     - DevOps
         - .NET
-            - Measure
-            - CI/CD
+            Measure
+            Pipeline
         - Notepad
-            - Open
-            - New
-            - Zip
-            - Email -Zip
-            - Publish -Zip
+            Open
+            New
+            Zip
+            Email
+            Publish
         - Pester
-            - API
-            - Module
-            - Resources
+            API
+            Module
+            Resources
     - Games
-        - Solitaire
+        Solitaire
     - Streaming
-        - Start OBS
-        - Ping OBS
-        - Stop OBS
-        - Transcode
+        Start
+        Stop
+        Ping
+        Transcode
     - Help
-        - Commands
+        About
+        Commands
         - Configuration
-            - New
-            - Edit
-            - Import
-            - Show
+            New
+            Edit
+            Import
+            Show
+        Debug
         - Dependencies
+            Install
+            Test
         - Profile
-            - Auto Run On
-            - Auto Run Off
-        - Debug
-        - About
-    * Clock (global)
+            Auto Run Off
+            Auto Run On
+    Clock
 
 # Getting Started
 
