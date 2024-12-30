@@ -22,7 +22,7 @@ process {
     Set-Content -Path $profile -Force
 
     Write-Verbose "Appending Content"
-    '. "$HOME\repos\ronhowe\code\powershell\profile.ps1"' |
+    ". $(Resolve-Path -Path "$PSScriptRoot\..\profile.ps1")" |
     Add-Content -Path $profile
 
     Write-Verbose "Importing Profile"

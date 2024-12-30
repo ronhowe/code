@@ -99,11 +99,9 @@ process {
         }
     }
 
-    Write-Verbose "Defining Global Variables"
-    New-Variable -Name "CODE" -Value "$HOME\repos\ronhowe\code" -Scope Global -Force -ErrorAction SilentlyContinue
-    New-Variable -Name "REPOS" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
     ## NOTE: Work shim.
-    New-Variable -Name "VSTS" -Value "$HOME\repos" -Scope Global -Force -ErrorAction SilentlyContinue
+    Write-Verbose "Defining VSTS Global Variable"
+    New-Variable -Name "VSTS" -Value "C:\VSTS" -Scope Global -Force -ErrorAction SilentlyContinue
 
     Write-Verbose "Setting PSReadLine Options"
     if ($PSVersionTable.PSEdition -eq "Core") {
@@ -115,13 +113,13 @@ process {
     }
 
     Write-Verbose "Asserting Shell Module Exists"
-    if (Test-Path -Path "$HOME\repos\ronhowe\code\powershell\module\bin\Shell\Shell.psm1") {
+    if (Test-Path -Path "$PSScriptRoot\module\bin\Shell\Shell.psm1") {
         Write-Verbose "Removing Shell Module"
         Get-Module -Name "Shell" |
         Remove-Module -Force
 
         Write-Verbose "Importing Shell Module"
-        Import-Module -Name "$HOME\repos\ronhowe\code\powershell\module\bin\Shell" -Force
+        Import-Module -Name "$PSScriptRoot\module\bin\Shell" -Force
     
         Write-Verbose "Starting Shell"
         Start-Shell

@@ -4,7 +4,8 @@ function Import-ShellConfiguration {
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript({ Test-Path -Path $_ })]
-        [string]$Path
+        [string]
+        $Path
     )
     begin {
         Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
