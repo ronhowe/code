@@ -47,7 +47,8 @@ function Mount-AzureFileShare {
                 Credential = (New-Object System.Management.Automation.PSCredential("Azure\$StorageAccountName", (ConvertTo-SecureString $storageAccountKey -AsPlainText -Force)))
                 Verbose    = $true
             }
-            New-PSDrive @parameters
+            New-PSDrive @parameters |
+            Out-Null
         }
         else {
             Write-Warning "Connection To Azure Storage Account Failed"
