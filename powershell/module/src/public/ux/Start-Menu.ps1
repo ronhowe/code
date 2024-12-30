@@ -176,7 +176,7 @@ function Start-Menu {
             Name           = "MountAzureFileShare"
             DisplayName    = "Share"
             Action         = {
-                Remove-PSDrive -Name $ShellConfig.DriveLetter -Force -ErrorAction SilentlyContinue -Verbose
+                Remove-PSDrive -Name $ShellConfig.DriveLetter -Force -ErrorAction Continue -Verbose
                 Mount-AzureFileShare -Verbose
                 Show-Menu -MenuName "Azure"
             }
