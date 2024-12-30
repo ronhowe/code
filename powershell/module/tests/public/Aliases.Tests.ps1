@@ -18,12 +18,14 @@ Describe "Alias Tests" -ForEach @(
     @{ Alias = "matrix" }
     @{ Alias = "menu" }
     @{ Alias = "new" }
+    @{ Alias = "now" }
     @{ Alias = "oops" }
     @{ Alias = "quiet" }
     @{ Alias = "redact" }
     @{ Alias = "repos" }
     @{ Alias = "shell" }
     @{ Alias = "silence" }
+    @{ Alias = "time" }
     @{ Alias = "version" }
     @{ Alias = "weather" }
 ) {
