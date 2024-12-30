@@ -27,6 +27,8 @@ function Mount-AzureFileShare {
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
+        $ErrorActionPreference = "Stop"
+
         Write-Verbose "Testing Connection To Azure Storage Account"
         $connectTestResult = Test-NetConnection -ComputerName "$StorageAccountName.file.core.windows.net" -Port 445
 
@@ -43,11 +45,12 @@ function Mount-AzureFileShare {
                 Persist    = $true
                 Scope     = "Global"
                 Credential = (New-Object System.Management.Automation.PSCredential("Azure\$StorageAccountName", (ConvertTo-SecureString $storageAccountKey -AsPlainText -Force)))
+                Verbose    = $true
             }
             New-PSDrive @parameters
         }
         else {
-            Write-Error "Connection To Azure Storage Account Failed"
+            Write-Warning "Connection To Azure Storage Account Failed"
         }
     }
     end {
