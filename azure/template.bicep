@@ -1,9 +1,11 @@
 param appInsightsName string
 param appName string
-param automationAccountName string = 'aa-ronhowe-0'
+param automationAccountName string
 param configStoreName string
 param fileShareName string
 param location string
+param ipStartAddress string
+param ipEndAddress string
 param planName string
 @secure()
 param sqlAdminPassword string
@@ -14,29 +16,38 @@ param storageAccountName string
 param vaultName string
 param workspaceName string
 
+param automationSku string = 'Free'
+param configSku string = 'standard'
 param curveName string = ''
+param includeAppConfiguration bool = false
+param includeAutomationAccount bool = false
+param includeKeyVault bool = false
 param keyName string = 'mykey'
 param keyOps array = []
 param keySize int = 2048
 param keyType string = 'RSA'
-param skuCapacity int = 1
-// LINK: https://azure.microsoft.com/en-us/pricing/details/app-service/windows/
-// NOTE: B1 => 1 Core => 1.75 GB RAM =>  10 GB Storage => $0.075/hour => $54.75/month
-// TODO: Can we get cheaper with Linux?
-param skuName string = 'B1'
+param planCapacity int = 1
+param planSku string = 'B1'
+param shareQuotaGB int = 1
+param sqlFirewallRuleName string = 'MyFirewallRule'
+param sqlSku string = 'S0'
+param sqlTier string = 'Standard'
+param storageKind string = 'StorageV2'
+param storageSku string = 'Standard_LRS'
+param vaultFamily string = 'A'
 param vaultSku string = 'standard'
 
-// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.web/serverfarms?pivots=deployment-language-bicep
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.web/serverfarms
 resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: planName
   location: location
   sku: {
-    name: skuName
-    capacity: skuCapacity
+    name: planSku
+    capacity: planCapacity
   }
 }
 
-// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.web/sites?pivots=deployment-language-bicep
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.web/sites
 resource appService 'Microsoft.Web/sites@2024-04-01' = {
   name: appName
   location: location
@@ -63,24 +74,24 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
   }
 }
 
-// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.automation/automationaccounts?pivots=deployment-language-bicep
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.automation/automationaccounts
 // TODO: 2023-11-01 is the latest version in eastus2. 2024-04-01 is the latest version in eastus.
-resource automationAccount 'Microsoft.Automation/automationAccounts@2023-11-01' = {
+resource automationAccount 'Microsoft.Automation/automationAccounts@2023-11-01' = if (includeAutomationAccount) {
   name: automationAccountName
   location: location
   properties: {
     sku: {
-      name: 'Free'
+      name: automationSku
     }
   }
 }
 
-// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.appconfiguration/configurationstores?pivots=deployment-language-bicep
-resource configStore 'Microsoft.AppConfiguration/configurationStores@2024-05-01' = {
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.appconfiguration/configurationstores
+resource configStore 'Microsoft.AppConfiguration/configurationStores@2024-05-01' = if (includeAppConfiguration) {
   name: configStoreName
   location: location
   sku: {
-    name: 'standard'
+    name: configSku
   }
   properties: {
     enablePurgeProtection: false
@@ -91,13 +102,13 @@ resource configStore 'Microsoft.AppConfiguration/configurationStores@2024-05-01'
   }
 }
 
-// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.operationalinsights/workspaces?pivots=deployment-language-bicep
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.operationalinsights/workspaces
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: workspaceName
   location: location
 }
 
-// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.insights/components?pivots=deployment-language-bicep
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.insights/components
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: appInsightsName
   location: location
@@ -108,45 +119,47 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts?pivots=deployment-language-bicep
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   name: storageAccountName
   location: location
-  kind: 'StorageV2'
+  kind: storageKind
   sku: {
-    name: 'Standard_LRS'
+    name: storageSku
   }
 }
 
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts/fileservices
 resource fileServices 'Microsoft.Storage/storageAccounts/fileServices@2023-05-01' = {
   parent: storageAccount
   name: 'default'
 }
 
-resource fileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2021-09-01' = {
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts/fileservices/shares
+resource fileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2023-05-01' = {
   parent: fileServices
   name: fileShareName
   properties: {
-    shareQuota: 100 // smallest size in GB
+    shareQuota: shareQuotaGB
   }
 }
 
-// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults?pivots=deployment-language-bicep
-resource vault 'Microsoft.KeyVault/vaults@2024-04-01-preview' = {
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults
+resource vault 'Microsoft.KeyVault/vaults@2024-04-01-preview' = if (includeKeyVault) {
   name: vaultName
   location: location
   properties: {
     accessPolicies: []
     enableRbacAuthorization: true
     enableSoftDelete: true
-    softDeleteRetentionInDays: 7
+    softDeleteRetentionInDays: 1
     enabledForDeployment: true
     enabledForDiskEncryption: true
     enabledForTemplateDeployment: true
     tenantId: subscription().tenantId
     sku: {
       name: vaultSku
-      family: 'A'
+      family: vaultFamily
     }
     networkAcls: {
       defaultAction: 'Allow'
@@ -155,8 +168,8 @@ resource vault 'Microsoft.KeyVault/vaults@2024-04-01-preview' = {
   }
 }
 
-// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults/keys?pivots=deployment-language-bicep
-resource key 'Microsoft.KeyVault/vaults/keys@2024-04-01-preview' = {
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults/keys
+resource key 'Microsoft.KeyVault/vaults/keys@2024-04-01-preview' = if (includeKeyVault) {
   parent: vault
   name: keyName
   properties: {
@@ -167,7 +180,7 @@ resource key 'Microsoft.KeyVault/vaults/keys@2024-04-01-preview' = {
   }
 }
 
-// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers?pivots=deployment-language-bicep
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers
 resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
   name: sqlServerName
   location: location
@@ -177,7 +190,7 @@ resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
   }
 }
 
-// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers/databases?pivots=deployment-language-bicep
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers/databases
 resource sqlDatabase 'Microsoft.Sql/servers/databases@2024-05-01-preview' = {
   parent: sqlServer
   name: sqlDatabaseName
@@ -187,18 +200,18 @@ resource sqlDatabase 'Microsoft.Sql/servers/databases@2024-05-01-preview' = {
     maxSizeBytes: 2147483648
   }
   sku: {
-    name: 'S0'
-    tier: 'Standard'
+    name: sqlSku
+    tier: sqlTier
   }
 }
 
-// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers/firewallrules?pivots=deployment-language-bicep
+// LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers/firewallrules
 resource sqlFirewallRule 'Microsoft.Sql/servers/firewallRules@2024-05-01-preview' = {
   parent: sqlServer
-  name: 'MyFirewallRule'
+  name: sqlFirewallRuleName
   properties: {
-    startIpAddress: '69.207.185.73'
-    endIpAddress: '69.207.185.73'
+    startIpAddress: ipStartAddress
+    endIpAddress: ipEndAddress
   }
 }
 

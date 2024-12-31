@@ -17,11 +17,35 @@
         "fileShareName": {
             "value": "fsrhowe0"
         },
+        "includeAppConfiguration": {
+            "value": false
+        },
+        "includeAutomationAccount": {
+            "value": false
+        },
+        "includeKeyVault": {
+            "value": false
+        },
+        "ipStartAddress": {
+            "value": "69.207.185.73"
+        },
+        "ipEndAddress": {
+            "value": "69.207.185.73"
+        },
         "location": {
             "value": "eastus2"
         },
         "planName": {
             "value": "asp-ronhowe-0"
+        },
+        "sqlAdminUsername": {
+            "value": "sqladmin"
+        },
+        "sqlDatabaseName": {
+            "value": "sqldb-ronhowe-0"
+        },
+        "sqlServerName": {
+            "value": "sql-ronhowe-0"
         },
         "storageAccountName": {
             "value": "stronhowe0"
@@ -31,15 +55,6 @@
         },
         "workspaceName": {
             "value": "law-ronhowe-0"
-        },
-        "sqlServerName": {
-            "value": "sql-ronhowe-0"
-        },
-        "sqlDatabaseName": {
-            "value": "sqldb-ronhowe-0"
-        },
-        "sqlAdminUsername": {
-            "value": "sqladmin"
         }
     }
 }
