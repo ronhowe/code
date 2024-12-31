@@ -6,6 +6,7 @@ param fileShareName string
 param location string
 param ipStartAddress string
 param ipEndAddress string
+param keyVaultName string
 param planName string
 @secure()
 param sqlAdminPassword string
@@ -13,7 +14,6 @@ param sqlAdminUsername string
 param sqlDatabaseName string
 param sqlServerName string
 param storageAccountName string
-param vaultName string
 param workspaceName string
 
 param automationSku string = 'Free'
@@ -146,13 +146,13 @@ resource fileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2023-0
 
 // LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults
 resource vault 'Microsoft.KeyVault/vaults@2024-04-01-preview' = if (includeKeyVault) {
-  name: vaultName
+  name: keyVaultName
   location: location
   properties: {
     accessPolicies: []
     enableRbacAuthorization: true
     enableSoftDelete: true
-    softDeleteRetentionInDays: 1
+    softDeleteRetentionInDays: 7 // minimum value
     enabledForDeployment: true
     enabledForDiskEncryption: true
     enabledForTemplateDeployment: true
@@ -185,6 +185,7 @@ resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
   name: sqlServerName
   location: location
   properties: {
+    // TODO: administrators  The Azure Active Directory administrator of the server. This can only be used at server create time
     administratorLogin: sqlAdminUsername
     administratorLoginPassword: sqlAdminPassword
   }
@@ -212,6 +213,15 @@ resource sqlFirewallRule 'Microsoft.Sql/servers/firewallRules@2024-05-01-preview
   properties: {
     startIpAddress: ipStartAddress
     endIpAddress: ipEndAddress
+  }
+}
+
+resource sqlFirewallRuleForAzure 'Microsoft.Sql/servers/firewallRules@2024-05-01-preview' = {
+  parent: sqlServer
+  name: 'AllowAllAzureIps'
+  properties: {
+    startIpAddress: '0.0.0.0'
+    endIpAddress: '0.0.0.0'
   }
 }
 

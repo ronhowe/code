@@ -18,13 +18,13 @@
             "value": "fsrhowe0"
         },
         "includeAppConfiguration": {
-            "value": false
+            "value": true
         },
         "includeAutomationAccount": {
-            "value": false
+            "value": true
         },
         "includeKeyVault": {
-            "value": false
+            "value": true
         },
         "ipStartAddress": {
             "value": "69.207.185.73"
@@ -34,6 +34,9 @@
         },
         "location": {
             "value": "eastus2"
+        },
+        "keyVaultName": {
+            "value": "kv-ronhowe-0"
         },
         "planName": {
             "value": "asp-ronhowe-0"
@@ -49,9 +52,6 @@
         },
         "storageAccountName": {
             "value": "stronhowe0"
-        },
-        "vaultName": {
-            "value": "kv-ronhowe-0"
         },
         "workspaceName": {
             "value": "law-ronhowe-0"

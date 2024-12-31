@@ -1,226 +1,154 @@
 throw
 
-###############################################################################
-#region dependencies
+################################################################################
+#region Dependencies
 
 Get-Module -Name "Az" -ListAvailable
 Find-Module -Name "Az" -Repository "PSGallery"
 Install-Module -Name "Az" -Repository "PSGallery" -Force
 
-#endregion dependencies
-###############################################################################
-
-###############################################################################
-#region imports
-
 Import-Module -Name "Az.Accounts"
 Import-Module -Name "Az.AppConfiguration"
 Import-Module -Name "Az.ApplicationInsights"
+Import-Module -Name "Az.Automation"
 Import-Module -Name "Az.KeyVault"
 Import-Module -Name "Az.OperationalInsights"
 Import-Module -Name "Az.Resources"
 Import-Module -Name "Az.Storage"
 Import-Module -Name "Az.Websites"
 
-#endregion imports
-###############################################################################
+#endregion Dependencies
+################################################################################
 
-###############################################################################
-#region secrets
+################################################################################
+#region Authentication
 
-Set-Secret -Name "tenantId"
-Set-Secret -Name "subscriptionName"
-Set-Secret -Name "credential" -Secret (Get-Credential)
+$tenant = $ShellConfig.Tenant
+$subscription = $ShellConfig.Subscription
+$credential = Get-Credential -Message "Enter Azure Credential"
 
-#endregion secrets
-###############################################################################
-
-###############################################################################
-#region authentication
-
-$tenantId = Get-Secret -Name "tenantId" -AsPlainText
-$subscriptionName = Get-Secret -Name "subscriptionName" -AsPlainText
-$credential = Get-Secret -Name "credential"
-
-Connect-AzAccount -SubscriptionName $subscriptionName -TenantId $tenantId -Credential $credential
-az login --username $($credential.UserName) --password $($credential.Password | ConvertFrom-SecureString -AsPlainText) --tenant $tenantId
-az account set --subscription $subscriptionName
+Connect-AzAccount -SubscriptionName $subscription -TenantId $tenant -Credential $credential
+## NOTE: Required for some Azure Key Vault operations only supported in the Azure CLI.
+az login --username $($credential.UserName) --password $($credential.Password | ConvertFrom-SecureString -AsPlainText) --tenant $tenant
+az account set --subscription $subscription
 
 Disconnect-AzAccount
 az logout
 
-#endregion authentication
+#endregion Authentication
 ###############################################################################
 
 ###############################################################################
-#region resources
+#region Resources
 
 # https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
 # https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming-and-tagging-decision-guide
 
-Set-Location -Path "$HOME\repos\ronhowe\powershell\azure"
+$appInsightsName = "appi-ronhowe-0"
+$appName = "app-ronhowe-0"
+$automationAccountName = "aa-ronhowe-0"
+$configStoreName = "appc-ronhowe-0"
+$keyVaultName = "kv-ronhowe-0"
+$location = "eastus2"
+$parametersFile = Resolve-Path -Path "$HOME\repos\ronhowe\code\azure\parameters.json"
+$planName = "asp-ronhowe-0"
+$resourceGroupName = "rg-ronhowe-0"
+$storageAccountName = "stronhowe0"
+$templateFile = Resolve-Path -Path "$HOME\repos\ronhowe\code\azure\template.bicep"
+$workspaceName = "law-ronhowe-0"
 
-$app = "app-rhowe-idso-000"
-$config = "appcs-rhowe-idso-000"
-$insights = "appi-rhowe-idso-000"
-$key = "kv-rhowe-idso-000"
-$location = "eastus"
-$log = "log-rhowe-idso-000"
-$parameters = ".\parameters.0.json"
-$plan = "asp-rhowe-idso-000"
-$resource = "rg-rhowe-idso-000"
-$storage = "strhoweidso000"
+New-AzResourceGroup -Name $resourceGroupName -Location $location -Force -Verbose
+## NOTE: Will prompt for any secure input parameters in the template.
+New-AzResourceGroupDeployment -ResourceGroupName $resourceGroupName -Name (New-Guid) -TemplateFile $templateFile -TemplateParameterFile $parametersFile -Mode Incremental -Force -Verbose
 
-#or
+Get-AzAppConfigurationStore -ResourceGroupName $resourceGroupName -Name $configStoreName
+Get-AzApplicationInsights -ResourceGroupName $resourceGroupName -Name $appInsightsName
+Get-AzAppServicePlan -ResourceGroupName $resourceGroupName -Name $planName
+Get-AzAutomationAccount -ResourceGroupName $resourceGroupName -Name $automationAccountName
+Get-AzKeyVault -ResourceGroupName $resourceGroupName -Name $keyVaultName
+Get-AzOperationalInsightsWorkspace -ResourceGroupName $resourceGroupName -Name $workspaceName
+Get-AzResourceGroup -Name $resourceGroupName
+Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName
+Get-AzWebApp -ResourceGroupName $resourceGroupName -Name $appName
 
-$app = "app-ronhowe-1"
-$config = "appcs-ronhowe-1"
-$insights = "appi-ronhowe-1"
-$key = "kv-ronhowe-1"
-$location = "westus"
-$log = "log-ronhowe-1"
-$parameters = ".\parameters.1.json"
-$plan = "asp-ronhowe-1"
-$resource = "rg-ronhowe-1"
-$storage = "stronhowe1"
+Remove-AzResourceGroup -Name $resourceGroupName -Force -Verbose
 
-New-AzResourceGroup -Name $resource -Location $location -Force -Verbose
-New-AzResourceGroupDeployment -ResourceGroupName $resource -Name (New-Guid) -TemplateFile ".\template.bicep" -TemplateParameterFile $parameters -Mode Incremental -Force -Verbose
-
-Get-AzAppConfigurationStore -ResourceGroupName $resource -Name $config
-Get-AzApplicationInsights -ResourceGroupName $resource -Name $insights
-Get-AzAppServicePlan -ResourceGroupName $resource -Name $plan
-Get-AzKeyVault -ResourceGroupName $resource -Name $key
-Get-AzOperationalInsightsWorkspace -ResourceGroupName $resource -Name $log
-Get-AzResourceGroup -Name $resource
-Get-AzStorageAccount -ResourceGroupName $resource -Name $storage
-Get-AzWebApp -ResourceGroupName $resource -Name $app
-
-Remove-AzResourceGroup -Name $resource -Force -Verbose
-
-#endregion resources
+#endregion Resources
 ###############################################################################
 
 ###############################################################################
-#region managed identity
+#region RBAC
 
-$webApp = Get-AzWebApp -ResourceGroupName $resource -Name $app
+$webApp = Get-AzWebApp -ResourceGroupName $resourceGroupName -Name $appName
 $identity = $webApp.Identity
+$identity
 
-$appConfig = Get-AzAppConfigurationStore -ResourceGroupName $resource -Name $config
-New-AzRoleAssignment -ObjectId $identity.PrincipalId -RoleDefinitionName "App Configuration Data Reader" -Scope $appConfig.Id
+$storageAccount = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName
+New-AzRoleAssignment -ObjectId $identity.PrincipalId -RoleDefinitionName "Storage Table Data Contributor" -Scope $storageAccount.Id
 
-#endregion managed identity
+$appConfigurationStore = Get-AzAppConfigurationStore -ResourceGroupName $resourceGroupName -Name $configStoreName
+New-AzRoleAssignment -ObjectId $identity.PrincipalId -RoleDefinitionName "App Configuration Data Reader" -Scope $appConfigurationStore.Id
+
+#endregion RBAC
 ###############################################################################
 
-# $appInsights = Get-AzApplicationInsights -ResourceGroupName $resource -Name $insights
-# $instrumentationKey = $appInsights.InstrumentationKey
-# $connectionString = $appInsights.ConnectionString
+$applicationInsights = Get-AzApplicationInsights -ResourceGroupName $resourceGroupName -Name $appInsightsName
+$connectionString = $applicationInsights.ConnectionString
+$connectionString
 
 ###############################################################################
-#region settings
+#region Configuration
 
-# https://mohitgoyal.co/2018/02/26/apply-update-application-settings-for-azure-app-service-using-powershell/
+## NOTE: DANAGER!  This wipes out ALL app settings and replaces.
+Set-AzWebApp -ResourceGroupName $resourceGroupName -Name $appName -AppSettings @{ "AppConfig__Endpoint" = "https://$configStoreName.azconfig.io" } -Verbose
+Restart-AzWebApp -ResourceGroupName $resourceGroupName -Name $appName -Verbose
 
-# danger! this wipes out *all* of the app settings and replaces them solely with what is specified here
-Set-AzWebApp -ResourceGroupName $resource -Name $app -AppSettings @{ "AppConfig__Endpoint" = "https://$config.azconfig.io" } -Verbose
-
-Restart-AzWebApp -ResourceGroupName $resource -Name $app -Verbose
-
-# preserve settings by exporting them, modifying them, importing them
-$appSettings = (Get-AzWebApp -ResourceGroupName $resource -Name $app).SiteConfig.AppSettings |
+## NOTE:Preserve settings by exporting, modifying, importin.
+$appSettings = (Get-AzWebApp -ResourceGroupName $resourceGroupName -Name $appName).SiteConfig.AppSettings |
 Sort-Object -Property "Name"
 $appSettings
 
 $newAppSettings = @{}
-foreach ($item in $appSettings) {
-    $newAppSettings[$item.Name] = $item.Value
+foreach ($appSetting in $appSettings) {
+    $newAppSettings[$appSetting.Name] = $appSetting.Value
 }
-$newAppSettings
+$newAppSettings | Format-Table -AutoSize
 
-$newAppSettings.Add("AppConfig__Endpoint", "https://$config.azconfig.io")
+$newAppSettings.Add("AppConfig__Endpoint", "https://$configStoreName.azconfig.io")
+$newAppSettings.Add("Serilog:WriteTo:0:Args:connectionString", $connectionString)
+$newAppSettings.Add("ApplicationInsights", $connectionString)
+$newAppSettings.MyHeader = "$appName"
+$newAppSettings.MyFeature = "false"
+$newAppSettings | Format-Table -AutoSize
 
-$newAppSettings.CustomHeader = "$app"
+Set-AzWebApp -ResourceGroupName $resourceGroupName -Name $appName -AppSettings $newAppSettings
+Restart-AzWebApp -ResourceGroupName $resourceGroupName -Name $appName -Verbose
 
-$newAppSettings.MockService1PermanentExceptionToggle = "false"
-$newAppSettings.MockService1TransientExceptionToggle = "false"
-$newAppSettings.MockService1CpuThrottleToggle = "false"
-$newAppSettings.MockService1CpuThrottleIterations = 0
+Get-AzAppConfigurationKeyValue -Endpoint "https://$configStoreName.azconfig.io"
 
-Set-AzWebApp -ResourceGroupName $resource -Name $app -AppSettings $newAppSettings
+Get-AzAppConfigurationKeyValue -Endpoint "https://$configStoreName.azconfig.io" -Key "Sentinel"
+Set-AzAppConfigurationKeyValue -Endpoint "https://$configStoreName.azconfig.io" -Key "Sentinel" -Value (Get-Date -AsUTC)
 
-#endregion settings
-###############################################################################
+Get-AzAppConfigurationKeyValue -Endpoint "https://$configStoreName.azconfig.io" -Key ".appconfig.featureflag/MyFeature"
+$json = '{"id":"MyFeature","description":"","enabled":false,"conditions":{"client_filters":[]}}'
+Set-AzAppConfigurationKeyValue -Endpoint "https://$configStoreName.azconfig.io" -Key ".appconfig.featureflag/MyFeature" -Value $json -ContentType "application/vnd.microsoft.appconfig.ff+json;charset=utf-8"
 
-###############################################################################
-#region configuration
-
-Set-Location -Path "$HOME\repos\ronhowe\powershell\azure"
-
-az appconfig kv export --name $config --destination file --path .\configuration.json --yes --format json
-
+## TODO: Implement with PowerShell cmdlets if/when they become available for this particular operation.
+az appconfig kv export --name $configStoreName --destination file --path .\configuration.json --yes --format json
 Get-Content -Path .\configuration.json
-code .\configuration.json
+az appconfig kv import --name $configStoreName --source file --path .\configuration.json --yes --format json --import-mode all
 
-az appconfig kv import --name $config --source file --path .\configuration.json --yes --format json --import-mode all
-
-Get-AzAppConfigurationKeyValue -Endpoint "https://appcs-rhowe-idso-000.azconfig.io"
-
-# configuration(s)
-Get-AzAppConfigurationKeyValue -Endpoint "https://appcs-rhowe-idso-000.azconfig.io" -Key "Sentinel"
-Set-AzAppConfigurationKeyValue -Endpoint "https://appcs-rhowe-idso-000.azconfig.io" -Key "Sentinel" -Value (Get-Date -AsUTC)
-
-# feature toggle(s)
-Get-AzAppConfigurationKeyValue -Endpoint "https://appcs-rhowe-idso-000.azconfig.io" -Key ".appconfig.featureflag/MockService1PermanentExceptionToggle"
-
-$json = '{"id":"MockService1PermanentExceptionToggle","description":"","enabled":false,"conditions":{"client_filters":[]}}'
-Set-AzAppConfigurationKeyValue -Endpoint "https://appcs-rhowe-idso-000.azconfig.io" -Key ".appconfig.featureflag/MockService1PermanentExceptionToggle" -Value $json -ContentType "application/vnd.microsoft.appconfig.ff+json;charset=utf-8"
-
-$json = '{"id":"MockService1PermanentExceptionToggle","description":"","enabled":true,"conditions":{"client_filters":[]}}'
-Set-AzAppConfigurationKeyValue -Endpoint "https://appcs-rhowe-idso-000.azconfig.io" -Key ".appconfig.featureflag/MockService1PermanentExceptionToggle" -Value $json -ContentType "application/vnd.microsoft.appconfig.ff+json;charset=utf-8"
-
-# work in progress - trying to do the same as above but with Az PowerShell module (it may not be supported, have seen this before)
-
-# $exportedConfig = Get-AzAppConfigurationKeyValue -Endpoint (Get-Secret -Name "endpoint" -AsPlainText)
-# $exportedConfig | ConvertTo-Json | Out-File -FilePath .\appconfig.json
-
-# $importedConfig = Get-Content -Path .\appconfig.json | ConvertFrom-Json
-# Set-AzAppConfigurationKeyValue -Name $config -InputObject $importedConfig
-
-#endregion configuration
+#endregion Configuration
 ###############################################################################
 
 ###############################################################################
-#region continuous integration
+#region Deployment
 
-Set-Location -Path "$HOME\repos\ronhowe\dotnet"
-dotnet build
-dotnet test
+$codePath = "$HOME\repos\ronhowe\code"
+Remove-Item -Path "$codePath\dotnet\MyWebApplication\bin\Release\net9.0\publish" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
+dotnet publish "$codePath\dotnet\MyWebApplication\MyWebApplication.csproj" -c Release -o $path -v n
+Compress-Archive -Path "$codePath\dotnet\MyWebApplication\bin\Release\net9.0\publish\*" -DestinationPath "$codePath\dotnet\MyWebApplication\bin\Release\net9.0\publish\deploy.zip" -Force -Verbose
+Publish-AzWebApp -ResourceGroupName $resourceGroupName -Name $appName -ArchivePath "$codePath\dotnet\MyWebApplication\bin\Release\net9.0\publish\deploy.zip" -Force -Verbose
 
-#endregion continuous integration
-###############################################################################
-
-###############################################################################
-#region continuous deployment
-
-Get-Service -Name "W3SVC" | Stop-Service -Force -Verbose
-Get-Service -Name "W3SVC" | Start-Service -Verbose
-
-Set-Location -Path "$HOME\repos\ronhowe\dotnet"
-Remove-Item -Path "$HOME\repos\ronhowe\dotnet\WebApplication1\bin\Release\net8.0\publish" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
-dotnet publish
-Set-Location -Path "$HOME\repos\ronhowe\dotnet\WebApplication1\bin\Release\net8.0\publish" -ErrorAction Stop
-Compress-Archive -Path * -DestinationPath ".\deploy.zip" -Force -Verbose
-Publish-AzWebApp -ResourceGroupName $resource -Name $app -ArchivePath ".\deploy.zip" -Force -Verbose
-
-#endregion build and deployment
-###############################################################################
-
-###############################################################################
-#region live tests
-
-Set-Location -Path "$HOME\repos\ronhowe\powershell\api"
-.\Test-Api.ps1 -Name WebApplication1 -Platform AppService
-
-#endregion live tests
+#endregion Deployment
 ###############################################################################
