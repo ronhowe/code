@@ -1,7 +1,10 @@
-#requires -PSEdition Desktop
-
 Configuration HostConfiguration {
     param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string[]]
+        $Nodes,
+    
         [Parameter(Mandatory = $true)]
         [ValidateSet("Present", "Absent")]
         [string]
@@ -30,7 +33,8 @@ Configuration HostConfiguration {
         #     IPAddress      = "192.168.0.1"
         # }
         ## TODO: DSC Support for NAT rule.
-        @("DC-VM", "SQL-VM", "WEB-VM") | ForEach-Object {
+        $Nodes |
+        ForEach-Object {
             xVHD "xVHD$_" {
                 Ensure           = $Ensure
                 Generation       = "VHDX"
@@ -59,7 +63,7 @@ Configuration HostConfiguration {
                     Path               = $Node.WindowsServerIsoPath
                     VMName             = $_
                 }
-                if ($_ -eq "SQL-VM") {
+                if ($_ -like "*SQL*") {
                     xVMDvdDrive "xVMDvdDriveSqlServer$_" {
                         ControllerLocation = 1
                         ControllerNumber   = 1

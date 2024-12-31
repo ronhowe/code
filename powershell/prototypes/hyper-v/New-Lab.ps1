@@ -1,34 +1,22 @@
-#requires -RunAsAdministrator
-#requires -PSEdition Desktop
+[CmdletBinding()]
+param(
+    [ValidateNotNullOrEmpty()]
+    [string[]]
+    $Nodes
+)
+begin {
+    Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
 
-Set-Location -Path $PSScriptRoot
+    Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
+    Select-Object -Property @("Name", "Value") |
+    ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
+}
+process {
+    Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-$AdministratorCredential = Get-Credential -Message "Enter Administrator Credential" -UserName "Administrator"
-
-$ComputerNames = @("DC-VM", "SQL-VM", "WEB-VM")
-
-.\Install-HostDependencies.ps1
-
-.\Import-HostDependencies.ps1
-
-.\Invoke-HostConfiguration.ps1 -Ensure "Present" -Wait
-
-$ComputerNames | Start-VM
-
-$ComputerNames | ForEach-Object { Start-Process -FilePath "vmconnect.exe" -ArgumentList @("localhost", $_) }
-
-Read-Host "Hit Enter after completing the operating system installation on all lab virtual machines"
-
-# $ComputerNames | Checkpoint-VM -SnapshotName "OOBE"
-
-$ComputerNames | .\Rename-Guest.ps1 -AdministratorCredential $AdministratorCredential
-
-$ComputerNames | .\Initialize-Guest.ps1 -AdministratorCredential $AdministratorCredential
-
-$ComputerNames | .\Install-GuestDependencies.ps1 -Credential $AdministratorCredential -PfxPath ".\DscPrivateKey.pfx" -PfxPassword $AdministratorCredential.Password
-
-$ComputerNames | .\Invoke-GuestConfiguration.ps1 -Credential $AdministratorCredential
-
-.\Wait-GuestConfiguration.ps1 -ComputerName $ComputerNames -Credential $AdministratorCredential -RetryInterval 3
-
-.\Test-Lab.ps1
+    Write-Verbose "Invoking Host Configuration"
+    & "$PSScriptRoot\Invoke-HostConfiguration.ps1" -Nodes $Nodes -Ensure "Present" -Wait
+}
+end {
+    Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
+}

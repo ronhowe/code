@@ -1,5 +1,3 @@
-#requires -PSEdition Desktop
-
 [CmdletBinding()]
 param (
     [Parameter(Mandatory = $true, ValueFromPipeline = $true)]

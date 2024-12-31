@@ -1,8 +1,10 @@
-#requires -RunAsAdministrator
-#requires -PSEdition Desktop
-
 [CmdletBinding()]
 param(
+    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+    [ValidateNotNullOrEmpty()]
+    [string[]]
+    $Nodes,
+
     [Parameter(Mandatory = $true)]
     [ValidateSet("Present", "Absent")]
     [string]
@@ -12,16 +14,25 @@ param(
     $Wait
 )
 begin {
+    Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
+
+    Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
+    Select-Object -Property @("Name", "Value") |
+    ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
 }
 process {
-    Write-Output "Importing Host Configuration"
-    . ".\HostConfiguration.ps1"
+    Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-    Write-Output "Compiling Host Configuration"
-    HostConfiguration -ConfigurationData ".\HostConfiguration.psd1" -Ensure $Ensure -OutputPath "$env:TEMP\HostConfiguration" | Out-Null
+    Write-Verbose "Importing Host Configuration"
+    . "$PSScriptRoot\HostConfiguration.ps1"
 
-    Write-Output "Starting Host Configuration"
+    Write-Verbose "Compiling Host Configuration"
+    HostConfiguration -ConfigurationData "$PSScriptRoot\HostConfiguration.psd1" -Nodes $Nodes -Ensure $Ensure -OutputPath "$env:TEMP\HostConfiguration" |
+    Out-Null
+
+    Write-Verbose "Starting Host Configuration"
     Start-DscConfiguration -Path "$env:TEMP\HostConfiguration" -Force -Wait:$Wait
 }
 end {
+    Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
 }

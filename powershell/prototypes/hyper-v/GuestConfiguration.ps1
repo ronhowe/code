@@ -1,5 +1,3 @@
-#requires -PSEdition Desktop
-
 Configuration GuestConfiguration {
     param(
         [Parameter(Mandatory = $true)]

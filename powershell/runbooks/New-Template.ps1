@@ -1,5 +1,20 @@
 [CmdletBinding()]
 param(
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
+    [ValidateScript({ Test-Path -Path $_ })]
+    [string]
+    $Path,
+
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullorEmpty()]
+    [string[]]
+    $ComputerName,
+
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullorEmpty()]
+    [pscredential]
+    $Credential
 )
 begin {
     Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
@@ -11,7 +26,8 @@ begin {
 process {
     Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-    ## TODO: Insert code here.
+    Write-Verbose "Doing Something"
+    ## TODO: Do Something
 }
 end {
     Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"

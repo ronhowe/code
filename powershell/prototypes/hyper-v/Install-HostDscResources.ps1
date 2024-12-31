@@ -1,9 +1,5 @@
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-    [ValidateNotNullOrEmpty()]
-    [string[]]
-    $Nodes
 )
 begin {
     Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
@@ -15,12 +11,19 @@ begin {
 process {
     Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-    Write-Verbose "Stopping Virtual Machines"
-    $Nodes |
-    Stop-VM -TurnOff -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
-
-    Write-Verbose "Invoking Host Configuration"
-    & "$PSScriptRoot\Invoke-HostConfiguration.ps1" -Nodes $Nodes -Ensure "Absent" -Wait
+    Write-Verbose "Installing Dsc Resources"
+    @(
+        "ActiveDirectoryCSDsc",
+        "ActiveDirectoryDsc",
+        "ComputerManagementDsc",
+        "NetworkingDsc",
+        "SqlServerDsc",
+        "xHyper-V"
+    ) |
+    ForEach-Object {
+        Write-Verbose "Installing Dsc Resource $_"
+        Install-Module -Name $_ -Repository "PSGallery" -Scope AllUsers -Force
+    }
 }
 end {
     Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
