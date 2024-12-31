@@ -42,6 +42,10 @@ function Import-ShellConfiguration {
             Write-Error "Import Failed Because $($_.Exception.Message)"
         }
 
+        Write-Verbose "Importing Azure Configuration"
+        Import-ShellAzureConfiguration |
+        Out-Null
+
         Write-Verbose "Returning Shell Configuration"
         return $global:ShellConfig
     }
