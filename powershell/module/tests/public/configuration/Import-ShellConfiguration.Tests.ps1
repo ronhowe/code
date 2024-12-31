@@ -31,6 +31,7 @@ Describe "Import-ShellConfiguration Tests" {
         (Import-ShellConfiguration -Path "$PSScriptRoot\MockPowerConfiguration.json").SubscriptionId |
         Should -Be "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"
     }
+    ## TODO: Assert mock Azure configurations.
     afterall{
         Import-ShellConfiguration
     }
