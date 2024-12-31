@@ -1,9 +1,17 @@
-function Remove-AzureResourceGroup {
+function Remove-AzureKeyVault {
     [CmdletBinding()]
     param(
         [ValidateNotNullOrEmpty()]
         [string]
-        $ResourceGroupName = $ShellConfig.ResourceGroupName
+        $ResourceGroupName = $ShellConfig.ResourceGroupName,
+
+        [ValidateNotNullOrEmpty()]
+        [string]
+        $Location = $ShellConfig.Location,
+
+        [ValidateNotNullOrEmpty()]
+        [string]
+        $KeyVaultName = $ShellConfig.KeyVaultName
     )
     begin {
         Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
@@ -16,8 +24,11 @@ function Remove-AzureResourceGroup {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
         try {
-            Write-Verbose "Removing Azure Resource Group ; Please Wait"
-            Remove-AzResourceGroup -Name $ResourceGroupName -Force
+            Write-Verbose "Removing Azure Key Vault ; Please Wait"
+            Remove-AzKeyVault -VaultName $KeyVaultName -Location $Location -ResourceGroupName $ResourceGroupName -Force
+
+            Write-Verbose "Purging Azure Key Vault ; Please Wait"
+            Remove-AzKeyVault -VaultName $KeyVaultName -Location $Location -InRemovedState -Force
         }
         catch {
             Write-Error "Removal Failed Because $($_.Exception.Message)"

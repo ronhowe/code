@@ -24,7 +24,7 @@ function New-AzureResourceGroupDeployment {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
         try {
-            Write-Verbose "Adding Azure Resource Group Deployment"
+            Write-Verbose "Adding Azure Resource Group Deployment ; Please Wait"
             $parameters = @{
                 ResourceGroupName     = $ResourceGroupName
                 Location              = $Location

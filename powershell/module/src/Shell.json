@@ -7,8 +7,10 @@
     "ResourceGroupName": "default",
     "Location": "default",
     "DeploymentName": "default",
-    "StorageAccountName": "default",
-    "FileShareName": "default",
     "AppConfigurationName": "default",
-    "DriveLetter": "Z"
+    "AutomationAccountName": "default",
+    "DriveLetter": "Z",
+    "FileShareName": "default",
+    "KeyVaultName": "default",
+    "StorageAccountName": "default"
 }

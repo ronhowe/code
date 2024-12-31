@@ -1,9 +1,13 @@
-function Remove-AzureResourceGroup {
+function Remove-AzureAutomationAccount {
     [CmdletBinding()]
     param(
         [ValidateNotNullOrEmpty()]
         [string]
-        $ResourceGroupName = $ShellConfig.ResourceGroupName
+        $ResourceGroupName = $ShellConfig.ResourceGroupName,
+
+        [ValidateNotNullOrEmpty()]
+        [string]
+        $AutomationAccountName = $ShellConfig.AutomationAccountName
     )
     begin {
         Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
@@ -16,8 +20,8 @@ function Remove-AzureResourceGroup {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
         try {
-            Write-Verbose "Removing Azure Resource Group ; Please Wait"
-            Remove-AzResourceGroup -Name $ResourceGroupName -Force
+            Write-Verbose "Removing Azure Automation Account ; Please Wait"
+            Remove-AzAutomationAccount -ResourceGroupName $ResourceGroupName -Name $AutomationAccountName -Force
         }
         catch {
             Write-Error "Removal Failed Because $($_.Exception.Message)"
