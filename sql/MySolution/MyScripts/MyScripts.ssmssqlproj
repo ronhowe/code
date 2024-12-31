@@ -49,6 +49,12 @@
           <AssociatedConnUserName />
           <FullPath>Debug-Performance.sql</FullPath>
         </FileNode>
+        <FileNode Name="Debug-Permissions.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Debug-Permissions.sql</FullPath>
+        </FileNode>
         <FileNode Name="Drop-MyDatabase.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
