@@ -1,37 +1,42 @@
-
-<#
-    .SYNOPSIS
-    This script copies local Holotable repo files to the installed Holotable client location.
-
-    .DESCRIPTION
-    This script copies local Holotable repo files to the installed Holotable client location.
-
-    .PARAMETER $Path
-    The path to the local Holotable repo.
-
-    .PARAMETER $IncludeImages
-    Whether or not to copy the image files.
-#>
 [CmdletBinding()]
 param(
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [ValidateScript({ Test-Path -Path $_ })]
     [string]
-    $Path = "~\repos\ronhowe\powershell\holotable",
+    $SourceCdfPath = "$HOME\repos\ronhowe\code\powershell\prototypes\holotable",
+
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [ValidateScript({ Test-Path -Path $_ })]
+    [string]
+    $TargetCdfPath = $env:HOLOTABLE_PATH,
 
     [switch]
     $IncludeImages
 )
+begin {
+    Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
 
-if (-not (Test-Path -Path $Path)) {
-    Write-Error "Cannot find $Path." -ErrorAction Stop
+    Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
+    Select-Object -Property @("Name", "Value") |
+    ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
 }
+process {
+    Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-if (-not (Test-Path -Path $env:HOLOTABLE_PATH)) {
-    Write-Error "Cannot find HOLOTABLE_PATH environment variable or path." -ErrorAction Stop
+    $ErrorActionPreference = "Stop"
+
+    Write-Verbose "Copying Card Definitions"
+    Copy-Item -Path (Join-Path -Path $Path -ChildPath "*.cdf") -Destination $TargetCdfPath -Force -PassThru
+
+    ## NOTE: Only needed if file hashes are incorrect.
+    Write-Verbose "Asserting Include Images Switch"
+    if ($IncludeImages) {
+        Write-Verbose "Copying Card Images"
+        Copy-Item -Path (Join-Path -Path $Path -ChildPath "Images-HT\starwars") -Destination (Join-Path -Path $TargetCdfPath -ChildPath "cards") -Recurse -Force -PassThru
+    }
 }
-
-Copy-Item -Path (Join-Path -Path $Path -ChildPath "*.cdf") -Destination $env:HOLOTABLE_PATH -Force -PassThru
-
-# Only needed if file hashes are incorrect.
-if ($IncludeImages) {
-    Copy-Item -Path (Join-Path -Path $Path -ChildPath "Images-HT\starwars") -Destination (Join-Path -Path $env:HOLOTABLE_PATH -ChildPath "cards") -Recurse -Force -PassThru
+end {
+    Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
 }

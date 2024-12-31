@@ -1,6 +1,23 @@
-#requires -PSEdition Core
 [CmdletBinding()]
 param(
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [ValidateScript({ Test-Path -Path $_ })]
+    [string]
+    $SourceCdfPath = "$HOME\repos\ronhowe\holotable",
+
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [ValidateScript({ Test-Path -Path $_ })]
+    [string]
+    $SourceJsonPath = "$HOME\repos\ronhowe\swccg-card-json",
+
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [ValidateScript({ Test-Path -Path $_ })]
+    [string]
+    $TargetCdfPath = "$HOME\repos\ronhowe\code\powershell\prototypes\holotable"
+
 )
 begin {
     Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
@@ -12,75 +29,83 @@ begin {
 process {
     Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-    Import-Module -Name "$HOME\repos\ronhowe\code\powershell\prototypes\holotable\Holotable.psm1" -Force
+    $ErrorActionPreference = "Stop"
 
-    # $vscodePath = "C:\Users\ronhowe\AppData\Local\Programs\Microsoft VS Code\Code.exe"
+    Import-Module -Name "$PSScriptRoot\Holotable.psm1" -Force
 
     Write-Verbose "Exporting Dark Side CDF"
     $parameters = @{
-        JsonPath       = "$HOME\repos\ronhowe\swccg-card-json\Dark.json"
-        JsonLegacyPath = "$HOME\repos\ronhowe\swccg-card-json\DarkLegacy.json"
-        JsonSetsPath   = "$HOME\repos\ronhowe\swccg-card-json\sets.json"
-        CdfPath        = "$HOME\repos\ronhowe\code\powershell\prototypes\holotable\darkside.cdf"
-        # IdFilter       = 634 # Darth Vader (Premiere)
-        # SetFilter      = "*17*"
-        # TitleFilter    = "*Darth Vader*"
-        # TypeFilter     = "Objective"
+        JsonPath       = "$SourceJsonPath\Dark.json"
+        JsonLegacyPath = "$SourceJsonPath\DarkLegacy.json"
+        JsonSetsPath   = "$SourceJsonPath\sets.json"
+        CdfPath        = "$TargetCdfPath\darkside.cdf"
     }
     Export-Cdf @parameters
-
-    Write-Verbose "Diffing Dark Side CDF"
-    $parameters = @{
-        Path         = "code"
-        ArgumentList = @(
-            "--diff",
-            (Resolve-Path -Path "$HOME\repos\ronhowe\holotable\darkside.cdf"),
-            (Resolve-Path -Path "$HOME\repos\ronhowe\code\powershell\prototypes\holotable\darkside.cdf")
-        )
-        NoNewWindow  = $true
-        Wait         = $true
-    }
-    Start-Process @parameters
 
     Write-Verbose "Exporting Light Side CDF"
     $parameters = @{
-        JsonPath       = "$HOME\repos\ronhowe\swccg-card-json\Light.json"
-        JsonLegacyPath = "$HOME\repos\ronhowe\swccg-card-json\LightLegacy.json"
-        JsonSetsPath   = "$HOME\repos\ronhowe\swccg-card-json\sets.json"
-        CdfPath        = "$HOME\repos\ronhowe\code\powershell\prototypes\holotable\Lightside.cdf"
-        # IdFilter       = 1593 # Luke Skywalker (Premiere)
-        # SetFilter      = "*17*"
-        # TitleFilter    = "*Luke Skywalker*"
-        # TypeFilter     = "Objective"
+        JsonPath       = "$SourceJsonPath\Light.json"
+        JsonLegacyPath = "$SourceJsonPath\LightLegacy.json"
+        JsonSetsPath   = "$SourceJsonPath\sets.json"
+        CdfPath        = "$TargetCdfPath\lightside.cdf"
     }
     Export-Cdf @parameters
 
-    Write-Verbose "Diffing Light Side CDF"
-    $parameters = @{
-        Path         = "code"
-        ArgumentList = @(
-            "--diff",
-            (Resolve-Path -Path "$HOME\repos\ronhowe\holotable\lightside.cdf"),
-            (Resolve-Path -Path "$HOME\repos\ronhowe\code\powershell\prototypes\holotable\lightside.cdf")
-        )
-        NoNewWindow  = $true
-        Wait         = $true
+    Write-Verbose "Asserting Visual Studio Code Exists"
+    if (Get-Command -Name "code" -ErrorAction SilentlyContinue) {
+        Write-Verbose "Diffing Dark Side CDF"
+        $parameters = @{
+            Path         = "code"
+            ArgumentList = @(
+                "--diff",
+            (Resolve-Path -Path "$SourceCdfPath\darkside.cdf"),
+            (Resolve-Path -Path "$TargetCdfPath\darkside.cdf")
+            )
+            NoNewWindow  = $true
+            Wait         = $true
+        }
+        Start-Process @parameters
+
+        Write-Verbose "Diffing Light Side CDF"
+        $parameters = @{
+            Path         = "code"
+            ArgumentList = @(
+                "--diff",
+            (Resolve-Path -Path "$SourceCdfPath\lightside.cdf"),
+            (Resolve-Path -Path "$TargetCdfPath\lightside.cdf")
+            )
+            NoNewWindow  = $true
+            Wait         = $true
+        }
+        Start-Process @parameters
     }
-    Start-Process @parameters
+    else {
+        Write-Error "Visual Studio Code Not Found"
+    }
 
-    Write-Verbose "Getting Dark Side Statistics..."
-    Get-Content -Path "$HOME\repos\ronhowe\swccg-card-json\Dark.json" |
+    Write-Verbose "Getting Dark Side JSON Statistics"
+    Get-Content -Path "$SourceJsonPath\Dark.json" |
     ConvertFrom-Json |
     Select-Object -ExpandProperty "cards" |
-    Measure-Object -Property id -Minimum -Maximum |
-    Select-Object -Property @{Name = "Side"; Expression = { "Dark" } }, @{Name = "Total Cards"; Expression = { $_.Count } }, @{Name = "Minimum Id"; Expression = { $_.Minimum } }, @{Name = "Maximum Id"; Expression = { $_.Maximum } }
+    Measure-Object -Property "id" -Minimum -Maximum |
+    Select-Object -Property @(
+        @{Name = "Side"; Expression = { "Dark" } },
+        @{Name = "Total Cards"; Expression = { $_.Count } },
+        @{Name = "Minimum Id"; Expression = { $_.Minimum } },
+        @{Name = "Maximum Id"; Expression = { $_.Maximum } }
+    )
 
-    Write-Verbose "Getting Light Side Statistics..."
-    Get-Content -Path "$HOME\repos\ronhowe\swccg-card-json\Light.json" |
+    Write-Verbose "Getting Light Side JSON Statistics"
+    Get-Content -Path "$SourceJsonPath\Light.json" |
     ConvertFrom-Json |
     Select-Object -ExpandProperty "cards" |
-    Measure-Object -Property id -Minimum -Maximum |
-    Select-Object -Property @{Name = "Side"; Expression = { "Light" } }, @{Name = "Total Cards"; Expression = { $_.Count } }, @{Name = "Minimum Id"; Expression = { $_.Minimum } }, @{Name = "Maximum Id"; Expression = { $_.Maximum } }
+    Measure-Object -Property "id" -Minimum -Maximum |
+    Select-Object -Property @(
+        @{Name = "Side"; Expression = { "Light" } },
+        @{Name = "Total Cards"; Expression = { $_.Count } },
+        @{Name = "Minimum Id"; Expression = { $_.Minimum } },
+        @{Name = "Maximum Id"; Expression = { $_.Maximum } }
+    )
 }
 end {
     Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
