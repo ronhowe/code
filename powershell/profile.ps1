@@ -67,6 +67,15 @@ process {
     #     Write-Warning "Skipping Microsoft.PowerShell.SecretStore Module"
     # }
 
+    Write-Verbose "Asserting PackageManagement Module Exists"
+    if (Get-Module -Name "PackageManagement" -ListAvailable) {
+        Write-Verbose "Importing PackageManagement"
+        Import-Module -Name "PackageManagement" -Verbose:$false
+    }
+    else {
+        Write-Warning "Skipping PackageManagement Module"
+    }
+
     ## NOTE: Loaded by usual hosts automatically.  Importing intentionally just for clarity.
     Write-Verbose "Asserting Pester Module Exists"
     if (Get-Module -Name "Pester" -ListAvailable) {

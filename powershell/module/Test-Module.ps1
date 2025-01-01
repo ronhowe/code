@@ -13,7 +13,8 @@ process {
     Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
     Write-Verbose "Importing Module"
-    Import-Module -Name "$PSScriptRoot\bin\Shell" -Global -Force
+    Import-Module -Name "$PSScriptRoot\bin\Shell" -Global -Force -Verbose:$false 4>&1 |
+    Out-Null
 
     ## TODO: Remove \module\ such as to include \dependencies\ Pester tests?
     Get-ChildItem -Path "$PSScriptRoot\tests\*.Tests.ps1" -Recurse |

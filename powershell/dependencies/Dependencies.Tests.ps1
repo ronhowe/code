@@ -25,7 +25,7 @@ Describe "Dependency Tests" {
     $(
         (Import-PowerShellDataFile -Path "$PSScriptRoot\Dependencies.psd1").Modules
     ) {
-        Get-Module -FullyQualifiedName @{ ModuleName = $Name ; RequiredVersion = $Version } -ListAvailable |
+        Get-Module -FullyQualifiedName @{ ModuleName = $Name ; RequiredVersion = $Version } -ListAvailable -Verbose:$false |
         Should -Not -BeNullOrEmpty
     }
 }

@@ -17,6 +17,18 @@ process {
 
     $ErrorActionPreference = "Stop"
 
+    Write-Verbose "Importing Configuration Module"
+    Import-Module -Name "Configuration" -Verbose:$false 4>&1 |
+    Out-Null
+
+    Write-Verbose "Importing Metadata Module"
+    Import-Module -Name "Metadata" -Verbose:$false 4>&1 |
+    Out-Null
+
+    Write-Verbose "Importing ModuleBuilder Module"
+    Import-Module -Name "ModuleBuilder" -Verbose:$false 4>&1 |
+    Out-Null
+
     Write-Verbose "Removing Output"
     Remove-Item -Path "$PSScriptRoot\bin" -Recurse -Force -ErrorAction SilentlyContinue
 
@@ -39,7 +51,8 @@ process {
         Verbose                    = $false
         Version                    = $Version
     }
-    Build-Module @parameters
+    Build-Module @parameters 4>&1 |
+    Out-Null
 }
 end {
     Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
