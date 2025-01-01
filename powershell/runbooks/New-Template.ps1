@@ -6,7 +6,7 @@ param(
     [string]
     $Path,
 
-    [Parameter(Mandatory = $true)]
+    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
     [ValidateNotNullorEmpty()]
     [string[]]
     $ComputerName,
@@ -26,8 +26,16 @@ begin {
 process {
     Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-    Write-Verbose "Doing Something"
-    ## TODO: Do Something
+    foreach ($computer in $ComputerName) {
+        Write-Verbose "Doing Something To $computer"
+        ## TODO: Do Something
+
+        Write-Verbose "Splatting Something On $computer"
+        $parameters = @{
+            Message = "Splat Something"
+        }
+        Write-Verbose @parameters
+    }
 }
 end {
     Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"

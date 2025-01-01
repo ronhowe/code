@@ -12,7 +12,7 @@ function Debug-ValueFromPipeline {
         Select-Object -Property @("Name", "Value") |
         ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
     }
-    ## NOTE: process{} blocks not supported in Azure Automation runbooks.
+    ## NOTE: process{} blocks not supported in Azure Automation runbooks for initial pipeline input.
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
