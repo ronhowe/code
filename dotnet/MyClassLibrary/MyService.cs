@@ -51,8 +51,17 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
             throw;
         }
 
-        logger.LogInformation("Saving Input To Repository");
-        await repository.SaveAsync(myInput);
+        if ((bool)_myFeature)
+        {
+            logger.LogInformation("Saving Enabled");
+
+            logger.LogInformation("Saving Input To Repository");
+            await repository.SaveAsync(myInput);
+        }
+        else
+        {
+            logger.LogInformation("Saving Disabled");
+        }
 
         logger.LogInformation("Returning {result}", myInput);
 
