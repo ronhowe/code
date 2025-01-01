@@ -198,9 +198,59 @@ Configuration GuestDsc {
         Log PowerOnSelfTest {
             Message = "Power-On Self-Test LAB-WEB-00"
         }
-        WindowsFeature "InstallWebServer" {
+        WindowsFeature "InstallWeb-Asp-Net45" {
+            Name   = "Web-Asp-Net45"
             Ensure = "Present"
-            Name   = "Web-Server"
+        }
+        WindowsFeature "InstallWeb-Server" {
+            Name      = "Web-Server"
+            Ensure    = "Present"
+            DependsOn = "[WindowsFeature]InstallWeb-Asp-Net45"
+        }
+        WindowsFeature "InstallWeb-Http-Errors" {
+            Name      = "Web-Http-Errors"
+            Ensure    = "Present"
+            DependsOn = "[WindowsFeature]InstallWeb-Server"
+        }
+        WindowsFeature "InstallWeb-Static-Content" {
+            Name      = "Web-Static-Content"
+            Ensure    = "Present"
+            DependsOn = "[WindowsFeature]InstallWeb-Server"
+        }
+        WindowsFeature "InstallWeb-Mgmt-Tools" {
+            Name      = "Web-Mgmt-Tools"
+            Ensure    = "Present"
+            DependsOn = "[WindowsFeature]InstallWeb-Server"
+        }
+        WindowsFeature "InstallWeb-Common-Http" {
+            Name      = "Web-Common-Http"
+            Ensure    = "Present"
+            DependsOn = "[WindowsFeature]InstallWeb-Server"
+        }
+        WindowsFeature "InstallWeb-Http-Logging" {
+            Name      = "Web-Http-Logging"
+            Ensure    = "Present"
+            DependsOn = "[WindowsFeature]InstallWeb-Server"
+        }
+        WindowsFeature "InstallWeb-Log-Libraries" {
+            Name      = "Web-Log-Libraries"
+            Ensure    = "Present"
+            DependsOn = "[WindowsFeature]InstallWeb-Server"
+        }
+        WindowsFeature "InstallWeb-Request-Monitor" {
+            Name      = "Web-Request-Monitor"
+            Ensure    = "Present"
+            DependsOn = "[WindowsFeature]InstallWeb-Server"
+        }
+        WindowsFeature "InstallWeb-Http-Tracing" {
+            Name      = "Web-Http-Tracing"
+            Ensure    = "Present"
+            DependsOn = "[WindowsFeature]InstallWeb-Server"
+        }
+        WindowsFeature "InstallWeb-Security" {
+            Name      = "Web-Security"
+            Ensure    = "Present"
+            DependsOn = "[WindowsFeature]InstallWeb-Server"
         }
     }
 }
