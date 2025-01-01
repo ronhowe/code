@@ -212,6 +212,11 @@ Configuration GuestDsc {
             Ensure    = "Present"
             DependsOn = "[WindowsFeature]InstallWeb-Asp-Net45"
         }
+        WindowsFeature "InstallWeb-Mgmt-Service" {
+            Name      = "Web-Mgmt-Service"
+            Ensure    = "Present"
+            DependsOn = "[WindowsFeature]InstallWeb-Server"
+        }
         WindowsFeature "InstallWeb-Http-Errors" {
             Name      = "Web-Http-Errors"
             Ensure    = "Present"

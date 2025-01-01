@@ -13,6 +13,7 @@ public sealed class MyLiveTests : TestBase
     [TestMethod]
     [TestCategory("LiveTest")]
     [DataTestMethod]
+    [DataRow("https://localhost:443/healthcheck", "MyHeader (Production)", HttpStatusCode.OK)]
     [DataRow("https://lab-web-00:443/healthcheck", "MyHeader (Production)", HttpStatusCode.OK)]
     [DataRow("https://app-ronhowe-0.azurewebsites.net:443/healthcheck", "MyHeader (Production)", HttpStatusCode.OK)]
     public void LiveSiteTests(string uriString, string headerValue, HttpStatusCode httpStatusCode)
@@ -33,7 +34,7 @@ public sealed class MyLiveTests : TestBase
 
         HttpClientHandler handler = new()
         {
-            // NOTE: Needed for localhost and lab environments.
+            // NOTE: Needed for localhost and lab environments with untrusted, self-signed certificates.
             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         };
 

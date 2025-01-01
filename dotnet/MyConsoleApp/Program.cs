@@ -53,7 +53,13 @@ public class Program
 
         while (true)
         {
-            HttpClient client = new();
+            HttpClientHandler handler = new()
+            {
+                // NOTE: Needed for localhost and lab environments with untrusted, self-signed certificates.
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            using HttpClient client = new(handler);
 
             stopwatch.Start();
 

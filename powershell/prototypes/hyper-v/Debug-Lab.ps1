@@ -110,3 +110,5 @@ Invoke-Command -ComputerName $nodes -Credential $credential -FilePath ".\powersh
 
 ## NOTE: Install-WebDeploy is idempotent.
 Invoke-Command -ComputerName $nodes -Credential $credential -FilePath ".\powershell\runbooks\Install-WebDeploy.ps1"
+
+Invoke-Command -ComputerName $nodes -Credential $credential -FilePath ".\powershell\runbooks\Install-NetCoreHostingBundle.ps1"

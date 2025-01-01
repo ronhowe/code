@@ -3,12 +3,12 @@ param(
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $Msi = "webdeploy_amd64_en-US.msi",
+    $Msi = "dotnet-hosting-9.0.0-win.exe",
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $Source = "https://download.microsoft.com/download/b/d/8/bd882ec4-12e0-481a-9b32-0fae8e3c0b78/webdeploy_amd64_en-US.msi",
+    $Source = "https://download.visualstudio.microsoft.com/download/pr/e1ae9d41-3faf-4755-ac27-b24e84eef3d1/5e3a24eb8c1a12272ea1fe126d17dfca/dotnet-hosting-9.0.0-win.exe",
 
     [switch]
     $Cleanup
@@ -49,7 +49,8 @@ process {
         WorkingDirectory = $env:TEMP
     }
     Write-Debug "`$parameters = $($parameters | Out-String)"
-    Start-Process @parameters
+    Write-Warning "Downloaded ; Not Installed" -WarningAction Continue
+    # Start-Process @parameters
 
     if ($Cleanup) {
         Write-Verbose "Removing Installer"
