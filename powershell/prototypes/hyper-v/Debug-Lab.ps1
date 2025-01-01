@@ -112,3 +112,8 @@ Invoke-Command -ComputerName $nodes -Credential $credential -FilePath ".\powersh
 Invoke-Command -ComputerName $nodes -Credential $credential -FilePath ".\powershell\runbooks\Install-WebDeploy.ps1"
 
 Invoke-Command -ComputerName $nodes -Credential $credential -FilePath ".\powershell\runbooks\Install-NetCoreHostingBundle.ps1"
+
+## TODO: Refactor into GuestDsc.  Enables Web Management Service for publishing web applications.
+$port = 8172
+New-NetFirewallRule -DisplayName "Allow TCP Inbound Port $port - Domain" -Direction Inbound -Protocol TCP -LocalPort $port -Action Allow -Profile Domain
+New-NetFirewallRule -DisplayName "Allow TCP Inbound Port $port - Private" -Direction Inbound -Protocol TCP -LocalPort $port -Action Allow -Profile Private
