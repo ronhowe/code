@@ -3,7 +3,7 @@
 param(
     [ValidateNotNullOrEmpty()]
     [string]
-    $Version = "0.0.0"
+    $Version = $((Get-Date).ToString("yyyy.MM.dd.hhmm"))
 )
 begin {
     Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"

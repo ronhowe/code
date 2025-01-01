@@ -1,10 +1,9 @@
-function New-Lab {
+function Get-MyService {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [ValidateNotNullOrEmpty()]
-        [string[]]
-        $Nodes
+        [Parameter(Mandatory = $true)]
+        [boolean]
+        $MyInput
     )
     begin {
         Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
@@ -16,8 +15,8 @@ function New-Lab {
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-        Write-Verbose "Invoking Host Dsc Ensuring Present"
-        Invoke-HostDsc -Nodes $Nodes -Ensure "Present" -Wait
+        Write-Verbose "Returning $MyInput"
+        return $MyInput
     }
     end {
         Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"

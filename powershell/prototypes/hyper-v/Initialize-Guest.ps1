@@ -1,67 +1,161 @@
-#requires -RunAsAdministrator
-#requires -PSEdition Desktop
+function Initialize-Guest {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string[]]
+        $Nodes,
 
-[CmdletBinding()]
-param(
-    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-    [ValidateNotNullorEmpty()]
-    [string[]]
-    $ComputerName,
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullorEmpty()]
+        [pscredential]
+        $Credential
+    )
+    begin {
+        Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
+    
+        Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
+        Select-Object -Property @("Name", "Value") |
+        ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
+    }
+    process {
+        Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-    [Parameter(Mandatory = $true)]
-    [ValidateNotNullorEmpty()]
-    [PSCredential]
-    $AdministratorCredential
-)
-begin {
-}
-process {
-    $ScriptBlock = {
-        [CmdletBinding()]
-        param(
-            [ValidateNotNullorEmpty()]
-            [PSCredential]
-            $AdministratorCredential
-        )
-        begin {
-        }
-        process {
-            Write-Output "Enabling Administrator Account on $env:COMPUTERNAME"
-            Enable-LocalUser -Name "Administrator"
+        $scriptBlock = {
+            [CmdletBinding()]
+            param(
+                [Parameter(Mandatory = $true)]
+                [ValidateNotNullorEmpty()]
+                [pscredential]
+                $Credential,
 
-            Write-Output "Setting Administrator Account Password on $env:COMPUTERNAME"
-            Set-LocalUser -Name "Administrator" -Password $AdministratorCredential.Password
+                [Parameter(Mandatory = $false)]
+                [ValidateSet("Continue", "SilentlyContinue")]
+                [string]
+                $ScriptBlockVerbosePreference = "SilentlyContinue",
 
-            # Write-Output "Setting Network Profile to Private on $env:COMPUTERNAME"
-            # Get-NetAdapter -Name "Ethernet" | Set-NetConnectionProfile -NetworkCategory Private
+                [Parameter(Mandatory = $false)]
+                [ValidateNotNullorEmpty()]
+                [string]
+                $GatewayIpAddress = "192.168.0.1",
 
-            Write-Output "Enabling WinRM on $env:COMPUTERNAME"
-            Start-Process -FilePath "winrm" -ArgumentList @("quickconfig", "-force")
+                [Parameter(Mandatory = $false)]
+                [ValidateNotNullorEmpty()]
+                [string]
+                $PrefixLength = "24",
 
-            Write-Output "Setting Execution Policy to Unrestricted on $env:COMPUTERNAME"
-            Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope LocalMachine -Force
+                [Parameter(Mandatory = $false)]
+                [ValidateNotNullorEmpty()]
+                [string]
+                $PrimaryDnsIpAddress = "192.168.1.1"
+            )
+            begin {
+                $VerbosePreference = $ScriptBlockVerbosePreference
 
-            Write-Output "Setting Static IP Configuration on $env:COMPUTERNAME"
-            $IpAddress =
-            switch ($env:COMPUTERNAME) {
-                "DC-VM" { "192.168.0.10" }
-                "SQL-VM" { "192.168.0.20" }
-                "WEB-VM" { "192.168.0.30" }
-                default { throw }
+                Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
+
+                Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
+                Select-Object -Property @("Name", "Value") |
+                ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
             }
-            $InterfaceIndex = $(Get-NetAdapter -Name "Ethernet").ifIndex
-            Remove-NetIPAddress -InterfaceIndex $InterfaceIndex -Confirm:$false
-            Remove-NetRoute -InterfaceIndex $InterfaceIndex -Confirm:$false
-            New-NetIPAddress -IPAddress $IpAddress -AddressFamily IPv4 -PrefixLength "24" -InterfaceIndex $InterfaceIndex -DefaultGateway "192.168.0.1" | Out-Null
-            Set-DnsClientServerAddress -InterfaceIndex $InterfaceIndex -ServerAddresses ("192.168.1.1") | Out-Null
+            process {
+                Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
+
+                $ErrorActionPreference = "Stop"
+
+                ## NOTE: The redirection operator and output to $null suppress verbose import messages.
+                ## NOTE: Using $env:COMPUTERNAME is a nice way to see the source of the messages.
+                ## TODO: Can all of this be written as a script that is passed in instead of an inline scriptblock?
+                Write-Verbose "Importing DnsClient Module On $env:COMPUTERNAME"
+                Import-Module -Name "DnsClient" -Verbose:$false 4>&1 |
+                Out-Null
+
+                Write-Verbose "Importing NetAdapter Module On $env:COMPUTERNAME"
+                Import-Module -Name "NetAdapter" -Verbose:$false 4>&1 |
+                Out-Null
+
+                Write-Verbose "Importing NetConnection Module On $env:COMPUTERNAME"
+                Import-Module -Name "NetConnection" -Verbose:$false 4>&1 |
+                Out-Null
+
+                Write-Verbose "Importing NetTCPIP Module On $env:COMPUTERNAME"
+                Import-Module -Name "NetTCPIP" -Verbose:$false 4>&1 |
+                Out-Null
+
+                ## NOTE: For posterity.  Administrator is enabledduring OOBE.
+                # Write-Verbose "Enabling Administrator On $env:COMPUTERNAME"
+                # Enable-LocalUser -Name "Administrator"
+
+                ## NOTE: For posterity.  Administrator password is set during OOBE.
+                # Write-Verbose "Setting Administrator Password On $env:COMPUTERNAME"
+                # Set-LocalUser -Name "Administrator" -Password $Credential.Password
+
+                ## TODO: This is setting the network to "Identifying..." and breaking the script.
+                # Write-Verbose "Setting Network Profile Oo Private On $env:COMPUTERNAME"
+                # Get-NetAdapter -Name "Ethernet" |
+                # Set-NetConnectionProfile -NetworkCategory Private
+
+                Write-Verbose "Enabling WinRM On $env:COMPUTERNAME"
+                Start-Process -FilePath "winrm" -ArgumentList @("quickconfig", "-force") -Wait -NoNewWindow
+
+                Write-Verbose "Setting Execution Policy To Unrestricted On $env:COMPUTERNAME"
+                Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope LocalMachine -Force
+
+                ## TODO: The IP should be passed in.
+                Write-Verbose "Asserting Static IP Address On $env:COMPUTERNAME"
+                $ipAddress =
+                switch ($env:COMPUTERNAME) {
+                    "LAB-DC-00" { "192.168.0.10" }
+                    "LAB-APP-00" { "192.168.0.20" }
+                    "LAB-SQL-00" { "192.168.0.30" }
+                    "LAb-WEB-00" { "192.168.0.40" }
+                    default { throw }
+                }
+                Write-Debug "`$ipAddress = $ipAddress"
+
+                Write-Verbose "Asserting Net Adapter Interface On $env:COMPUTERNAME"
+                $interfaceIndex = $(Get-NetAdapter -Name "Ethernet").ifIndex
+                Write-Debug "`$interfaceIndex = $interfaceIndex"
+
+                Write-Verbose "Removing Net IP Address On $env:COMPUTERNAME"
+                Remove-NetIPAddress -InterfaceIndex $interfaceIndex -Confirm:$false -ErrorAction Continue
+
+                Write-Verbose "Removing Net Route On $env:COMPUTERNAME"
+                Remove-NetRoute -InterfaceIndex $interfaceIndex -Confirm:$false -ErrorAction Continue
+
+                ## TODO: The gateway IP and subnet mask should be passed in.
+                Write-Verbose "Creating Net IP Address On $env:COMPUTERNAME"
+                New-NetIPAddress -IPAddress $ipAddress -AddressFamily IPv4 -PrefixLength $PrefixLength -InterfaceIndex $interfaceIndex -DefaultGateway $GatewayIpAddress |
+                Out-Null
+
+                ## TODO: The DNS IP should be passed in.
+                Write-Verbose "Setting DNS Client Server Address On $env:COMPUTERNAME"
+                Set-DnsClientServerAddress -InterfaceIndex $interfaceIndex -ServerAddresses ($PrimaryDnsIpAddress) |
+                Out-Null
+            }
+            end {
+                Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
+            }
         }
-        end {
+
+        Write-Verbose "Initializing Guests ; Please Wait"
+        $parameters = @{
+            VMName       = $Nodes
+            Credential   = $Credential
+            ScriptBlock  = $scriptBlock
+            ArgumentList = @(
+                $Credential,
+                $VerbosePreference
+                ## TODO: Pass in instead of using the defaults.
+                # $GatewayIpAddress,
+                # $PrefixLength,
+                # $PrimaryDnsIpAddress
+            )
+            Verbose      = $true
         }
+        Invoke-Command @parameters
     }
-    foreach ($Computer in $ComputerName) {
-        Write-Output "Initializing Guest $Computer"
-            Invoke-Command -VMName $ComputerName -Credential $AdministratorCredential -ScriptBlock $ScriptBlock -ArgumentList $AdministratorCredential
+    end {
+        Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
     }
-}
-end {
 }

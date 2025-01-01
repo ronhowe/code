@@ -1,12 +1,29 @@
-#requires -RunAsAdministrator
-#requires -PSEdition Desktop
+function Remove-Lab {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string[]]
+        $Nodes
+    )
+    begin {
+        Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
 
-Set-Location -Path $PSScriptRoot
+        Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
+        Select-Object -Property @("Name", "Value") |
+        ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
+    }
+    process {
+        Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-$ComputerNames = @("DC-VM", "SQL-VM", "WEB-VM")
+        Write-Verbose "Stopping Virtual Machines"
+        $Nodes |
+        Stop-VM -TurnOff -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
 
-.\Import-HostDependencies.ps1
-
-$ComputerNames | Stop-VM -TurnOff -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
-
-.\Invoke-HostConfiguration.ps1 -Ensure "Absent" -Wait
+        Write-Verbose "Invoking Host Dsc Ensuring Absent"
+        Invoke-HostDsc -Nodes $Nodes -Ensure "Absent" -Wait
+    }
+    end {
+        Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
+    }
+}

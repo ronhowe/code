@@ -1,31 +1,38 @@
-#requires -RunAsAdministrator
-#requires -PSEdition Desktop
+function Rename-Guest {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string[]]
+        $Nodes,
 
-[CmdletBinding()]
-param (
-    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-    [ValidateNotNullorEmpty()]
-    [string]
-    $ComputerName,
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullorEmpty()]
+        [pscredential]
+        $Credential
+    )
+    begin {
+        Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
 
-    [Parameter(Mandatory = $true)]
-    [ValidateNotNullorEmpty()]
-    [PSCredential]
-    $AdministratorCredential
-)
-begin {
-}
-process {
-    foreach ($Computer in $ComputerName) {
-        Write-Output "Renaming Guest $Computer"
-        $ScriptBlock = {
-            Rename-Computer -NewName $using:Computer -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
-        }
-        Invoke-Command -VMName $Computer -Credential $AdministratorCredential -ScriptBlock $ScriptBlock
-
-        Write-Output "Rebooting Guest $Computer"
-        Restart-VM -Name $Computer -Wait -Force
+        Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
+        Select-Object -Property @("Name", "Value") |
+        ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
     }
-}
-end {
+    process {
+        Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
+
+        foreach ($node in $Nodes) {
+            Write-Verbose "Renaming Computer $node ; Please Wait"
+            $scriptBlock = {
+                Rename-Computer -NewName $using:node -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+            }
+            Invoke-Command -VMName $node -Credential $Credential -ScriptBlock $scriptBlock
+
+            Write-Verbose "Restarting VM $node ; Please Wait"
+            Restart-VM -Name $node -Wait -Force
+        }
+    }
+    end {
+        Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
+    }
 }

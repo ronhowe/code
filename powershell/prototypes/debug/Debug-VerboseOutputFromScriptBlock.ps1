@@ -1,24 +1,27 @@
-$ScriptBlock = {
+## NOTE: Invoke-Command does not apply VerbosePreference to ScriptBlock
+## LINK: https://github.com/PowerShell/PowerShell/issues/4040
+
+Clear-Host
+
+$scriptBlock = {
     [CmdletBinding()]
     param()
-    Write-Verbose "Verbose Message"
+    ## NOTE: You should not see this.
+    Write-Verbose "`$VerbosePreference = $VerbosePreference"
 }
 
-# Does not work.
-# Invoke-Command does not apply VerbosePreference to ScriptBlock
-# https://github.com/PowerShell/PowerShell/issues/4040
-Invoke-Command -ScriptBlock $ScriptBlock -Verbose
+Invoke-Command -ScriptBlock $scriptBlock -Verbose
 
-$ScriptBlock = {
+$scriptBlock = {
     param(
         [ValidateSet("Continue", "SilentlyContinue")]
         [string]
-        $VerbosePreference = "SilentlyContinue"
+        $ScriptBlockVerbosePreference = "SilentlyContinue"
     )
-    $VerbosePreference = $VerbosePreference
-    Write-Verbose "Verbose Message"
+    ## NOTE: You should see these if $ScriptBlockVerbosePreference is "Continue".
+    $VerbosePreference = $ScriptBlockVerbosePreference
+    Write-Verbose "`$VerbosePreference = $VerbosePreference"
+    Write-Verbose "`$ScriptBlockVerbosePreference = $ScriptBlockVerbosePreference"
 }
 
-# Workaround.
-Invoke-Command -ScriptBlock $ScriptBlock -ArgumentList "Continue"
-Invoke-Command -ScriptBlock $ScriptBlock -ArgumentList "SilentlyContinue"
+Invoke-Command -ScriptBlock $scriptBlock -ArgumentList @("Continue")
