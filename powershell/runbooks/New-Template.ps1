@@ -26,6 +26,11 @@ begin {
 process {
     Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
+    ## NOTE: Consider moving this to begin {} when appropriate to avoid multiple imports?
+    Write-Verbose "Importing Some Module"
+    Import-Module -Name "SomeModule" -Verbose:$false 4>&1 |
+    Out-Null
+
     foreach ($computer in $ComputerName) {
         Write-Verbose "Doing Something To $computer"
         ## TODO: Do Something

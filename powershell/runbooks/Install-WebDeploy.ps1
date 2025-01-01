@@ -3,12 +3,12 @@ param(
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $Msi = "PowerShell-7.4.6-win-x64.msi",
+    $Msi = "webdeploy_amd64_en-US.msi",
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $Source = "https://github.com/PowerShell/PowerShell/releases/download/v7.4.6/PowerShell-7.4.6-win-x64.msi",
+    $Source = "https://download.microsoft.com/download/b/d/8/bd882ec4-12e0-481a-9b32-0fae8e3c0b78/webdeploy_amd64_en-US.msi",
 
     [switch]
     $Cleanup
@@ -39,15 +39,8 @@ process {
     $parameters = @{
         FilePath         = "msiexec.exe"
         ArgumentList     = @(
-            "/package",
-            $destination,
-            "/quiet",
-            "ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1",
-            "ADD_FILE_CONTEXT_MENU_RUNPOWERSHELL=1",
-            "ENABLE_PSREMOTING=1",
-            "REGISTER_MANIFEST=1",
-            "USE_MU=1 ENABLE_MU=1",
-            "ADD_PATH=1"
+            "/i",
+            $destination
         )
         NoNewWindow      = $true
         Wait             = $true

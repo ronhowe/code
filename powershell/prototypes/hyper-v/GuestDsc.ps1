@@ -27,6 +27,11 @@ Configuration GuestDsc {
             ConfigurationMode  = $Node.ConfigurationMode
             RebootNodeIfNeeded = $Node.RebootNodeIfNeeded
         }
+        File "CreateInstallersFolder" {
+            DestinationPath = "C:\installers"
+            Ensure          = "Present"
+            Type            = "Directory"
+        }
         File "DeleteDscEncryptionPfx" {
             DestinationPath = "C:\DscPrivateKey.pfx"
             Ensure          = "Absent"
