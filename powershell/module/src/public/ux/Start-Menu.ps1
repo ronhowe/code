@@ -185,52 +185,52 @@ function Start-Menu {
         New-MenuItem @parameters |
         Add-MenuItem -Menu "Azure"
 
-        # $parameters = @{
-        #     Name           = "NewAzureResourceGroup"
-        #     DisplayName    = "New Azure Resource Group"
-        #     Action         = {
-        #         New-AzureResourceGroup -Verbose |
-        #         Out-Null
-        #         Show-Menu -MenuName "Azure"
-        #     }
-        #     DisableConfirm = $false
-        # }
-        # New-MenuItem @parameters |
-        # Add-MenuItem -Menu "Azure"
+        $parameters = @{
+            Name           = "NewAzureResourceGroup"
+            DisplayName    = "New Azure Resource Group"
+            Action         = {
+                New-AzureResourceGroup -Verbose |
+                Out-Null
+                Show-Menu -MenuName "Azure"
+            }
+            DisableConfirm = $false
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "Azure"
 
-        # $parameters = @{
-        #     Name           = "NewAzureResourceDeploymentGroup"
-        #     DisplayName    = "New Azure Resource Group Deployment"
-        #     Action         = {
-        #         New-AzureResourceGroupDeployment -Verbose |
-        #         Out-Null
-        #         Show-Menu -MenuName "Azure"
-        #     }
-        #     DisableConfirm = $false
-        # }
-        # New-MenuItem @parameters |
-        # Add-MenuItem -Menu "Azure"
+        $parameters = @{
+            Name           = "NewAzureResourceDeploymentGroup"
+            DisplayName    = "New Azure Resource Group Deployment"
+            Action         = {
+                New-AzureResourceGroupDeployment -Verbose |
+                Out-Null
+                Show-Menu -MenuName "Azure"
+            }
+            DisableConfirm = $false
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "Azure"
 
-        # $parameters = @{
-        #     Name           = "RemoveAzureResourceGroup"
-        #     DisplayName    = "Remove Azure Resource Group"
-        #     Action         = {
-        #         $ErrorActionPreference = "Continue"
-        #         $VerbosePreference = "Continue"
-        #         Remove-AzureAutomationAccount |
-        #         Out-Null
-        #         Remove-AzureKeyVault |
-        #         Out-Null
-        #         Remove-AzureResourceGroup |
-        #         Out-Null
-        #         Clear-AzureAppConfigurationDeletedStore |
-        #         Out-Null
-        #         Show-Menu -MenuName "Azure"
-        #     }
-        #     DisableConfirm = $false
-        # }
-        # New-MenuItem @parameters |
-        # Add-MenuItem -Menu "Azure"
+        $parameters = @{
+            Name           = "RemoveAzureResourceGroup"
+            DisplayName    = "Remove Azure Resource Group"
+            Action         = {
+                $ErrorActionPreference = "Continue"
+                $VerbosePreference = "Continue"
+                Remove-AzureAutomationAccount |
+                Out-Null
+                Remove-AzureKeyVault |
+                Out-Null
+                Remove-AzureResourceGroup |
+                Out-Null
+                Clear-AzureAppConfigurationDeletedStore |
+                Out-Null
+                Show-Menu -MenuName "Azure"
+            }
+            DisableConfirm = $false
+        }
+        New-MenuItem @parameters |
+        Add-MenuItem -Menu "Azure"
 
         #endregion Main | Azure | *
         ################################################################################
