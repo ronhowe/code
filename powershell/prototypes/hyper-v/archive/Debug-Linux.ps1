@@ -1,44 +1,32 @@
-#requires -RunAsAdministrator
+throw
 
-# Import module(s).
 Import-Module -Name "Hyper-V"
 
-# Get the administrator credential.
 $Credential = Get-Credential -Message "Enter Administrator Credential" -UserName "administrator"
 
-# Get the username.
-$UserName = $Credential.UserName
+$userName = $Credential.UserName
 
-# Get the host name.
-$HostName = Read-Host -Prompt "Enter Host Name"
+$nodes = Read-Host -Prompt "Enter Node Name"
 
-# Get the IP address.
-$IpAddress = "192.168.0.3" # Standardized static IP.
+$ipAddress = "192.168.0.3" # Standardized static IP.
 
-# Get the SSH destination by IP address.
-$Destination = "$UserName@$IpAddress"
+$sshDestination = "$userName@$ipAddress"
 
-# Get the hostname.
-ssh $Destination hostname
+ssh $sshDestination hostname
 
-# Update packages.
-ssh -t $Destination "sudo apt update -y"
+ssh -t $sshDestination "sudo apt update -y"
 
-# Upgrade packages.
-ssh -t $Destination "sudo apt upgrade -y"
+ssh -t $sshDestination "sudo apt upgrade -y"
 
-# Enable guest services.
-# https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/supported-ubuntu-virtual-machines-on-hyper-v
-ssh -t $Destination "sudo apt-get install linux-azure -y"
+## NOTE: Enable guest services.
+## LINK: https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/supported-ubuntu-virtual-machines-on-hyper-v
+ssh -t $sshDestination "sudo apt-get install linux-azure -y"
 
-# Reboot the host.
-ssh -t $Destination "sudo reboot"
+ssh -t $sshDestination "sudo reboot"
 
-# Get the host name.
-ssh $Destination "hostnamectl"
+ssh $sshDestination "hostnamectl"
 
-# Rename the host.  Reboot after.
-ssh -t $Destination "sudo hostnamectl set-hostname $HostName"
+ssh -t $sshDestination "sudo hostnamectl set-hostname $nodes"
 
 # Regenerate SSH keys.
 # These must be run locally because they terminate and eliminate SSH connectivity.
@@ -46,43 +34,32 @@ ssh -t $Destination "sudo hostnamectl set-hostname $HostName"
 # sudo dpkg-reconfigure openssh-server
 # sudo systemctl restart ssh
 
-# Remove client SSH keys.
-ssh-keygen -R $IpAddress
-ssh-keygen -R $HostName
+ssh-keygen -R $ipAddress
+ssh-keygen -R $nodes
 
-# Test SSH to the host by IP address.
-Test-NetConnection -ComputerName $IpAddress -Port 22
+Test-NetConnection -ComputerName $ipAddress -Port 22 # ssh
 
-# Get the hosts file entry.
-Get-Content -Path "C:\Windows\System32\drivers\etc\hosts" | Select-String -SimpleMatch "LNX-VM"
+Get-Content -Path "C:\Windows\System32\drivers\etc\hosts" | Select-String -SimpleMatch "LAB-LNX-00"
 
-# Test SSH to the host by host name.  Requires hosts file entry.
-Test-NetConnection -ComputerName $HostName -Port 22
+Test-NetConnection -ComputerName $nodes -Port 22
 
-# Get the SSH destination by host name.
-$Destination = "$UserName@$HostName"
+$sshDestination = "$userName@$nodes"
 
-# Get the hostname.
-ssh $Destination hostname
+ssh $sshDestination hostname
 
-# Get the current time.
-ssh $Destination date
+ssh $sshDestination date
 
-# Get timezone.
-ssh $Destination "timedatectl"
+ssh $sshDestination "timedatectl"
 
-# Get timezone.
-ssh $Destination "timedatectl"
+ssh $sshDestination "timedatectl"
 
-# Get supported timezones.
-ssh $Destination "timedatectl list-timezones"
+ssh $sshDestination "timedatectl list-timezones"
 
-# Set timezone.
-ssh $Destination "sudo timedatectl set-timezone Etc/UTC"
-# ssh $Destination "sudo timedatectl set-timezone America/New_York"
+ssh $sshDestination "sudo timedatectl set-timezone Etc/UTC"
+# ssh $sshDestination "sudo timedatectl set-timezone America/New_York"
 
-# https://docs.microsoft.com/en-us/powershell/scripting/learn/remoting/ssh-remoting-in-powershell-core?view=powershell-7.2
-ssh $Destination
+## LINK: https://learn.microsoft.com/en-us/powershell/scripting/security/remoting/ssh-remoting-in-powershell?view=powershell-7.4
+ssh $sshDestination
 
 # cd /
 # sudo find -name "pwsh"
@@ -91,17 +68,13 @@ ssh $Destination
 # Subsystem powershell /snap/bin/pwsh -sshs -NoLogo
 # sudo systemctl restart sshd.service
 
-# Create a PowerShell session over SSH.
-$Session = New-PSSession -HostName $HostName -UserName administrator
+$session = New-PSSession -HostName $nodes -UserName administrator
 
-# Get the session.
-$Session | Get-PSSession
+$session | Get-PSSession
 
-# Enter the session.
-$Session | Enter-PSSession
+$session | Enter-PSSession
 
-# Close the session.
-$Session | Remove-PSSession
+$session | Remove-PSSession
 
 # Use Secure Copy Program (scp) from WSL to copy file to the host.
-scp ./OnboardingScript.sh administrator@LNX-VM:/home/administrator
+scp ./OnboardingScript.sh administrator@LAB-LNX-00:/home/administrator
