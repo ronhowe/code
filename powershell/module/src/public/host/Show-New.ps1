@@ -13,7 +13,7 @@ function Show-New {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
         Clear-Host
-        Show-Logo
+        Start-Shell
     }
     end {
         Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
