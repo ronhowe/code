@@ -33,23 +33,40 @@ function Install-GuestDscResources {
             }
             Invoke-Command -Session $session -ScriptBlock $scriptBlock
 
-            Write-Verbose "Installing Dsc Resources On $node"
-            @(
-                "ActiveDirectoryCSDsc",
-                "ActiveDirectoryDsc",
-                "ComputerManagementDsc",
-                "NetworkingDsc",
-                "PSWindowsUpdate",
-                "SqlServerDsc"
-            ) |
-            ForEach-Object {
-                Write-Verbose "Installing Dsc Resource $_ On $node"
-                $scriptBlock = {
-                    $ProgressPreference = "SilentlyContinue"
-                    Install-Module -Name $using:_ -Scope AllUsers -Repository "PSGallery" -Force
-                }
-                Invoke-Command -Session $session -ScriptBlock $scriptBlock
+            Write-Verbose "Installing ActiveDirectoryCSDsc Dsc Resource On $node"
+            $scriptBlock = {
+                $ProgressPreference = "SilentlyContinue"
+                Install-Module -Name "ActiveDirectoryCSDsc" -RequiredVersion "5.0.0" -Repository "PSGallery" -Scope AllUsers -Force
             }
+            Invoke-Command -Session $session -ScriptBlock $scriptBlock
+
+            Write-Verbose "Installing ActiveDirectoryDsc Dsc Resource On $node"
+            $scriptBlock = {
+                $ProgressPreference = "SilentlyContinue"
+                Install-Module -Name "ActiveDirectoryDsc" -RequiredVersion "6.6.0" -Repository "PSGallery" -Scope AllUsers -Force
+            }
+            Invoke-Command -Session $session -ScriptBlock $scriptBlock
+
+            Write-Verbose "Installing ComputerManagementDsc Dsc Resource On $node"
+            $scriptBlock = {
+                $ProgressPreference = "SilentlyContinue"
+                Install-Module -Name "ComputerManagementDsc" -RequiredVersion "9.2.0" -Repository "PSGallery" -Scope AllUsers -Force
+            }
+            Invoke-Command -Session $session -ScriptBlock $scriptBlock
+
+            Write-Verbose "Installing NetworkingDsc Dsc Resource On $node"
+            $scriptBlock = {
+                $ProgressPreference = "SilentlyContinue"
+                Install-Module -Name "NetworkingDsc" -RequiredVersion "9.0.0" -Repository "PSGallery" -Scope AllUsers -Force
+            }
+            Invoke-Command -Session $session -ScriptBlock $scriptBlock
+
+            Write-Verbose "Installing SqlServerDsc Dsc Resource On $node"
+            $scriptBlock = {
+                $ProgressPreference = "SilentlyContinue"
+                Install-Module -Name "SqlServerDsc" -RequiredVersion "17.0.0" -Repository "PSGallery" -Scope AllUsers -Force
+            }
+            Invoke-Command -Session $session -ScriptBlock $scriptBlock
 
             Write-Verbose "Removing PSSession To $node"
             $session |

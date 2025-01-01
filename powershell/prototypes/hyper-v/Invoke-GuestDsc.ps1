@@ -1,35 +1,58 @@
-[CmdletBinding()]
-param (
-    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-    [ValidateNotNullorEmpty()]
-    [string[]]
-    $ComputerName,
+function Invoke-GuestDsc {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string[]]
+        $Nodes,
 
-    [Parameter(Mandatory = $true)]
-    [ValidateNotNullorEmpty()]
-    [PSCredential]
-    $Credential,
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullorEmpty()]
+        [pscredential]
+        $Credential,
 
-    [switch]
-    $Wait
-)
-begin {
-    Write-Output "Importing Guest Configuration"
-    . ".\GuestConfiguration.ps1"
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullorEmpty()]
+        [string]
+        $DscEncryptionCertificateThumbprint,
 
-    Write-Output "Compiling Guest Configuration"
-    GuestConfiguration -ConfigurationData ".\GuestConfiguration.psd1" -OutputPath "$env:TEMP\GuestConfiguration" -Credential $Credential | Out-Null
-}
-process {
-    foreach ($Computer in $ComputerName) {
-        Write-Output "Invoking Guest Configuration on $Computer"
+        [switch]
+        $Wait
+    )
+    begin {
+        Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
 
-        Write-Output "Setting Guest Local Configuration Manager on $Computer"
-        Set-DscLocalConfigurationManager -ComputerName $Computer -Credential $Credential -Path "$env:TEMP\GuestConfiguration"
-
-        Write-Output "Starting Guest Configuration on $Computer"
-        Start-DscConfiguration -ComputerName $Computer -Credential $Credential -Path "$env:TEMP\GuestConfiguration" -Force -Wait:$Wait
+        Get-Variable -Scope "Local" -Include @($MyInvocation.MyCommand.Parameters.Keys) |
+        Select-Object -Property @("Name", "Value") |
+        ForEach-Object { Write-Debug "`$$($_.Name) = $($_.Value)" }
     }
-}
-end {
+    process {
+        Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
+
+        Write-Verbose "Importing Guest Dsc"
+        . "$PSScriptRoot\GuestDsc.ps1" -Verbose:$false 4>&1 |
+        Out-Null
+
+        Write-Verbose "Compiling Guest Dsc"
+        $parameters = @{
+            ConfigurationData                  = "$PSScriptRoot\GuestDsc.psd1"
+            OutputPath                         = "$env:TEMP\GuestDsc"
+            Credential                         = $Credential
+            DscEncryptionCertificateThumbprint = $DscEncryptionCertificateThumbprint
+        }
+        GuestDsc @parameters |
+        Out-Null
+
+        Write-Verbose "Invoking Guest Dsc On $node"
+        foreach ($node in $Nodes) {
+            Write-Verbose "Setting Guest Dsc Local Configuration Manager On $node"
+            Set-DscLocalConfigurationManager -ComputerName $node -Credential $Credential -Path "$env:TEMP\GuestDsc"
+
+            Write-Verbose "Starting Guest Dsc On $node"
+            Start-DscConfiguration -ComputerName $node -Credential $Credential -Path "$env:TEMP\GuestDsc" -Force -Wait:$Wait
+        }
+    }
+    end {
+        Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
+    }
 }

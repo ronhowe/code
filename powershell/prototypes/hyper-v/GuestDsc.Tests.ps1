@@ -1,33 +1,50 @@
 $TestCases = @(
-    @{ ComputerName = "LAB-DC-00" }
-    @{ ComputerName = "LAB-APP-00" }
-    @{ ComputerName = "LAB-SQL-00" }
-    @{ ComputerName = "LAB-WEB-00" }
+    Get-VM -Name "LAB*" |
+    ForEach-Object { [hashtable]@{ "Node" = $_.Name } }
 )
-Describe "Networking Tests" {
-    Context "Firewall" {
-        It "<ComputerName> Can Be Pinged" -TestCases $TestCases {
+Describe "Guest Dsc Tests" {
+    Context "Network" {
+        It "Asserting Ping Connectivity To <Node>" -TestCases $TestCases {
             param (
                 [string]
-                $ComputerName
+                $Node
             )
-            (Test-NetConnection -ComputerName $ComputerName -WarningAction SilentlyContinue).PingSucceeded |
+            Write-Host "Asserting Ping Connectivity To $Node" -ForegroundColor Cyan
+            (Test-NetConnection -ComputerName $Node -WarningAction SilentlyContinue).PingSucceeded |
             Should -BeTrue
         }
     }
 }
-Describe "SQL Server Tests" {
-    Context "Endpoint" {
-        It "SQL-VM SQL Port Open" {
-            (Test-NetConnection -ComputerName "LAB-SQL-00" -Port 1433 -WarningAction SilentlyContinue).TcpTestSucceeded |
+$TestCases = @(
+    Get-VM -Name "LAB*SQL*" |
+    ForEach-Object { [hashtable]@{ "Node" = $_.Name } }
+)
+Describe "Guest SQL Server Tests" {
+    Context "Network" {
+        It "Asserting SQL Connectivity To <Node>" -TestCases $TestCases {
+            param (
+                [string]
+                $Node
+            )
+            Write-Host "Asserting SQL Connectivity To $Node" -ForegroundColor Cyan
+            (Test-NetConnection -ComputerName $Node -Port 1433 -WarningAction SilentlyContinue).TcpTestSucceeded |
             Should -BeTrue
         }
     }
 }
-Describe "Web Server Tests" {
-    Context "Endpoint" {
-        It "WEB-VM HTTPS Port Open" {
-            (Test-NetConnection -ComputerName "LAB-WEB-00" -Port 443 -WarningAction SilentlyContinue).TcpTestSucceeded | Should
+$TestCases = @(
+    Get-VM -Name "LAB*WEB*" |
+    ForEach-Object { [hashtable]@{ "Node" = $_.Name } }
+)
+Describe "Guest Web Server Tests" {
+    Context "Network" {
+        It "Asserting Web Connectivity To <Node>" -TestCases $TestCases {
+            param (
+                [string]
+                $Node
+            )
+            Write-Host "Asserting Web Connectivity To $Node" -ForegroundColor Cyan
+            (Test-NetConnection -ComputerName $Node -Port 443 -WarningAction SilentlyContinue).TcpTestSucceeded | Should
             -BeTrue
         }
     }

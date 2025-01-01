@@ -3,8 +3,7 @@
         @{
             ActionAfterReboot    = "ContinueConfiguration"
             PSDscAllowDomainUser = $true
-            CertificateFile      = "$env:TEMP\DscPublicKey.cer"
-            CertificateId        = "EAC69C0CDF518426D6342A0673EAA22C9A5D2860"
+            CertificateFile      = "$PSScriptRoot\DscPublicKey.cer"
             ConfigurationMode    = "ApplyAndAutoCorrect"
             DnsIpAddress         = "192.168.1.1"
             DomainName           = "LAB.LOCAL"
@@ -43,10 +42,15 @@ WMI-RPCSS-In-TCP
 "@
         },
         @{
+            IpAddress = "192.168.0.20/24"
+            NodeName  = "LAB-APP-00"
+            Sku       = "Desktop"
+        };
+        @{
             DatabasePath                = "C:\Windows\NTDS"
             IpAddress                   = "192.168.0.10/24"
             LogPath                     = "C:\Windows\NTDS"
-            NodeName                    = "DC-VM"
+            NodeName                    = "LAB-DC-00"
             Sku                         = "Desktop"
             SkipCcmClientSDK            = $true
             SkipComponentBasedServicing = $true
@@ -56,16 +60,16 @@ WMI-RPCSS-In-TCP
         };
         @{
             Features            = "SQLENGINE"
-            IpAddress           = "192.168.0.20/24"
+            IpAddress           = "192.168.0.30/24"
             InstanceName        = "MSSQLSERVER"
-            NodeName            = "SQL-VM"
+            NodeName            = "LAB-SQL-00"
             Sku                 = "Desktop"
             SourcePath          = "E:\"
             SQLSysAdminAccounts = @("Administrators")
         };
         @{
-            NodeName  = "WEB-VM"
-            IpAddress = "192.168.0.30/24"
+            NodeName  = "LAB-WEB-00"
+            IpAddress = "192.168.0.40/24"
             Sku       = "Desktop"
         };
     );

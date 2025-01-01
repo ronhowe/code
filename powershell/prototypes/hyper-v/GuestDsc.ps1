@@ -1,25 +1,29 @@
-Configuration GuestDsc{
+Configuration GuestDsc {
     param(
         [Parameter(Mandatory = $true)]
         [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $Credential
-    )
-    
-    Import-DscResource -ModuleName "ActiveDirectoryCSDsc"
-    Import-DscResource -ModuleName "ActiveDirectoryDsc"
-    Import-DscResource -ModuleName "ComputerManagementDsc"
-    Import-DscResource -ModuleName "NetworkingDsc"
-    Import-DscResource -ModuleName "PSDesiredStateConfiguration"
-    Import-DscResource -ModuleName "SqlServerDsc"
+        [pscredential]
+        $Credential,
 
-    #region Helpers
-    $DomainCredential = New-Object System.Management.Automation.PSCredential ($("{0}\{1}" -f $Node.DomainName, $Credential.UserName), $Credential.Password)
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullorEmpty()]
+        [string]
+        $DscEncryptionCertificateThumbprint
+    )
+
+    Import-DscResource -ModuleName "ActiveDirectoryCSDsc" -ModuleVersion "5.0.0"
+    Import-DscResource -ModuleName "ActiveDirectoryDsc" -ModuleVersion "6.6.0"
+    Import-DscResource -ModuleName "ComputerManagementDsc" -moduleVersion "9.2.0"
+    Import-DscResource -ModuleName "NetworkingDsc" -ModuleVersion "9.0.0"
+    Import-DscResource -ModuleName "PSDesiredStateConfiguration" -ModuleVersion "1.1"
+    Import-DscResource -ModuleName "SqlServerDsc" -ModuleVersion "17.0.0"
+
+    $domainCredential = New-Object System.Management.Automation.PSCredential ($("{0}\{1}" -f $Node.DomainName, $Credential.UserName), $Credential.Password)
 
     Node $AllNodes.NodeName {
         LocalConfigurationManager {
             ActionAfterReboot  = $Node.ActionAfterReboot
-            CertificateId      = $Node.CertificateId
+            CertificateId      = $DscEncryptionCertificateThumbprint
             ConfigurationMode  = $Node.ConfigurationMode
             RebootNodeIfNeeded = $Node.RebootNodeIfNeeded
         }
@@ -47,7 +51,7 @@ Configuration GuestDsc{
             AddressFamily  = "IPv4"
             InterfaceAlias = "Ethernet"
         }
-        if ($Node.NodeName -eq "DC-VM") {
+        if ($Node.NodeName -eq "LAB-DC-00") {
             Computer "RenameComputer" {
                 Name = $Node.NodeName
             }
@@ -73,7 +77,7 @@ Configuration GuestDsc{
                 WaitTimeout  = $Node.WaitTimeout
             }
             Computer "JoinDomain" {
-                Credential = $DomainCredential
+                Credential = $domainCredential
                 DependsOn  = "[WaitForADDomain]WaitForActiveDirectory"
                 DomainName = $Node.DomainName
                 Name       = $Node.NodeName
@@ -91,7 +95,9 @@ Configuration GuestDsc{
                 State       = "Running"
             }
         }
-        $Node.FirewallRules | ConvertFrom-Csv | ForEach-Object {
+        $Node.FirewallRules |
+        ConvertFrom-Csv |
+        ForEach-Object {
             Firewall "SetFirewallRule$($_.Name)" {
                 Action  = "Allow"
                 Enabled = $true
@@ -107,7 +113,15 @@ Configuration GuestDsc{
             ValueName = "fdenyTSConnections"
         }
     }
-    Node "DC-VM" {
+    Node "LAB-APP-00" {
+        Log PowerOnSelfTest {
+            Message = "Power-On Self-Test LAB-APP-00"
+        }
+    }
+    Node "LAB-DC-00" {
+        Log PowerOnSelfTest {
+            Message = "Power-On Self-Test LAB-DC-00"
+        }
         WindowsFeature "InstallActiveDirectoryServices" {
             Ensure = "Present"
             Name   = "AD-Domain-Services"
@@ -149,7 +163,10 @@ Configuration GuestDsc{
             ForestFQDN                        = $Node.DomainName
         }
     }
-    Node "SQL-VM" {
+    Node "LAB-SQL-00" {
+        Log PowerOnSelfTest {
+            Message = "Power-On Self-Test LAB-SQL-00"
+        }
         SqlSetup "InstallSqlServer" {
             DependsOn            = "[Computer]JoinDomain"
             Features             = $Node.Features
@@ -171,10 +188,13 @@ Configuration GuestDsc{
             SourcePath   = $Node.SourcePath
         }
     }
-    Node "WEB-VM" {
+    Node "LAB-WEB-00" {
+        Log PowerOnSelfTest {
+            Message = "Power-On Self-Test LAB-WEB-00"
+        }
         WindowsFeature "InstallWebServer" {
             Ensure = "Present"
-            Name   = "Web-Server" 
+            Name   = "Web-Server"
         }
     }
 }

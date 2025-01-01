@@ -12,8 +12,8 @@ Configuration HostDsc {
         $Ensure
     )
 
-    Import-DscResource -ModuleName "PSDesiredStateConfiguration"
-    Import-DscResource -ModuleName "xHyper-V"
+    Import-DscResource -ModuleName "PSDesiredStateConfiguration" -ModuleVersion "1.1"
+    Import-DscResource -ModuleName "xHyper-V" -ModuleVersion "3.18.0"
 
     Node "localhost" {
         # WindowsFeature "HyperV" {
