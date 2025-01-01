@@ -41,6 +41,7 @@ RemoteDesktop-UserMode-In-TCP
 WMI-RPCSS-In-TCP
 "@
         },
+        ## TODO: Determine if , or ; or both are the appropriate delimiters.
         @{
             IpAddress = "192.168.0.20/24"
             NodeName  = "LAB-APP-00"
@@ -68,8 +69,8 @@ WMI-RPCSS-In-TCP
             SQLSysAdminAccounts = @("Administrators")
         };
         @{
-            NodeName  = "LAB-WEB-00"
             IpAddress = "192.168.0.40/24"
+            NodeName  = "LAB-WEB-00"
             Sku       = "Desktop"
         };
     );
