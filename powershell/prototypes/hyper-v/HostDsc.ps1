@@ -1,4 +1,5 @@
-Configuration HostConfiguration {
+Configuration HostDsc {
+    [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateNotNullOrEmpty()]

@@ -1,4 +1,4 @@
-Configuration GuestConfiguration {
+Configuration GuestDsc{
     param(
         [Parameter(Mandatory = $true)]
         [ValidateNotNullorEmpty()]
