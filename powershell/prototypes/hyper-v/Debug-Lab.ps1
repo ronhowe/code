@@ -82,14 +82,19 @@ $nodes | Start-VM -Verbose
 Install-GuestDscResources -Nodes $nodes -Credential $credential -Verbose
 
 ## NOTE: Creates public key (.CER) and public/private key pair (.PFX).  Only .CER is Git safe.
+# first time
 . .\New-DscEncryptionCertificate.ps1
-$certificate = New-DscEncryptionCertificate -Verbose
+$thumbprint = (New-DscEncryptionCertificate -Verbose).Thumbprint
+# and beyond
+$thumbprint = Get-ChildItem -Path "Cert:\LocalMachine\My\" |
+Where-Object { $_.Subject -eq "CN=DscEncryptionCert" } |
+Select-Object -ExpandProperty "Thumbprint"
 
 . .\Publish-DscEncryptionCertificate.ps1
 Publish-DscEncryptionCertificate -Nodes $nodes -Credential $credential -PfxPath ".\DscPrivateKey.pfx" -PfxPassword $pfxPassword -Verbose
 
 . .\Invoke-GuestDsc.ps1
-Invoke-GuestDsc -Nodes $nodes -Credential $credential -DscEncryptionCertificateThumbprint ($certificate.Thumbprint) -Verbose
+Invoke-GuestDsc -Nodes $nodes -Credential $credential -DscEncryptionCertificateThumbprint $thumbprint -Verbose
 
 . .\Wait-GuestDsc.ps1
 Wait-GuestDsc -Nodes $nodes -Credential $credential -RetryInterval 3 -Verbose

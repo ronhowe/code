@@ -46,7 +46,7 @@ function Invoke-GuestDsc {
         Write-Verbose "Invoking Guest Dsc On $node"
         foreach ($node in $Nodes) {
             Write-Verbose "Setting Guest Dsc Local Configuration Manager On $node"
-            Set-DscLocalConfigurationManager -ComputerName $node -Credential $Credential -Path "$env:TEMP\GuestDsc"
+            Set-DscLocalConfigurationManager -ComputerName $node -Credential $Credential -Path "$env:TEMP\GuestDsc" -Force
 
             Write-Verbose "Starting Guest Dsc On $node"
             Start-DscConfiguration -ComputerName $node -Credential $Credential -Path "$env:TEMP\GuestDsc" -Force -Wait:$Wait

@@ -46,6 +46,7 @@ Configuration GuestDsc {
             InterfaceAlias = "Ethernet"
             IPAddress      = $Node.IpAddress
         }
+
         DefaultGatewayAddress "SetDefaultGatewayIpAddress" {
             Address        = $Node.GatewayIpAddress
             AddressFamily  = "IPv4"
@@ -112,6 +113,11 @@ Configuration GuestDsc {
             ValueData = "0"
             ValueName = "fdenyTSConnections"
         }
+        ## NOTE: Does not support Domain.  May need to manually set if network discovery does not set it to Domain automatically.
+        # NetConnectionProfile "SetNetworkProfile" {
+        #     InterfaceAlias  = "Ethernet"
+        #     NetworkCategory = "Private"
+        # }
     }
     Node "LAB-APP-00" {
         Log PowerOnSelfTest {

@@ -21,12 +21,12 @@ $TestCases = @(
 )
 Describe "Guest SQL Server Tests" {
     Context "Network" {
-        It "Asserting SQL Connectivity To <Node>" -TestCases $TestCases {
+        It "Asserting Net Connection On Port 1433 To <Node>" -TestCases $TestCases {
             param (
                 [string]
                 $Node
             )
-            Write-Host "Asserting SQL Connectivity To $Node" -ForegroundColor Cyan
+            Write-Host "Asserting Net Connection On Port 1433 To $Node" -ForegroundColor Cyan
             (Test-NetConnection -ComputerName $Node -Port 1433 -WarningAction SilentlyContinue).TcpTestSucceeded |
             Should -BeTrue
         }
@@ -38,14 +38,14 @@ $TestCases = @(
 )
 Describe "Guest Web Server Tests" {
     Context "Network" {
-        It "Asserting Web Connectivity To <Node>" -TestCases $TestCases {
+        It "Asserting Net Connection On Port 80 To <Node>" -TestCases $TestCases {
             param (
                 [string]
                 $Node
             )
-            Write-Host "Asserting Web Connectivity To $Node" -ForegroundColor Cyan
-            (Test-NetConnection -ComputerName $Node -Port 443 -WarningAction SilentlyContinue).TcpTestSucceeded | Should
-            -BeTrue
+            Write-Host "Asserting Net Connection On Port 80 To $Node" -ForegroundColor Cyan
+            (Test-NetConnection -ComputerName $Node -Port 80 -WarningAction SilentlyContinue).TcpTestSucceeded |
+            Should -BeTrue
         }
     }
 }
