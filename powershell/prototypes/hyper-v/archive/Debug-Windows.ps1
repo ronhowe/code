@@ -1,14 +1,19 @@
 throw
 
-Import-Module -Name "Hyper-V"
+Get-Module -Name "Shell"
+# Assert-RunAsAdministrator
+# Assert-RunAsWindowsPowerShell
+Set-LocationCode
 
-$credential = Get-Credential -Message "Enter Administrator Credential" -UserName "Administrator"
+Import-Module -Name "Hyper-V"
 
 $nodes = Read-Host -Prompt "Enter Node Name"
 
+$credential = Get-Credential -Message "Enter Administrator Credential" -UserName "Administrator"
+
 Get-VM -Name $nodes
 
-Invoke-Command -VMName $nodes -Credential $credential -ScriptBlock { hostname }
+Invoke-Command -VMName $nodes -Credential $credential -ScriptBlock { $env:COMPUTERNAME }
 
 Invoke-Command -VMName $nodes -Credential $credential -ScriptBlock { Rename-Computer -NewName $using:nodeName -Restart -Force }
 
@@ -51,6 +56,8 @@ $SECONDARY = $routerIpAddress; $SECONDARY ; $secondaryDnsIpAddress = $SECONDARY
 $primaryDnsIpAddress = Read-Host -Prompt "Enter Primary DNS IP Address"
 $secondaryDnsIpAddress = Read-Host -Prompt "Enter Secondary DNS IP Address"
 
+$primaryDnsIpAddress + "/" + $secondaryDnsIpAddress | Set-Clipboard
+
 $scriptBlock = {
     $ProgressPreference = "SilentlyContinue"
     $interfaceIndex = $(Get-NetAdapter -Name "Ethernet").ifIndex
@@ -58,6 +65,12 @@ $scriptBlock = {
     Remove-NetRoute -InterfaceIndex $interfaceIndex -Confirm:$false
     New-NetIPAddress -IPAddress $using:IpAddress -AddressFamily IPv4 -PrefixLength "24" -InterfaceIndex $interfaceIndex -DefaultGateway $using:gatewayIpAddress
     Set-DnsClientServerAddress -InterfaceIndex $interfaceIndex -ServerAddresses ($using:primaryDnsIpAddress, $using:secondaryDnsIpAddress)
+}
+Invoke-Command -VMName $nodes -Credential $credential -ScriptBlock $scriptBlock
+
+$scriptBlock = {
+    $ProgressPreference = "SilentlyContinue"
+    Test-NetConnection
 }
 Invoke-Command -VMName $nodes -Credential $credential -ScriptBlock $scriptBlock
 

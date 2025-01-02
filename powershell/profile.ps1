@@ -109,7 +109,8 @@ process {
     }
 
     ## NOTE: Work shim.
-    Write-Verbose "Defining VSTS Global Variable"
+    Write-Verbose "Defining VSTS Global Variables"
+    New-Variable -Name "Root" -Value "C:\VSTS" -Scope Global -Force -ErrorAction SilentlyContinue
     New-Variable -Name "VSTS" -Value "C:\VSTS" -Scope Global -Force -ErrorAction SilentlyContinue
 
     Write-Verbose "Setting PSReadLine Options"
