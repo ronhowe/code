@@ -124,3 +124,10 @@ Invoke-Command -ComputerName $nodes -Credential $credential -FilePath ".\powersh
 $port = 8172
 New-NetFirewallRule -DisplayName "Allow TCP Inbound Port $port - Domain" -Direction Inbound -Protocol TCP -LocalPort $port -Action Allow -Profile Domain
 New-NetFirewallRule -DisplayName "Allow TCP Inbound Port $port - Private" -Direction Inbound -Protocol TCP -LocalPort $port -Action Allow -Profile Private
+
+
+Copy-Item -Path ".\repos\ronhowe\code\powershell\module\bin\Shell" -Recurse -Destination "C:\installers" -ToSession $session -Verbose -Force
+
+Install-Module -Name "Pester" -Repository "PSGallery" -Force -SkipPublisherCheck
+Remove-Module -Name "Pester" -Force -Verbose
+Import-Module -Name "Pester" -Force -Verbose

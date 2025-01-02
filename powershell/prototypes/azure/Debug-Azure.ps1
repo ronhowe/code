@@ -127,7 +127,7 @@ Restart-AzWebApp -ResourceGroupName $resourceGroupName -Name $appName -Verbose
 Get-AzAppConfigurationKeyValue -Endpoint "https://$configStoreName.azconfig.io"
 
 Get-AzAppConfigurationKeyValue -Endpoint "https://$configStoreName.azconfig.io" -Key "Sentinel"
-Set-AzAppConfigurationKeyValue -Endpoint "https://$configStoreName.azconfig.io" -Key "Sentinel" -Value (Get-Date -AsUTC)
+Set-AzAppConfigurationKeyValue -Endpoint "https://$configStoreName.azconfig.io" -Key "Sentinel" -Value ([DateTime]::UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"))
 
 Get-AzAppConfigurationKeyValue -Endpoint "https://$configStoreName.azconfig.io" -Key ".appconfig.featureflag/MyFeature"
 $json = '{"id":"MyFeature","description":"","enabled":false,"conditions":{"client_filters":[]}}'

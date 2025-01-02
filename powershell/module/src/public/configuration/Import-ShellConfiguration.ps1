@@ -24,7 +24,7 @@ function Import-ShellConfiguration {
                 "$HOME\Shell.json",
                 $Path
             ) |
-            Where-Object { $_ -and $_ -ne ""} |
+            Where-Object { $_ -and $_ -ne "" } |
             ForEach-Object {
                 Write-Debug "`$_ = $_"
                 Write-Verbose "Asserting Shell Configuration Source Exists"
@@ -42,9 +42,28 @@ function Import-ShellConfiguration {
             Write-Error "Import Failed Because $($_.Exception.Message)"
         }
 
-        Write-Verbose "Importing Azure Configuration"
-        Import-ShellAzureConfiguration |
-        Out-Null
+        try {
+            Write-Verbose "Adding Shell Configuration Sources"
+            @(
+                "$HOME\repos\ronhowe\code\azure\parameters.json"
+            ) |
+            Where-Object { $_ -and $_ -ne "" } |
+            ForEach-Object {
+                Write-Debug "`$_ = $_"
+                Write-Verbose "Asserting Azure Shell Configuration Source Exists"
+                if (Test-Path -Path $_) {
+                    Write-Verbose "Importing Azure Shell Configuration"
+                    Import-ShellAzureConfiguration -Path $_ |
+                    Out-Null
+                }
+                else {
+                    Write-Verbose "Azure Shell Configuration Source Not Found"
+                }
+            }
+        }
+        catch {
+            Write-Error "Import Failed Because $($_.Exception.Message)"
+        }
 
         Write-Verbose "Returning Shell Configuration"
         return $global:ShellConfig

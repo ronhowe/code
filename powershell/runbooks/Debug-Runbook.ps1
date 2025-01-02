@@ -27,7 +27,11 @@ process {
     Write-Output $env:COMPUTERNAME
 
     Write-Host "Writing When"
-    Write-Host (Get-Date -AsUTC).Date
+    ## NOTE: PowerShell Core only
+    # Write-Host (Get-Date -AsUTC).Date
+    # workarounds
+    Write-Host "$([DateTime]::Now.ToString(`"yyyy-MM-dd HH:mm:ss.fff`")) (LOCAL)"
+    Write-Host "$([DateTime]::UtcNow.ToString(`"yyyy-MM-dd HH:mm:ss.fff`")) (UTC)"
 
     Write-Host "Writing Why (`$Why`)"
     Write-Host $Why

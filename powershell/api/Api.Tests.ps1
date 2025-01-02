@@ -16,8 +16,8 @@ param(
 )
 Describe "API Tests" {
     BeforeAll {
-        Write-Host "$((Get-Date).ToString()) (LOCAL)" -ForegroundColor Yellow
-        Write-Host "$((Get-Date -AsUTC).ToString()) (UTC)" -ForegroundColor Yellow
+        Write-Host "$([DateTime]::Now.ToString(`"yyyy-MM-dd HH:mm:ss.fff`")) (LOCAL)"
+        Write-Host "$([DateTime]::UtcNow.ToString(`"yyyy-MM-dd HH:mm:ss.fff`")) (UTC)"
     }
     Context "<Name> (<Platform>) @ <Uri> MyHealthCheck" {
         It "Asserting Response Status Code Is 200" -Tag @("healthcheck") {

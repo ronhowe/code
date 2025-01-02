@@ -5,7 +5,7 @@ function Import-ShellAzureConfiguration {
         [ValidateNotNullOrEmpty()]
         [ValidateScript({ Test-Path -Path $_ })]
         [string]
-        $Path = "$HOME\repos\ronhowe\code\azure\parameters.json"
+        $Path
     )
     begin {
         Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"

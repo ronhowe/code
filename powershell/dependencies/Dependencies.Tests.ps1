@@ -10,8 +10,8 @@ Describe "Dependency Tests" {
         $ProgressPreference = "SilentlyContinue"
         $WarningPreference = "SilentlyContinue"
 
-        Write-Host "$((Get-Date).ToString()) (LOCAL)" -ForegroundColor Yellow
-        Write-Host "$((Get-Date -AsUTC).ToString()) (UTC)" -ForegroundColor Yellow
+        Write-Host "$([DateTime]::Now.ToString(`"yyyy-MM-dd HH:mm:ss.fff`")) (LOCAL)"
+        Write-Host "$([DateTime]::UtcNow.ToString(`"yyyy-MM-dd HH:mm:ss.fff`")) (UTC)"
     }
     It "Asserting Dependency Is Current @{ ModuleName = '<Name>' ; RequiredVersion = '<Version>' }" -ForEach `
     $(
