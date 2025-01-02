@@ -5,11 +5,11 @@
 New-Alias -Name "catfact" -Value "Get-CatFact" -Force -Scope Global
 New-Alias -Name "clock" -Value "Show-Date" -Force -Scope Global
 New-Alias -Name "date" -Value "Show-Date" -Force -Scope Global
-New-Alias -Name "go" -Value "Push-LocationCode" -Force -Scope Global
-New-Alias -Name "go" -Value "Push-LocationCode" -Force -Scope Global
+New-Alias -Name "go" -Value "Set-LocationCode" -Force -Scope Global
+New-Alias -Name "go" -Value "Set-LocationCode" -Force -Scope Global
 New-Alias -Name "header" -Value "Show-Header" -Force -Scope Global
 New-Alias -Name "help" -Value "Show-Help" -Force -Scope Global
-New-Alias -Name "home" -Value "Push-LocationHome" -Force -Scope Global
+New-Alias -Name "home" -Value "Set-LocationHome" -Force -Scope Global
 New-Alias -Name "line" -Value "Set-PredictionInline" -Force -Scope Global
 New-Alias -Name "list" -Value "Set-PredictionList" -Force -Scope Global
 New-Alias -Name "logo" -Value "Show-Logo" -Force -Scope Global
@@ -20,7 +20,7 @@ New-Alias -Name "now" -Value "Show-Date" -Force -Scope Global
 New-Alias -Name "oops" -Value "Open-PSReadLineHistory" -Force -Scope Global
 New-Alias -Name "quiet" -Value "Hide-PromptMinimal" -Force -Scope Global
 New-Alias -Name "redact" -Value "Remove-LastCommand" -Force -Scope Global
-New-Alias -Name "repos" -Value "Push-LocationRepos" -Force -Scope Global
+New-Alias -Name "repos" -Value "Set-LocationRepos" -Force -Scope Global
 New-Alias -Name "shell" -Value "Start-Shell" -Scope Global -Force
 New-Alias -Name "silence" -Value "Hide-PromptOff" -Force -Scope Global
 New-Alias -Name "time" -Value "Show-Date" -Force -Scope Global

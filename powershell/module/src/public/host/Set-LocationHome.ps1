@@ -1,4 +1,4 @@
-function Push-LocationRepos {
+function Set-LocationHome {
     [CmdletBinding()]
     param(
     )
@@ -12,9 +12,7 @@ function Push-LocationRepos {
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-        if (Test-Path -Path "$HOME\repos") {
-            Push-Location -Path "$HOME\repos"
-        }
+        Set-Location -Path $HOME
     }
     end {
         Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"

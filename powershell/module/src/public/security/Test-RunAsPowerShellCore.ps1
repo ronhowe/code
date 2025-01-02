@@ -1,4 +1,4 @@
-function Push-LocationHome {
+function Test-RunAsPowerShellCore {
     [CmdletBinding()]
     param(
     )
@@ -12,7 +12,8 @@ function Push-LocationHome {
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-        Push-Location -Path $HOME
+        Write-Verbose "Returning Running As PowerShell Core"
+        return ($PSVersionTable.PSEdition -eq "Core")
     }
     end {
         Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"

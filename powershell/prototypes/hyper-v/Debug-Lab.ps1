@@ -1,10 +1,13 @@
 throw
 
+Get-Module -Name "Shell"
+Assert-RunAsAdministrator
+Assert-RunAsWindowsPowerShell
+Set-LocationCode
+
 Import-Module -Name "Hyper-V"
 Import-Module -Name "Pester"
 Import-Module -Name "PSDesiredStateConfiguration"
-
-Set-Location -Path "$HOME\repos\ronhowe\code"
 
 # all at once
 $nodes = @("LAB-DC-00", "LAB-APP-00", "LAB-SQL-00", "LAB-WEB-00")
@@ -33,7 +36,10 @@ Find-Module -Name "NetworkingDsc" -Repository "PSGallery"
 Find-Module -Name "SqlServerDsc" -Repository "PSGallery"
 Find-Module -Name "xHyper-V" -Repository "PSGallery"
 
-## NOTE: Versions as of 2025-01-01.
+## NOTE: xHyper-V 3.18.0 => HyperVDsc 4.x (some day).
+# Find-Module -Name "HyperVDsc" -Repository "PSGallery"
+
+## NOTE: Last checked as of 2025-01-02.
 # Version    Name                                Repository           Description
 # -------    ----                                ----------           -----------
 # 5.0.0      ActiveDirectoryCSDsc                PSGallery            DSC resources for installing, uninstalling and configuring Certificate Services components in Windows Server.
@@ -111,6 +117,7 @@ Invoke-Command -ComputerName $nodes -Credential $credential -FilePath ".\powersh
 ## NOTE: Install-WebDeploy is idempotent.
 Invoke-Command -ComputerName $nodes -Credential $credential -FilePath ".\powershell\runbooks\Install-WebDeploy.ps1"
 
+## NOTE: Install-NetCoreHostingBundle is idempotent.
 Invoke-Command -ComputerName $nodes -Credential $credential -FilePath ".\powershell\runbooks\Install-NetCoreHostingBundle.ps1"
 
 ## TODO: Refactor into GuestDsc.  Enables Web Management Service for publishing web applications.

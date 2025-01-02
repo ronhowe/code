@@ -1,4 +1,4 @@
-function Push-LocationCode {
+function Assert-RunAsPowerShellCore {
     [CmdletBinding()]
     param(
     )
@@ -12,8 +12,9 @@ function Push-LocationCode {
     process {
         Write-Verbose "Processing $($MyInvocation.MyCommand.Name)"
 
-        if (Test-Path -Path "$HOME\repos\ronhowe\code") {
-            Push-Location -Path "$HOME\repos\ronhowe\code"
+        Write-Verbose "Testing Running As PowerShell Core"
+        if (-not (Test-RunAsPowerShellCore)) {
+            throw [System.UnauthorizedAccessException] "Not Running As PowerShell Core"
         }
     }
     end {
