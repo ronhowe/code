@@ -24,11 +24,6 @@ function Initialize-Guest {
         $scriptBlock = {
             [CmdletBinding()]
             param(
-                [Parameter(Mandatory = $true)]
-                [ValidateNotNullorEmpty()]
-                [pscredential]
-                $Credential,
-
                 [Parameter(Mandatory = $false)]
                 [ValidateSet("Continue", "SilentlyContinue")]
                 [string]
@@ -81,14 +76,6 @@ function Initialize-Guest {
                 Write-Verbose "Importing NetTCPIP Module On $env:COMPUTERNAME"
                 Import-Module -Name "NetTCPIP" -Verbose:$false 4>&1 |
                 Out-Null
-
-                ## NOTE: For posterity.  Administrator is enabledduring OOBE.
-                # Write-Verbose "Enabling Administrator On $env:COMPUTERNAME"
-                # Enable-LocalUser -Name "Administrator"
-
-                ## NOTE: For posterity.  Administrator password is set during OOBE.
-                # Write-Verbose "Setting Administrator Password On $env:COMPUTERNAME"
-                # Set-LocalUser -Name "Administrator" -Password $Credential.Password
 
                 ## TODO: This is setting the network to "Identifying..." and breaking the script.
                 # Write-Verbose "Setting Network Profile Oo Private On $env:COMPUTERNAME"
@@ -144,7 +131,6 @@ function Initialize-Guest {
             Credential   = $Credential
             ScriptBlock  = $scriptBlock
             ArgumentList = @(
-                $Credential,
                 $VerbosePreference
                 ## TODO: Pass in instead of using the defaults.
                 # $GatewayIpAddress,

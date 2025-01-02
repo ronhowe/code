@@ -1,7 +1,10 @@
-#requires -Module "Az.Storage"
-#requires -Module "SqlServer"
 [CmdletBinding()]
 param(
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [ValidateScript({ Test-Path -Path $_ })]
+    [string]
+    $LogsPath = "D:\home\LogFiles\MyLogs"
 )
 begin {
     Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
@@ -24,8 +27,8 @@ process {
     Remove-AzStorageTable -Name "MyCloudTable" -Force
     
     Write-Verbose "Removing Log Files"
-    Get-ChildItem -Path "$HOME\repos\ronhowe\code\logs" -Recurse |
-    Remove-Item -Force
+    Get-ChildItem -Path $LogsPath -Recurse |
+    Remove-Item -Force -ErrorAction Continue
 }
 end {
     Write-Verbose "Ending $($MyInvocation.MyCommand.Name)"
