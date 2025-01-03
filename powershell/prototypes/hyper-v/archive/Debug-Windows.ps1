@@ -1,9 +1,7 @@
 throw
 
 Get-Module -Name "Shell"
-# Assert-RunAsAdministrator
-# Assert-RunAsWindowsPowerShell
-Set-LocationCode
+Assert-RunAsAdministrator
 
 Import-Module -Name "Hyper-V"
 
@@ -38,7 +36,7 @@ $ipAddress = Read-Host -Prompt "Enter IP Address"
 
 # Get the gateway IP address.
 $GATEWAY = "192.168.0.1" ; $GATEWAY ; $gatewayIpAddress = $GATEWAY
-# ro
+# or
 $gatewayIpAddress = Read-Host -Prompt "Enter Gateway IP Address"
 
 # Get the router IP address.
@@ -56,7 +54,7 @@ $SECONDARY = $routerIpAddress; $SECONDARY ; $secondaryDnsIpAddress = $SECONDARY
 $primaryDnsIpAddress = Read-Host -Prompt "Enter Primary DNS IP Address"
 $secondaryDnsIpAddress = Read-Host -Prompt "Enter Secondary DNS IP Address"
 
-$primaryDnsIpAddress + "/" + $secondaryDnsIpAddress | Set-Clipboard
+$primaryDnsIpAddress + " / " + $secondaryDnsIpAddress
 
 $scriptBlock = {
     $ProgressPreference = "SilentlyContinue"
@@ -111,21 +109,6 @@ $scriptBlock = {
 }
 Invoke-Command -ComputerName $nodes -Credential $credential -ScriptBlock $scriptBlock
 
-$scriptBlock = {
-    $ProgressPreference = "SilentlyContinue"
-    Import-Module -Name "BitsTransfer"
-    $source = "https://github.com/PowerShell/PowerShell/releases/download/v7.4.6/PowerShell-7.4.6-win-x64.msi"
-    $destination = "$HOME\Downloads\PowerShell-7.4.6-win-x64.msi"
-    Start-BitsTransfer -Source $source -Destination $destination -Verbose
-}
-Invoke-Command -ComputerName $nodes -Credential $credential -ScriptBlock $scriptBlock
-
-$scriptBlock = {
-    Set-Location -Path "$HOME\Downloads"
-    msiexec.exe /package PowerShell-7.4.6-win-x64.msi /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1
-}
-Invoke-Command -ComputerName $nodes -Credential $credential -ScriptBlock $scriptBlock
-
 Invoke-Command -ComputerName $nodes -Credential $credential -ScriptBlock { pwsh.exe --version }
 
 # Get and extend evaluation licensing information.  Works only in local console session.
@@ -136,3 +119,7 @@ Invoke-Command -ComputerName $nodes -Credential $credential -ScriptBlock { pwsh.
 # slmgr -dli
 
 Restart-Computer -ComputerName $nodes -Credential $credential -Wait -For Wmi -Force
+
+$userName = Read-Host -Prompt "Enter User Name"
+New-LocalUser -Name $userName -AccountNeverExpires -PasswordNeverExpires -UserMayNotChangePassword
+Add-LocalGroupMember -Group "Administrators" -Member $userName
