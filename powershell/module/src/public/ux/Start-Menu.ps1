@@ -448,7 +448,7 @@ function Start-Menu {
             Name           = "TestDependencies"
             DisplayName    = "Test"
             Action         = {
-                & "$HOME\repos\ronhowe\code\powershell\dependencies\Test-Dependencies.ps1"
+                & "$PSScriptRoot\Test-Dependencies.ps1"
                 Show-Menu -MenuName "Dependencies"
             }
             DisableConfirm = $true
@@ -460,7 +460,7 @@ function Start-Menu {
             Name           = "InstallDependencies"
             DisplayName    = "Install"
             Action         = {
-                & "$HOME\repos\ronhowe\code\powershell\dependencies\Install-Dependencies.ps1"
+                & "$PSScriptRoot\Install-Dependencies.ps1"
                 Show-Menu -MenuName "Dependencies"
             }
             DisableConfirm = $true
