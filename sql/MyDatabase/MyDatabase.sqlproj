@@ -73,6 +73,7 @@
   <ItemGroup>
     <None Include="localhost.MyDatabase.publish.xml" />
     <None Include="sql-ronhowe-0.sqldb-ronhowe-0.publish.publish.xml" />
+    <None Include="lab-sql-00.MyDatabase.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">
