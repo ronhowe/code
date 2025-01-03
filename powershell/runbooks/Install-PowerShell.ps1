@@ -46,7 +46,8 @@ process {
             "ADD_FILE_CONTEXT_MENU_RUNPOWERSHELL=1",
             "ENABLE_PSREMOTING=1",
             "REGISTER_MANIFEST=1",
-            "USE_MU=1 ENABLE_MU=1",
+            "USE_MU=1",
+            "ENABLE_MU=1",
             "ADD_PATH=1"
         )
         NoNewWindow      = $true
@@ -56,9 +57,13 @@ process {
     Write-Debug "`$parameters = $($parameters | Out-String)"
     Start-Process @parameters
 
+    Write-Verbose "Asserting Cleanup"
     if ($Cleanup) {
         Write-Verbose "Removing Installer"
         Remove-Item -Path $destination
+    }
+    else {
+        Write-Verbose "Skipping Cleanup"
     }
 }
 end {
