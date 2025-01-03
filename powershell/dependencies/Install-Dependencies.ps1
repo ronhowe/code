@@ -1,5 +1,9 @@
 [CmdletBinding()]
 param(
+    [Parameter(Mandatory = $false)]
+    [ValidateSet("AllUsers", "CurrentUser")]
+    [string]
+    $Scope = "CurrentUser"
 )
 begin {
     Write-Verbose "Beginning $($MyInvocation.MyCommand.Name)"
@@ -28,7 +32,7 @@ process {
                 Name               = $_.Name
                 Repository         = $_.Repository
                 RequiredVersion    = $_.Version
-                Scope              = $_.Scope
+                Scope              = $Scope
                 SkipPublisherCheck = $true
                 Verbose            = $false
                 WarningAction      = "SilentlyContinue"
