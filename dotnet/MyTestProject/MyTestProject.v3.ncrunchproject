@@ -12,6 +12,9 @@
       <NamedTestSelector>
         <TestName>MyTestProject.MyLiveTests.LiveSiteTests (5145372329938219144)</TestName>
       </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>MyTestProject.MyLiveTests.LiveSiteTests (15607056182519074589)</TestName>
+      </NamedTestSelector>
     </IgnoredTests>
   </Settings>
 </ProjectConfiguration>
