@@ -11,7 +11,7 @@
         @{ Name = 'Microsoft.PowerShell.SecretManagement' ; Version = '1.1.2' ; Repository = 'PSGallery' },
         @{ Name = 'Microsoft.PowerShell.SecretStore' ; Version = '1.0.6' ; Repository = 'PSGallery' },
         @{ Name = 'ModuleBuilder' ; Version = '3.1.0' ; Repository = 'PSGallery' },
-        @{ Name = 'Pester' ; Version = '5.6.1' ; Repository = 'PSGallery' },
+        @{ Name = 'Pester' ; Version = '5.7.1' ; Repository = 'PSGallery' },
         @{ Name = 'posh-git' ; Version = '1.1.0' ; Repository = 'PSGallery' },
         @{ Name = 'PowerConfig' ; Version = '0.1.6' ; Repository = 'PSGallery' },
         @{ Name = 'PSPolly' ; Version = '0.0.2' ; Repository = 'PSGallery' },
