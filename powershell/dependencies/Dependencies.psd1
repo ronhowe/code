@@ -1,7 +1,6 @@
 @{
     Modules = @(
-        @{ Name = 'Az' ; Version = '13.0.0' ; Repository = 'PSGallery' },
-        @{ Name = 'Az.ConnectedMachine' ; Version = '1.1.0' ; Repository = 'PSGallery' },
+        @{ Name = 'Az' ; Version = '13.1.0' ; Repository = 'PSGallery' },
         @{ Name = 'Az.Tools.Predictor' ; Version = '1.1.3' ; Repository = 'PSGallery' },
         @{ Name = 'CliMenu' ; Version = '1.0.52.0' ; Repository = 'PSGallery' },
         @{ Name = 'dbatools' ; Version = '2.1.28' ; Repository = 'PSGallery' },
