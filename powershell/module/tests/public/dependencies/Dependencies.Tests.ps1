@@ -1,17 +1,8 @@
-#requires -Module "Pester"
-[CmdletBinding()]
-param ()
-
-$ErrorActionPreference = "Stop"
-
 Describe "Dependency Tests" {
     BeforeAll {
         $ErrorActionPreference = "Stop"
         $ProgressPreference = "SilentlyContinue"
         $WarningPreference = "SilentlyContinue"
-
-        Write-Host "$([DateTime]::Now.ToString(`"yyyy-MM-dd HH:mm:ss.fff`")) (LOCAL)"
-        Write-Host "$([DateTime]::UtcNow.ToString(`"yyyy-MM-dd HH:mm:ss.fff`")) (UTC)"
     }
     It "Asserting Dependency Is Current @{ ModuleName = '<Name>' ; RequiredVersion = '<Version>' }" -ForEach `
     $(

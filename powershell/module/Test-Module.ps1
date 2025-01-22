@@ -17,7 +17,7 @@ process {
     Out-Null
 
     ## TODO: Remove \module\ such as to include \dependencies\ Pester tests?
-    Get-ChildItem -Path "$PSScriptRoot\tests\*.Tests.ps1" -Recurse |
+    Get-ChildItem -Path "$PSScriptRoot\tests\*.Tests.ps1" -Exclude "Dependencies.Tests.ps1" -Recurse |
     ForEach-Object {
         Invoke-Pester -Path $($_.FullName) -Output Detailed
     }
