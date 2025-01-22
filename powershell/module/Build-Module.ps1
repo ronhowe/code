@@ -37,10 +37,8 @@ process {
         CopyPaths                  = @(
             "$PSScriptRoot\src\Shell.json",
             "$PSScriptRoot\src\Shell.nuspec",
-            "$PSScriptRoot\..\dependencies\Dependencies.psd1",
-            "$PSScriptRoot\..\dependencies\Dependencies.Tests.ps1",
-            "$PSScriptRoot\..\dependencies\Install-Dependencies.ps1",
-            "$PSScriptRoot\..\dependencies\Test-Dependencies.ps1",
+            "$PSScriptRoot\src\public\dependencies\Dependencies.psd1",
+            "$PSScriptRoot\tests\public\dependencies\Dependencies.Tests.ps1",
             "$PSScriptRoot\LICENSE*"
             ## TODO: Add README.md to the list of files to copy.
             # "$PSScriptRoot\README.md"
