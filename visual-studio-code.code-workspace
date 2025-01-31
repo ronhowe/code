@@ -2,6 +2,12 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../holotable"
+		},
+		{
+			"path": "../swccg-card-json"
 		}
 	],
 	"settings": {
