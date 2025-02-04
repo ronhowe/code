@@ -126,7 +126,7 @@ function Start-Menu {
                 Write-Host
                 Show-Menu -MenuName "Azure"
             }
-            DisableConfirm = $false
+            DisableConfirm = $true
         }
         New-MenuItem @parameters |
         Add-MenuItem -Menu "Azure"
@@ -139,7 +139,7 @@ function Start-Menu {
                 Out-Null
                 Show-Menu -MenuName "Azure"
             }
-            DisableConfirm = $false
+            DisableConfirm = $true
         }
         New-MenuItem @parameters |
         Add-MenuItem -Menu "Azure"
