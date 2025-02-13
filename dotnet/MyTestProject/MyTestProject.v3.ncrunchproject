@@ -15,6 +15,21 @@
       <NamedTestSelector>
         <TestName>MyTestProject.MyLiveTests.LiveSiteTests (15607056182519074589)</TestName>
       </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>MyTestProject.MyIntegrationTests.WebHostTests (7853403886350120910)</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>MyTestProject.MyIntegrationTests.WebHostTests (7852447311233766565)</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>MyTestProject.MyIntegrationTests.WebHostTests (4545575094999389405)</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>MyTestProject.MyIntegrationTests.WebHostTests (4546531670115743750)</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>MyTestProject.MyLiveTests.LiveSiteTests (7116840031035379831)</TestName>
+      </NamedTestSelector>
     </IgnoredTests>
   </Settings>
 </ProjectConfiguration>
