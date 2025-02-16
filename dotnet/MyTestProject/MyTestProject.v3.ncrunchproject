@@ -30,6 +30,12 @@
       <NamedTestSelector>
         <TestName>MyTestProject.MyLiveTests.LiveSiteTests (7116840031035379831)</TestName>
       </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>MyTestProject.MyIntegrationTests.DebugHostTests (1695056846214297446)</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>MyTestProject.MyIntegrationTests.DebugHostTests (8614085571909565141)</TestName>
+      </NamedTestSelector>
     </IgnoredTests>
   </Settings>
 </ProjectConfiguration>
