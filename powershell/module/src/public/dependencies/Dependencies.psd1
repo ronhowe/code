@@ -1,9 +1,9 @@
 @{
     Modules = @(
-        @{ Name = 'Az' ; Version = '13.2.0' ; Repository = 'PSGallery' },
+        @{ Name = 'Az' ; Version = '13.3.0' ; Repository = 'PSGallery' },
         @{ Name = 'Az.Tools.Predictor' ; Version = '1.1.3' ; Repository = 'PSGallery' },
         @{ Name = 'CliMenu' ; Version = '1.0.52.0' ; Repository = 'PSGallery' },
-        @{ Name = 'dbatools' ; Version = '2.1.28' ; Repository = 'PSGallery' },
+        @{ Name = 'dbatools' ; Version = '2.1.30' ; Repository = 'PSGallery' },
         @{ Name = 'ImportExcel' ; Version = '7.8.10' ; Repository = 'PSGallery' },
         @{ Name = 'InvokeBuild' ; Version = '5.12.1' ; Repository = 'PSGallery' },
         @{ Name = 'Microsoft.PowerShell.Crescendo' ; Version = '1.1.0' ; Repository = 'PSGallery' },
