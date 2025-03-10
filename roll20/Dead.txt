@@ -1,1 +1,2 @@
 !token-mod --set statusmarkers|!dead
+!token-mod --set layer|map
