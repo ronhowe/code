@@ -1,1 +1,0 @@
-!token-mod --set statusmarkers|sleepy:+1
