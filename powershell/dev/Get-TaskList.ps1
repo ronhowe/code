@@ -2,15 +2,7 @@
 param(
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
-    $Path = @(
-        "$HOME\repos\ronhowe\azure",
-        "$HOME\repos\ronhowe\dev",
-        "$HOME\repos\ronhowe\dotnet",
-        "$HOME\repos\ronhowe\powershell",
-        "$HOME\repos\ronhowe\roll20",
-        "$HOME\repos\ronhowe\ronhowe",
-        "$HOME\repos\ronhowe\sql"
-    )
+    $Path = "$HOME\repos\ronhowe\code"
 )
 begin {
     Write-Debug "Beginning $($MyInvocation.MyCommand.Name)"

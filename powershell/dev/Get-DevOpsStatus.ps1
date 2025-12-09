@@ -3,7 +3,7 @@ param(
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
     [ValidateScript({ Test-Path -Path $_ })]
-    $Path = "$HOME\repos\ronhowe"
+    $Path = "$HOME\repos\ronhowe\code"
 )
 begin {
     Write-Debug "Beginning $($MyInvocation.MyCommand.Name)"
@@ -28,20 +28,11 @@ process {
     Write-Header -Header "Packages"
     dotnet list "$Path\dotnet\MySolution.sln" package --outdated
 
-    # Write-Host "Pausing 3 Second(s) For Review ; Please Wait"
-    # Start-Sleep -Seconds 3
-
     # Write-Header -Header "Resources"
     # & "$Path\powershell\dependency\resource\Test-Resources.ps1"
 
-    # Write-Host "Pausing 3 Second(s) For Review ; Please Wait"
-    # Start-Sleep -Seconds 3
-
     Write-Header -Header "Tools"
-    & "$Path\powershell\developer\Get-DevOpsTools.ps1" -Verbose
-
-    # Write-Host "Pausing 3 Second(s) For Review ; Please Wait"
-    # Start-Sleep -Seconds 3
+    & "$Path\powershell\dev\Get-DevOpsTools.ps1" -Verbose
 
     Write-Header -Header "WinGet"
     winget upgrade

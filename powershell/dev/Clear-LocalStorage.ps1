@@ -17,7 +17,7 @@ process {
     Write-Debug "Processing $($MyInvocation.MyCommand.Name)"
 
     Write-Verbose "Truncating Database Table"
-    Invoke-SqlCmd -ConnectionString "Server=LOCALHOST;Database=MyDatabase;Integrated Security=True;Application Name=$($MyInvocation.MyCommand.Name);Encrypt=False;Connect Timeout=1;Command Timeout=0;" -Query "TRUNCATE TABLE [MyTable];"
+    Invoke-SqlCmd -ConnectionString "Server=localhost;Database=MyDatabase;Integrated Security=True;Application Name=$($MyInvocation.MyCommand.Name);Encrypt=False;Connect Timeout=1;Command Timeout=0;" -Query "TRUNCATE TABLE [MyTable];"
     
     Write-Verbose "Removing Azure Storage Table"
     New-AzStorageContext -ConnectionString "UseDevelopmentStorage=true;" |
