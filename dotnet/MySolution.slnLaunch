@@ -4,11 +4,13 @@
     "Projects": [
       {
         "Path": "MyWebApplication10\\MyWebApplication10.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": "https"
       },
       {
         "Path": "MyConsoleApp10\\MyConsoleApp10.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": "MyConsoleApp10"
       }
     ]
   }

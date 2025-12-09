@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Mandatory = $false)]
-    [string]$Name = "MyWebApplication",
+    [string]$Name = "MyWebApplication10",
 
     [Parameter(Mandatory = $false)]
     [string]$Platform = "Kestrel",

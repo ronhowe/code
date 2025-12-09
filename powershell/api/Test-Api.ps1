@@ -2,9 +2,9 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $false)]
-    [ValidateSet("*", "MyWebApplication")]
+    [ValidateSet("*", "MyWebApplication10")]
     [string]
-    $Name = "MyWebApplication",
+    $Name = "MyWebApplication10",
 
     [Parameter(Mandatory = $false)]
     [ValidateSet("*", "AppService", "Kestrel")]
@@ -34,10 +34,10 @@ do {
         $includeTags = @()
         $excludeTags = @()
 
-        if ($SkipApplicationChecks) {
-            Write-Warning "Skipping Application Checks"
-            $excludeTags += "application"
-        }
+        # if ($SkipApplicationChecks) {
+        Write-Warning "Skipping Application Checks" -WarningAction Continue
+        $excludeTags += "application"
+        # }
 
         if ($SkipHealthChecks) {
             Write-Warning "Skipping Health Checks"

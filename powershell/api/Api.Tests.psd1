@@ -3,16 +3,16 @@
         @{
             Enabled  = $true
             Endpoint = @{
-                Name     = "MyWebApplication"
+                Name     = "MyWebApplication10"
                 Platform = "Kestrel"
                 Uri      = "https://localhost:444"
                 Header   = "MyHeader (Development)"
             }
         }
         @{
-            Enabled  = $true
+            Enabled  = $false
             Endpoint = @{
-                Name     = "MyWebApplication"
+                Name     = "MyWebApplication10"
                 Platform = "AppService"
                 Uri      = "https://app-ronhowe-0.azurewebsites.net:443"
                 Header   = "MyHeader (Production)"
