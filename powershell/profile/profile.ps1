@@ -107,26 +107,6 @@ process {
         Write-Warning "Shell Module Not Found"
     }
 
-    ## NOTE: Work shim.
-    Write-Verbose "Asserting Windows PowerShell ISE Host"
-    if ($host.Name -eq "Windows PowerShell ISE Host") {
-        Write-Verbose "Asserting ISESteroids Module Exists"
-        if (Get-Module -Name "ISESteroids" -ListAvailable) {
-            Write-Verbose "Importing ISESteroids"
-            Import-Module -Name "ISESteroids"
-        }
-        else {
-            Write-Warning "Skipping ISESteroids Module"
-        }
-    }
-
-    ## NOTE: Work shim.
-    Write-Verbose "Defining Shim Global Variables"
-    New-Variable -Name "Root" -Value "C:\VSTS" -Scope Global -Force -ErrorAction SilentlyContinue
-    Write-Debug "`$Root = $Root"
-    New-Variable -Name "VSTS" -Value "C:\VSTS" -Scope Global -Force -ErrorAction SilentlyContinue
-    Write-Debug "`$VSTS = $VSTS"
-
     Write-Verbose "Setting PSReadLine Options"
     if ($PSVersionTable.PSEdition -eq "Core") {
         Set-PSReadLineOption -PredictionSource HistoryAndPlugin
