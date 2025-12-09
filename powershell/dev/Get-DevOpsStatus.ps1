@@ -26,7 +26,7 @@ process {
     # Start-Sleep -Seconds 3
 
     Write-Header -Header "Packages"
-    dotnet list "$Path\dotnet\MySolution.sln" package --outdated
+    dotnet list "$Path\dotnet\MySolutionNoDb.sln" package --outdated
 
     # Write-Header -Header "Resources"
     # & "$Path\powershell\dependency\resource\Test-Resources.ps1"
