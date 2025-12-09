@@ -1,0 +1,44 @@
+{
+    "bicep.enableSurveys": false,
+    "editor.fontFamily": "'Cascadia Mono PL', Consolas, 'Courier New', monospace",
+    "editor.fontSize": 20,
+    "editor.minimap.size": "fill",
+    "editor.mouseWheelZoom": true,
+    "editor.renderWhitespace": "all",
+    "editor.rulers": [
+        // 80
+    ],
+    "explorer.compactFolders": false,
+    "files.associations": {
+        "*.ps1": "powershell"
+    },
+    "git.autofetch": true,
+    "git.enableSmartCommit": true,
+    "json.maxItemsComputed": 10000,
+    "polyglot-notebook.defaultNotebookExtension": ".dib",
+    "polyglot-notebook.defaultNotebookLanguage": "pwsh",
+    "powershell.integratedConsole.forceClearScrollbackBuffer": true,
+    "powershell.pester.codeLens": false,
+    "powershell.powerShellDefaultVersion": "PowerShell (x64)",
+    "python.languageServer": "Pylance",
+    "[python]": {
+        "editor.formatOnType": true
+    },
+    "security.workspace.trust.untrustedFiles": "open",
+    "settingsSync.ignoredExtensions": [],
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.defaultProfile.linux": "pwsh",
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.enablePersistentSessions": false,
+    "terminal.integrated.fontSize": 20,
+    "terminal.integrated.persistentSessionReviveProcess": "never",
+    "terminal.integrated.tabs.enabled": false,
+    "vscode-pets.petColor": "black",
+    "vscode-pets.petSize": "large",
+    "vscode-pets.position": "explorer",
+    "vscode-pets.throwBallWithMouse": true,
+    "vsicons.dontShowNewVersionMessage": true,
+    "workbench.colorTheme": "Visual Studio Dark",
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.startupEditor": "none"
+}
