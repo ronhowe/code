@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyWebApplication10", "MyWeb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyConsoleApp10", "MyConsoleApp10\MyConsoleApp10.csproj", "{C2710BE0-A07A-473E-8E86-9D55D322ADF4}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MyDatabase", "MyDatabase\MyDatabase.sqlproj", "{F3493371-13D5-444F-9C7A-67E3E6DACC9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,12 @@ Global
 		{C2710BE0-A07A-473E-8E86-9D55D322ADF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2710BE0-A07A-473E-8E86-9D55D322ADF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2710BE0-A07A-473E-8E86-9D55D322ADF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3493371-13D5-444F-9C7A-67E3E6DACC9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3493371-13D5-444F-9C7A-67E3E6DACC9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3493371-13D5-444F-9C7A-67E3E6DACC9F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{F3493371-13D5-444F-9C7A-67E3E6DACC9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3493371-13D5-444F-9C7A-67E3E6DACC9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3493371-13D5-444F-9C7A-67E3E6DACC9F}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
