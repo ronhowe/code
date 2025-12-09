@@ -38,7 +38,7 @@ param vaultFamily string = 'A'
 param vaultSku string = 'standard'
 
 // LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.web/serverfarms
-resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
+resource appServicePlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   name: planName
   location: location
   sku: {
@@ -48,7 +48,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
 }
 
 // LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.web/sites
-resource appService 'Microsoft.Web/sites@2024-04-01' = {
+resource appService 'Microsoft.Web/sites@2025-03-01' = {
   name: appName
   location: location
   properties: {
@@ -61,7 +61,7 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
           value: 'dotnet'
         }
       ]
-      netFrameworkVersion: 'v9.0'
+      netFrameworkVersion: 'v10.0'
       http20Enabled: true
       minTlsVersion: '1.2'
       use32BitWorkerProcess: false
@@ -75,8 +75,7 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
 }
 
 // LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.automation/automationaccounts
-// TODO: 2023-11-01 is the latest version in eastus2. 2024-04-01 is the latest version in eastus.
-resource automationAccount 'Microsoft.Automation/automationAccounts@2023-11-01' = if (includeAutomationAccount) {
+resource automationAccount 'Microsoft.Automation/automationAccounts@2024-10-23' = if (includeAutomationAccount) {
   name: automationAccountName
   location: location
   properties: {
@@ -87,7 +86,7 @@ resource automationAccount 'Microsoft.Automation/automationAccounts@2023-11-01' 
 }
 
 // LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.appconfiguration/configurationstores
-resource configStore 'Microsoft.AppConfiguration/configurationStores@2024-05-01' = if (includeAppConfiguration) {
+resource configStore 'Microsoft.AppConfiguration/configurationStores@2025-06-01-preview' = if (includeAppConfiguration) {
   name: configStoreName
   location: location
   sku: {
@@ -103,7 +102,7 @@ resource configStore 'Microsoft.AppConfiguration/configurationStores@2024-05-01'
 }
 
 // LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.operationalinsights/workspaces
-resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-07-01' = {
   name: workspaceName
   location: location
 }
@@ -120,7 +119,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
 }
 
 // LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts
-resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2025-06-01' = {
   name: storageAccountName
   location: location
   kind: storageKind
@@ -130,13 +129,13 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
 }
 
 // LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts/fileservices
-resource fileServices 'Microsoft.Storage/storageAccounts/fileServices@2023-05-01' = {
+resource fileServices 'Microsoft.Storage/storageAccounts/fileServices@2025-06-01' = {
   parent: storageAccount
   name: 'default'
 }
 
 // LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts/fileservices/shares
-resource fileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2023-05-01' = {
+resource fileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2025-06-01' = {
   parent: fileServices
   name: fileShareName
   properties: {
@@ -145,7 +144,7 @@ resource fileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2023-0
 }
 
 // LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults
-resource vault 'Microsoft.KeyVault/vaults@2024-04-01-preview' = if (includeKeyVault) {
+resource vault 'Microsoft.KeyVault/vaults@2025-05-01' = if (includeKeyVault) {
   name: keyVaultName
   location: location
   properties: {
@@ -169,7 +168,7 @@ resource vault 'Microsoft.KeyVault/vaults@2024-04-01-preview' = if (includeKeyVa
 }
 
 // LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults/keys
-resource key 'Microsoft.KeyVault/vaults/keys@2024-04-01-preview' = if (includeKeyVault) {
+resource key 'Microsoft.KeyVault/vaults/keys@2025-05-01' = if (includeKeyVault) {
   parent: vault
   name: keyName
   properties: {
@@ -181,7 +180,7 @@ resource key 'Microsoft.KeyVault/vaults/keys@2024-04-01-preview' = if (includeKe
 }
 
 // LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers
-resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
+resource sqlServer 'Microsoft.Sql/servers@2024-11-01-preview' = {
   name: sqlServerName
   location: location
   properties: {
@@ -192,7 +191,7 @@ resource sqlServer 'Microsoft.Sql/servers@2024-05-01-preview' = {
 }
 
 // LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers/databases
-resource sqlDatabase 'Microsoft.Sql/servers/databases@2024-05-01-preview' = {
+resource sqlDatabase 'Microsoft.Sql/servers/databases@2024-11-01-preview' = {
   parent: sqlServer
   name: sqlDatabaseName
   location: location
@@ -207,7 +206,7 @@ resource sqlDatabase 'Microsoft.Sql/servers/databases@2024-05-01-preview' = {
 }
 
 // LINK: https://learn.microsoft.com/en-us/azure/templates/microsoft.sql/servers/firewallrules
-resource sqlFirewallRule 'Microsoft.Sql/servers/firewallRules@2024-05-01-preview' = {
+resource sqlFirewallRule 'Microsoft.Sql/servers/firewallRules@2024-11-01-preview' = {
   parent: sqlServer
   name: sqlFirewallRuleName
   properties: {
@@ -216,7 +215,7 @@ resource sqlFirewallRule 'Microsoft.Sql/servers/firewallRules@2024-05-01-preview
   }
 }
 
-resource sqlFirewallRuleForAzure 'Microsoft.Sql/servers/firewallRules@2024-05-01-preview' = {
+resource sqlFirewallRuleForAzure 'Microsoft.Sql/servers/firewallRules@2024-11-01-preview' = {
   parent: sqlServer
   name: 'AllowAllAzureIps'
   properties: {

@@ -25,11 +25,10 @@ Import-Module -Name "Az.Websites"
 
 $tenant = $ShellConfig.Tenant
 $subscription = $ShellConfig.Subscription
-$credential = Get-Credential -Message "Enter Azure Credential"
 
-Connect-AzAccount -SubscriptionName $subscription -TenantId $tenant -Credential $credential
+Connect-AzAccount -TenantId $tenant -SubscriptionName $subscription -DeviceCode
 ## NOTE: Required for some Azure Key Vault operations only supported in the Azure CLI.
-az login --username $($credential.UserName) --password $($credential.Password | ConvertFrom-SecureString -AsPlainText) --tenant $tenant
+az login --tenant $tenant --allow-no-subscriptions --use-device-code
 az account set --subscription $subscription
 
 Disconnect-AzAccount
@@ -50,11 +49,11 @@ $automationAccountName = "aa-ronhowe-0"
 $configStoreName = "appc-ronhowe-0"
 $keyVaultName = "kv-ronhowe-0"
 $location = "eastus2"
-$parametersFile = Resolve-Path -Path "$HOME\repos\ronhowe\code\azure\parameters.json"
+$parametersFile = Resolve-Path -Path "$HOME\repos\ronhowe\code\azure\resource\parameters.json"
 $planName = "asp-ronhowe-0"
 $resourceGroupName = "rg-ronhowe-0"
 $storageAccountName = "stronhowe0"
-$templateFile = Resolve-Path -Path "$HOME\repos\ronhowe\code\azure\template.bicep"
+$templateFile = Resolve-Path -Path "$HOME\repos\ronhowe\code\azure\resource\template.bicep"
 $workspaceName = "law-ronhowe-0"
 
 New-AzResourceGroup -Name $resourceGroupName -Location $location -Force -Verbose
@@ -145,10 +144,10 @@ az appconfig kv import --name $configStoreName --source file --path .\configurat
 #region Deployment
 
 $codePath = "$HOME\repos\ronhowe\code"
-Remove-Item -Path "$codePath\dotnet\MyWebApplication\bin\Release\net9.0\publish" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
-dotnet publish "$codePath\dotnet\MyWebApplication\MyWebApplication.csproj" -c Release -o $path -v n
-Compress-Archive -Path "$codePath\dotnet\MyWebApplication\bin\Release\net9.0\publish\*" -DestinationPath "$codePath\dotnet\MyWebApplication\bin\Release\net9.0\publish\deploy.zip" -Force -Verbose
-Publish-AzWebApp -ResourceGroupName $resourceGroupName -Name $appName -ArchivePath "$codePath\dotnet\MyWebApplication\bin\Release\net9.0\publish\deploy.zip" -Force -Verbose
+Remove-Item -Path "$codePath\dotnet\MyWebApplication10\bin\Release\net10.0\publish" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
+dotnet publish "$codePath\dotnet\MyWebApplication10\MyWebApplication10.csproj" -c Release -o $path -v n
+Compress-Archive -Path "$codePath\dotnet\MyWebApplication10\bin\Release\net10.0\publish\*" -DestinationPath "$codePath\dotnet\MyWebApplication10\bin\Release\net10.0\publish\deploy.zip" -Force -Verbose
+Publish-AzWebApp -ResourceGroupName $resourceGroupName -Name $appName -ArchivePath "$codePath\dotnet\MyWebApplication10\bin\Release\net10.0\publish\deploy.zip" -Force -Verbose
 
 #endregion Deployment
 ###############################################################################
