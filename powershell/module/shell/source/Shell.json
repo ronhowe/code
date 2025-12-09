@@ -1,0 +1,16 @@
+{
+    "AppConfigurationName": "default",
+    "AutomationAccountName": "default",
+    "DeploymentName": "default",
+    "DriveLetter": "Z",
+    "Email": "user@domain.com",
+    "FileShareName": "default",
+    "KeyVaultName": "default",
+    "Location": "default",
+    "Name": "default",
+    "Organization": "default",
+    "ResourceGroupName": "default",
+    "StorageAccountName": "default",
+    "Subscription": "00000000-0000-0000-0000-000000000000",
+    "Tenant": "00000000-0000-0000-0000-000000000000"
+}

@@ -1,0 +1,16 @@
+{
+    "Email": "MOCKUSER@MOCKDOMAIN.COM",
+    "Name": "MOCKNAME",
+    "Organization": "MOCKORAGNIZATION",
+    "TenantId": "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF",
+    "SubscriptionId": "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF",
+    "ResourceGroupName": "MOCKRESOURCEGROUPNAME",
+    "Location": "MOCKLOCATION",
+    "DeploymentName": "MOCKDEPLOYMENTNAME",
+    "AppConfigurationName": "MOCKAPPCONFIGURATIONNAME",
+    "AutomationAccountName": "MOCKAUTOMATIONACCOUNTNAME",
+    "DriveLetter": "MOCKDRIVELETTER",
+    "FileShareName": "MOCKFILESHARENAME",
+    "KeyVaultName": "MOCKKEYVAULTNAME",
+    "StorageAccountName": "MOCKSTORAGEACCOUNTNAME"
+}

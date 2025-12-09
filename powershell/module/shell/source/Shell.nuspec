@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>Shell</id>
+        <version>0.0.0</version>
+        <authors>Ron Howe</authors>
+        <projectUrl>https://github.com/ronhowe/powershell</projectUrl>
+        <license type="expression">MIT</license>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <releaseNotes>Perfect is the enemy of good.</releaseNotes>
+        <description>A shell in PowerShell.</description>
+        <copyright>(c) Ron Howe. All rights reserved.</copyright>
+        <tags>powershell psmodule shell</tags>
+    </metadata>
+</package>

@@ -1,0 +1,7 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":[],"name":"csharp"},{"aliases":[],"languageName":"pwsh","name":"pwsh"}]}}
+
+#!pwsh
+
+& "$HOME\repos\ronhowe\code\powershell\runbooks\Debug-Runbook.ps1" -Verbose -Debug
