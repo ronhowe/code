@@ -2,7 +2,6 @@
     "bicep.enableSurveys": false,
     "editor.fontFamily": "'Cascadia Mono PL', Consolas, 'Courier New', monospace",
     "editor.fontSize": 20,
-    "editor.minimap.size": "fill",
     "editor.mouseWheelZoom": true,
     "editor.renderWhitespace": "all",
     "editor.rulers": [
@@ -32,13 +31,45 @@
     "terminal.integrated.enablePersistentSessions": false,
     "terminal.integrated.fontSize": 20,
     "terminal.integrated.persistentSessionReviveProcess": "never",
-    "terminal.integrated.tabs.enabled": false,
     "vscode-pets.petColor": "black",
     "vscode-pets.petSize": "large",
     "vscode-pets.position": "explorer",
     "vscode-pets.throwBallWithMouse": true,
     "vsicons.dontShowNewVersionMessage": true,
-    "workbench.colorTheme": "Visual Studio Dark",
     "workbench.iconTheme": "vscode-icons",
-    "workbench.startupEditor": "none"
+    "workbench.startupEditor": "none",
+    "mssql.enableRichExperiences": true,
+    "mssql.connections": [
+        {
+            "authenticationType": "Integrated",
+            "connectTimeout": 30,
+            "applicationName": "vscode-mssql",
+            "server": "localhost",
+            "profileName": "MyProfile",
+            "encrypt": "Optional",
+            "password": "",
+            "id": "F54FA515-A65A-4513-A0E2-D5501C40DA37",
+            "groupId": "95B9721F-2AB3-4E1A-8D04-9C66587F6FBB"
+        }
+    ],
+    "mssql.openQueryResultsInTabByDefaultDoNotShowPrompt": true,
+    "@azure.argTenant": "",
+    "mssql.connectionGroups": [
+        {
+            "name": "ROOT",
+            "id": "95B9721F-2AB3-4E1A-8D04-9C66587F6FBB"
+        }
+    ],
+    "terminal.integrated.shellIntegration.decorationsEnabled": "never",
+    "powershell.buttons.showPanelMovementButtons": true,
+    "github.copilot.chat.codeGeneration.instructions": [
+        {
+            "text": "- @azure Rule - Use Azure Best Practices: When generating code for Azure, running terminal commands for Azure, or performing operations related to Azure, invoke your `azure_development-get_best_practices` tool if available."
+        }
+    ],
+    "application.shellEnvironmentResolutionTimeout": 30,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "terminal.integrated.stickyScroll.enabled": false,
+    "git.openRepositoryInParentFolders": "never",
+    "editor.stickyScroll.enabled": false
 }
