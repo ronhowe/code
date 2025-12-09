@@ -4,7 +4,7 @@ param(
     [ValidateNotNullOrEmpty()]
     [ValidateScript({ Test-Path -Path $_ })]
     [string]
-    $Path = "$HOME\repos\ronhowe\code\dotnet"
+    $Path = "$HOME\repos\ronhowe\code\dotnet\MySolutionNoDb.sln"
 )
 begin {
     Write-Debug "Beginning $($MyInvocation.MyCommand.Name)"
