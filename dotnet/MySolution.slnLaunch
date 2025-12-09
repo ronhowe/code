@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "MyLaunchProfile",
+    "Projects": [
+      {
+        "Path": "MyWebApplication10\\MyWebApplication10.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "MyConsoleApp10\\MyConsoleApp10.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
