@@ -12,7 +12,7 @@ public class Program
 {
     private static bool _benchmark;
     private static bool _clear;
-    private static bool _color;
+    private static bool _nocolor;
     private static bool _noHeaders;
 
     static void Main(string[] args)
@@ -24,7 +24,7 @@ public class Program
 
         _benchmark = args.Contains("--benchmark");
         _clear = args.Contains("--clear");
-        _color = args.Contains("--color");
+        _nocolor = args.Contains("--nocolor");
         _noHeaders = args.Contains("--noheaders");
 
         var background = Console.BackgroundColor;
@@ -95,7 +95,7 @@ public class Program
 
     private static void Refresh(string message, long duration, Uri uri, ConsoleColor color)
     {
-        if (_color)
+        if (!_nocolor)
         {
             Console.BackgroundColor = color;
         }
