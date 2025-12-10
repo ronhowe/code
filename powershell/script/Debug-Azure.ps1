@@ -28,6 +28,7 @@ $subscription = $ShellConfig.Subscription
 
 Connect-AzAccount -TenantId $tenant -SubscriptionName $subscription -DeviceCode
 ## NOTE: Required for some Azure Key Vault operations only supported in the Azure CLI.
+## You will be prompted to select a subscription if your account has access to multiple.
 az login --tenant $tenant --allow-no-subscriptions --use-device-code
 az account set --subscription $subscription
 
