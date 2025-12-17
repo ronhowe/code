@@ -17,6 +17,7 @@
 		}
 	],
 	"settings": {
-		"dotnet.defaultSolution": "dotnet/MySolutionNoDb.sln"
+		"dotnet.defaultSolution": "dotnet/MySolutionNoDb.sln",
+		"powershell.cwd": "code"
 	}
 }
