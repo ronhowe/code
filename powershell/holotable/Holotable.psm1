@@ -259,63 +259,63 @@ function ConvertTo-CdfGameText {
             $output = "{0}\n\n{1}" -f $output, $Context.conceptBy
         }
 
-        @("LOST:", "USED:", "STARTING:", "Requirements:", "Wild cards (0-7):", "Wild cards (1-6):", "Wild cards (2-7):", "Clone cards:", "Stakes:", "Mentor:") |
-        ForEach-Object {
-            # Shim for Reveal Ourselves To The Jedi
-            if (($output.Contains($_)) -and ($Context.id -ne 2108)) {
-                $output = $output.Replace($_, "\n$_") 
-            }
-        }
+        # @("LOST:", "USED:", "STARTING:", "Requirements:", "Wild cards (0-7):", "Wild cards (1-6):", "Wild cards (2-7):", "Clone cards:", "Stakes:", "Mentor:") |
+        # ForEach-Object {
+        #     # Shim for Reveal Ourselves To The Jedi
+        #     if (($output.Contains($_)) -and ($Context.id -ne 2108)) {
+        #         $output = $output.Replace($_, "\n$_") 
+        #     }
+        # }
 
-        # Attack Run
-        if ($Context.id -eq 169) {
-            @(" Enter Trench:", " Provide Cover:", " It's Away!:", " Pull Up!:", " X =", " Y =", " Z =", " *Your Proton") |
-            ForEach-Object {
-                if ($output.Contains($_)) {
-                    $output = $output.Replace($_, "\n$($_.Trim())") 
-                }
-            }
-        }
+        # # Attack Run
+        # if ($Context.id -eq 169) {
+        #     @(" Enter Trench:", " Provide Cover:", " It's Away!:", " Pull Up!:", " X =", " Y =", " Z =", " *Your Proton") |
+        #     ForEach-Object {
+        #         if ($output.Contains($_)) {
+        #             $output = $output.Replace($_, "\n$($_.Trim())") 
+        #         }
+        #     }
+        # }
 
-        # Commence Primary Ignition
-        if ($Context.id -eq 508) {
-            @(" Name the System:", " You May Fire When Ready:", " Stand By:", " X =", " Y =", " Z =") |
-            ForEach-Object {
-                if ($output.Contains($_)) {
-                    $output = $output.Replace($_, "\n$($_.Trim())") 
-                }
-            }
-        }
+        # # Commence Primary Ignition
+        # if ($Context.id -eq 508) {
+        #     @(" Name the System:", " You May Fire When Ready:", " Stand By:", " X =", " Y =", " Z =") |
+        #     ForEach-Object {
+        #         if ($output.Contains($_)) {
+        #             $output = $output.Replace($_, "\n$($_.Trim())") 
+        #         }
+        #     }
+        # }
 
-        # Commence Primary Ignition (V)
-        if ($Context.id -eq 6187) {
-            @(" Prepare Single Reactor Ignition:", " Fire!:", " It's Beautiful:", " X =") |
-            ForEach-Object {
-                if ($output.Contains($_)) {
-                    $output = $output.Replace($_, "\n$($_.Trim())") 
-                }
-            }
-        }
+        # # Commence Primary Ignition (V)
+        # if ($Context.id -eq 6187) {
+        #     @(" Prepare Single Reactor Ignition:", " Fire!:", " It's Beautiful:", " X =") |
+        #     ForEach-Object {
+        #         if ($output.Contains($_)) {
+        #             $output = $output.Replace($_, "\n$($_.Trim())") 
+        #         }
+        #     }
+        # }
 
-        # Hyperoute Navigation Chart
-        if ($Context.id -eq 6365) {
-            @("[0]", " [1]", " [2]", " [3]", " [4]", " [5]", " [6]", " [7]", " [8]", " [9]", " * Known Rebel Base") |
-            ForEach-Object {
-                if ($output.Contains($_)) {
-                    $output = $output.Replace($_, "\n$($_.Trim())") 
-                }
-            }
-        }
+        # # Hyperoute Navigation Chart
+        # if ($Context.id -eq 6365) {
+        #     @("[0]", " [1]", " [2]", " [3]", " [4]", " [5]", " [6]", " [7]", " [8]", " [9]", " * Known Rebel Base") |
+        #     ForEach-Object {
+        #         if ($output.Contains($_)) {
+        #             $output = $output.Replace($_, "\n$($_.Trim())") 
+        #         }
+        #     }
+        # }
 
-        # Target The Main Generator
-        if ($Context.id -eq 2422) {
-            @(" Prepare To Target The Main Generator:", " Maximum Firepower!:", " X =", " Y =") |
-            ForEach-Object {
-                if ($output.Contains($_)) {
-                    $output = $output.Replace($_, "\n$($_.Trim())") 
-                }
-            }
-        }
+        # # Target The Main Generator
+        # if ($Context.id -eq 2422) {
+        #     @(" Prepare To Target The Main Generator:", " Maximum Firepower!:", " X =", " Y =") |
+        #     ForEach-Object {
+        #         if ($output.Contains($_)) {
+        #             $output = $output.Replace($_, "\n$($_.Trim())") 
+        #         }
+        #     }
+        # }
     }
     catch {
         Write-Warning "Failed to parse gametext."
@@ -640,7 +640,8 @@ function ConvertTo-CdfLine {
                 $line2 = "{0}\n" -f $setTag
                 $line3 = if ($iconsTag -ne "") { "{0}\n" -f $iconsTag } else { "" }
                 $line4 = if ($parsecTag -ne "") { "{0}\n" -f $parsecTag } else { "" }
-                $line5 = "{0}" -f $gametextTag.Replace("Dark:  ", "DARK ($darkSideIcons): ").Replace("Light:  ", "LIGHT ($lightSideIcons): ").Replace("Dark:", "DARK ($darkSideIcons): ").Replace("Light:", "LIGHT ($lightSideIcons): ").Replace("Text: DARK (", "Text:\nDARK (").Replace("Text: LIGHT (", "Text:\nLIGHT (").Replace(".  DARK (", ".\n\nDARK (").Replace(".  LIGHT (", ".\n\nLIGHT (").Replace(".'  DARK (", ".'\n\nDARK (").Replace(".'  LIGHT (", ".'\n\nLIGHT (")
+                # $line5 = "{0}" -f $gametextTag.Replace("Dark:  ", "DARK ($darkSideIcons): ").Replace("Light:  ", "LIGHT ($lightSideIcons): ").Replace("Dark:", "DARK ($darkSideIcons): ").Replace("Light:", "LIGHT ($lightSideIcons): ").Replace("Text: DARK (", "Text:\nDARK (").Replace("Text: LIGHT (", "Text:\nLIGHT (").Replace(".  DARK (", ".\n\nDARK (").Replace(".  LIGHT (", ".\n\nLIGHT (").Replace(".'  DARK (", ".'\n\nDARK (").Replace(".'  LIGHT (", ".'\n\nLIGHT (")
+                $line5 = "{0}" -f $gametextTag.Replace("Dark:", "DARK ($darkSideIcons):").Replace("Light:", "LIGHT ($lightSideIcons):")
 
                 "card `"$image`" `"{0}{1}{2}{3}{4}\n{5}`"" -f $line0, $line1, $line2, $line3, $line4, $line5
             }
