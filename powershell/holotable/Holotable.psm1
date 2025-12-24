@@ -11,7 +11,15 @@ function ConvertTo-CdfAbility {
     [string]$output = "";
 
     try {
-        $output = $Context.front.ability
+        switch ($Context.id) {
+            5396 {
+                # Brainiac (V)
+                $output = "Pi"
+            }
+            default {
+                $output = $Context.front.ability
+            }
+        }
     }
     catch {
         Write-Warning "Failed to parse ability."
@@ -98,11 +106,11 @@ function ConvertTo-CdfDestiny {
                 }
                 5373 {
                     # BB-8 In Black Squadron 1
-                    $output = "pi"
+                    $output = "Pi"
                 }
                 319 {
                     # Brainiac
-                    $output = "pi"
+                    $output = "Pi"
                 }
                 6849 {
                     # Puck
@@ -126,6 +134,9 @@ function ConvertTo-CdfDestiny {
                         }
                         "½ or 5½" {
                             $output = "5.5"
+                        }
+                        "π" {
+                            $output = "Pi"
                         }
                         "π or 2π" {
                             $output = "Pi or 2Pi"
@@ -321,6 +332,7 @@ function ConvertTo-CdfGameText {
         Write-Warning "Failed to parse gametext."
     }
 
+    $output = $output.Replace("π", "Pi")
     $output = $output.Replace("½", "1/2")
     $output = $output.Replace("¼", "1/4")
 
@@ -660,9 +672,9 @@ function ConvertTo-CdfLine {
                 $line1 = "{0} {1} [{2}]\n" -f $side, $type, $rarity
                 $line2 = "{0}\n" -f $setTag
                 $line3 = if ($iconsTag -ne "") { "{0}\n" -f $iconsTag } else { "" }
-                $frontTitle = $title.Split('/').Trim()[0]
-                $backTitle = $title.Split('/').Trim()[1].Replace(' (V)', '')
-                $line4 = "{0}" -f $gametext.Replace("$frontTitle`:", "$frontTitle`:\n\n").Replace($backTitle, "\n\n$backTitle")
+                # $frontTitle = $title.Split('/').Trim()[0]
+                # $backTitle = $title.Split('/').Trim()[1].Replace(' (V)', '')
+                $line4 = "{0}" -f $gametext #.Replace("$frontTitle`:", "$frontTitle`:\n\n").Replace($backTitle, "\n\n$backTitle")
 
                 "card `"$image`" `"{0}{1}{2}{3}\n{4}`"" -f $line0, $line1, $line2, $line3, $line4
             }
