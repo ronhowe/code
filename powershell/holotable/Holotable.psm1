@@ -335,6 +335,7 @@ function ConvertTo-CdfGameText {
     $output = $output.Replace("π", "Pi")
     $output = $output.Replace("½", "1/2")
     $output = $output.Replace("¼", "1/4")
+    $output = $output.Replace("°", " degrees")
 
     Write-ParseLog -Key "gametext" -Value $output
     Write-Output $output
