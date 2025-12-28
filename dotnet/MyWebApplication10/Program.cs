@@ -99,8 +99,8 @@ try
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = "yourIssuer",
-                ValidAudience = "yourAudience",
+                ValidIssuer = "myIssuer",
+                ValidAudience = "myAudience",
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key))
             };
         });

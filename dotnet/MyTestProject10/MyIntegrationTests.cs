@@ -139,8 +139,8 @@ public sealed class MyIntegrationTests : TestBase
             Subject = new ClaimsIdentity([new Claim("MyClaimType", "MyClaimValue")]),
             Expires = DateTime.UtcNow.AddMinutes(30),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-            Issuer = "yourIssuer",
-            Audience = "yourAudience"
+            Issuer = "myIssuer",
+            Audience = "myAudience"
         };
         SecurityToken _token = _tokenHandler.CreateToken(_tokenDescriptor);
         string _tokenString = _tokenHandler.WriteToken(_token);
