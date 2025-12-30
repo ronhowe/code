@@ -20,11 +20,11 @@ public sealed class MyDebugTests : TestBase
         Debug.WriteLine($"Creating Globally Unique Identifier");
         Debug.WriteLine(Guid.CreateVersion7());
 
-        Debug.WriteLine($"Generating Random Number");
-        byte[] key = new byte[4096 / 8];
-        RandomNumberGenerator.Fill(key);
-        string base64Key = Convert.ToBase64String(key);
-        //Debug.WriteLine(base64Key);
+        Debug.WriteLine($"Generating 4096-bit Random Key");
+        byte[] buffer = new byte[4096 / 8];
+        RandomNumberGenerator.Fill(buffer);
+        string key = Convert.ToBase64String(buffer);
+        Debug.WriteLine(key);
 
         Debug.WriteLine($"Running PowerShell Script");
         using PowerShell ps = PowerShell.Create();
