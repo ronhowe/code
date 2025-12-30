@@ -24,7 +24,7 @@ public sealed class MyDebugTests : TestBase
         byte[] key = new byte[4096 / 8];
         RandomNumberGenerator.Fill(key);
         string base64Key = Convert.ToBase64String(key);
-        Debug.WriteLine(base64Key);
+        //Debug.WriteLine(base64Key);
 
         Debug.WriteLine($"Running PowerShell Script");
         using PowerShell ps = PowerShell.Create();

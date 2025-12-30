@@ -144,11 +144,72 @@ public sealed class MyIntegrationTests : TestBase
         };
         SecurityToken _token = _tokenHandler.CreateToken(_tokenDescriptor);
         string _tokenString = _tokenHandler.WriteToken(_token);
-        Debug.WriteLine(_tokenString);
+        //Debug.WriteLine(_tokenString);
 
         Debug.WriteLine($"Sending GET Request With {value}");
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _tokenString);
-        using HttpResponseMessage _response = await _client.GetAsync($"/v{version}/{nameof(MyService)}?input={value}", cts.Token);
+        string _relativePath = $"/v{version}/{nameof(MyService)}?input={value}";
+        Uri _fullRequestUri = new(_client.BaseAddress!, _relativePath);
+
+        using HttpRequestMessage _request = new(HttpMethod.Get, _fullRequestUri);
+        _request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _tokenString);
+
+        #region Raw HTTP Request Log
+        Debug.WriteLine(String.Empty);
+        Debug.WriteLine("<<<<< RAW HTTP REQUEST BEGIN >>>>>");
+        Debug.WriteLine($"{_request.Method} {_request.RequestUri} HTTP/1.1");
+
+        foreach (KeyValuePair<string, IEnumerable<string>> header in _request.Headers)
+        {
+            Debug.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
+        }
+
+        if (_request.Content is not null)
+        {
+            foreach (KeyValuePair<string, IEnumerable<string>> header in _request.Content.Headers)
+            {
+                Debug.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
+            }
+
+            string _body = await _request.Content.ReadAsStringAsync(cts.Token);
+            if (!string.IsNullOrEmpty(_body))
+            {
+                Debug.WriteLine(string.Empty);
+                Debug.WriteLine(_body);
+            }
+        }
+
+        Debug.WriteLine("<<<<< RAW HTTP REQUEST END >>>>>");
+        Debug.WriteLine(String.Empty);
+        #endregion Raw HTTP Request Log
+
+        using HttpResponseMessage _response = await _client.SendAsync(_request, cts.Token);
+
+        #region Raw HTTP Response Log
+        string _responseBody = await _response.Content.ReadAsStringAsync(cts.Token);
+
+        Debug.WriteLine(String.Empty);
+        Debug.WriteLine(">>>>> RAW HTTP RESPONSE BEGIN <<<<<");
+        Debug.WriteLine($"HTTP/{_response.Version} {(int)_response.StatusCode} {_response.ReasonPhrase}");
+
+        foreach (KeyValuePair<string, IEnumerable<string>> header in _response.Headers)
+        {
+            Debug.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
+        }
+
+        foreach (KeyValuePair<string, IEnumerable<string>> header in _response.Content.Headers)
+        {
+            Debug.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
+        }
+
+        if (!string.IsNullOrEmpty(_responseBody))
+        {
+            Debug.WriteLine(string.Empty);
+            Debug.WriteLine(_responseBody);
+        }
+
+        Debug.WriteLine(">>>>> RAW HTTP RESPONSE END <<<<<");
+        Debug.WriteLine(String.Empty);
+        #endregion Raw HTTP Response Log
 
         Debug.WriteLine($"Asserting HTTP Status Code Is {HttpStatusCode.OK}");
         _response.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -171,6 +232,6 @@ public sealed class MyIntegrationTests : TestBase
         }
 
         Debug.WriteLine($"Asserting Result Is {value}");
-        Boolean.Parse(_response.Content.ReadAsStringAsync(cts.Token).Result).ShouldBe(value);
+        Boolean.Parse(_responseBody).ShouldBe(value);
     }
 }
