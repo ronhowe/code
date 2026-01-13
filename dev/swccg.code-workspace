@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../holotable"
+		},
+		{
+			"path": "../../swccg-card-json"
+		},
+		{
+			"path": "../../../swccgpc/holotable"
+		},
+		{
+			"path": "../../../swccgpc/swccg-card-json"
+		}
+	],
+	"settings": {
+		"dotnet.defaultSolution": "dotnet/MySolutionNoDb.sln",
+		"powershell.cwd": "code"
+	}
+}

@@ -2,18 +2,6 @@
 	"folders": [
 		{
 			"path": ".."
-		},
-		{
-			"path": "../../holotable"
-		},
-		{
-			"path": "../../swccg-card-json"
-		},
-		{
-			"path": "../../../swccgpc/holotable"
-		},
-		{
-			"path": "../../../swccgpc/swccg-card-json"
 		}
 	],
 	"settings": {
