@@ -1,0 +1,47 @@
+name: MyDotNetPipeline
+trigger:
+  branches:
+    include:
+      - main
+    exclude:
+      - dev
+  paths:
+    include:
+      - azure-pipelines.yml
+      - dotnet/*
+    exclude:
+      - README.md
+pool:
+  vmImage: 'ubuntu-latest'
+variables:
+  buildConfiguration: 'Release'
+stages:
+  - stage: MyStage
+    jobs:
+      - job: MyJob
+        steps:
+          - script: 'echo "Power-On Self-Test (POST)"'
+            displayName: 'Power-On Self-Test (POST)'
+          - task: UseDotNet@2
+            displayName: 'Install .NET SDK'
+            inputs:
+              version: '9.x'
+              performMultiLevelLookup: true
+              includePreviewVersions: true
+          - task: DotNetCoreCLI@2
+            displayName: 'Run .NET Restore'
+            inputs:
+              command: 'restore'
+              projects: 'dotnet/**/*.sln'
+          - task: DotNetCoreCLI@2
+            displayName: 'Run .NET Build'
+            inputs:
+              command: 'build'
+              projects: 'dotnet/**/*.sln'
+              arguments: '--configuration $(buildConfiguration)'
+          - task: DotNetCoreCLI@2
+            displayName: 'Run .NET Test'
+            inputs:
+              command: test
+              projects: 'dotnet/**/*Tests/*.csproj'
+              arguments: '--configuration $(buildConfiguration)'

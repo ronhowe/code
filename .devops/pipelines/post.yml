@@ -1,0 +1,68 @@
+name: 'MyPowerShellPipeline'
+trigger:
+  branches:
+    include:
+      - 'main'
+    exclude:
+      - 'dev'
+  paths:
+    include:
+      - 'devops/post.yml'
+pool:
+  vmImage: 'ubuntu-latest'
+variables:
+  major: 0
+  minor: 0
+  patch: $(Build.BuildId)
+stages:
+  - stage: 'MyStage'
+    jobs:
+      - job: 'MyJob'
+        steps:
+          - script: 'echo "Power-On Self-Test"'
+            displayName: 'Power-On Self-Test'
+          # - bash: |
+          #   echo "##[group]Beginning of a group"
+          #   echo "##[warning]Warning message"
+          #   echo "##[error]Error message"
+          #   echo "##[section]Start of a section"
+          #   echo "##[debug]Debug text"
+          #   echo "##[command]Command-line being run"
+          #   echo "##[endgroup]"
+          # - task: 'PowerShell@2'
+          #   displayName: 'Test Debug Log'
+          #   inputs:
+          #     targetType: 'inline'
+          #     script: |
+          #       Write-Host "##vso[task.LogIssue type=debug;]Power-On Self-Test (1 of 5) => Debug Logging ON"
+          # - task: 'PowerShell@2'
+          #   displayName: 'Test Information Log'
+          #   inputs:
+          #     targetType: 'inline'
+          #     script: |
+          #       Write-Host "##vso[task.LogIssue type=information;]Power-On Self-Test (2 of 5) => Information Logging ON"
+          - task: 'PowerShell@2'
+            displayName: 'Warning Log Test'
+            inputs:
+              targetType: 'inline'
+              script: |
+                Write-Host "##vso[task.LogIssue type=warning;]Power-On Self-Test (3 of 5) => Warning Logging ON"
+          - task: 'PowerShell@2'
+            displayName: 'Error Log Test'
+            inputs:
+              targetType: 'inline'
+              script: |
+                Write-Host "##vso[task.LogIssue type=error;]Power-On Self-Test (4 of 5) => Error Logging ON"
+          # - task: 'PowerShell@2'
+          #   displayName: 'Test Critical Log'
+          #   inputs:
+          #     targetType: 'inline'
+          #     script: |
+          #       Write-Host "##vso[task.LogIssue type=critical;]Power-On Self-Test (5 of 5) => Critical Logging ON"
+          - task: PowerShell@2
+            displayName: 'Increment Version Test'
+            inputs:
+              targetType: 'inline'
+              script: |
+                $version = "$(major).$(minor).$(patch)"
+                Write-Host $version

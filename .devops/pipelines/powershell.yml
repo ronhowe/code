@@ -1,0 +1,86 @@
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops&tabs=yaml-editor
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/powershell-v2?view=azure-pipelines
+name: 'MyPowerShellPipeline'
+trigger:
+  branches:
+    include:
+      - 'main'
+    exclude:
+      - 'dev'
+  paths:
+    include:
+      - 'azure-pipelines.yml'
+      - 'powershell/*'
+    exclude:
+      - 'README.md'
+pool:
+  vmImage: 'ubuntu-latest'
+variables:
+  module_name: 'Shell'
+  major: 0
+  minor: 0
+  patch: $(Build.BuildId)
+stages:
+  - stage: 'MyStage'
+    jobs:
+      - job: 'MyJob'
+        steps:
+          - script: 'echo "Power-On Self-Test (POST)"'
+            displayName: 'Power-On Self-Test (POST)'
+          - task: 'PowerShell@2'
+            displayName: 'Power-On Self-Test (POST) - WARNING'
+            inputs:
+              targetType: 'inline'
+              script: 'Write-Host "##vso[task.LogIssue type=warning;]This is the warning"'
+          - task: 'PowerShell@2'
+            name: 'installDependencies'
+            displayName: 'Install Dependencies'
+            inputs:
+              pwsh: true
+              targetType: 'filePath'
+              filePath: 'powershell/dependencies/Install-Dependencies.ps1'
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |
+                $moduleVersion = "$major.$minor.$patch"
+                Write-Output $moduleVersion
+          - task: PowerShell@2
+            name: 'createModuleFile'
+            displayName: "Create Module File"
+            inputs:
+              targetType: 'inline'
+              script: |
+                $filePath = 'powershell/modules/shell/Module.psd1'
+                $content = Get-Content -Path $filePath -Raw
+                $newVersion = "$(major).$(minor).$(patch)"
+                $updatedContent = $content -replace '0\.0\.0', $newVersion
+                Set-Content -Path $filePath -Value $updatedContent
+                Get-Content -Path $filePath -Raw
+          - task: 'PowerShell@2'
+            name: 'startBuild'
+            displayName: "Start Build"
+            inputs:
+              pwsh: true
+              targetType: 'filePath'
+              filePath: 'powershell/modules/shell/Start-Build.ps1'
+          # - task: 'PowerShell@2'
+          #   name: 'startPackage'
+          #   displayName: 'Start Package'
+          #   inputs:
+          #     pwsh: true
+          #     targetType: 'filePath'
+          #     filePath: 'powershell/modules/shell/Start-Package.ps1'
+          # - task: 'PublishBuildArtifacts@1'
+          #   name: 'publishArtifacts'
+          #   displayName: 'Publish Artifacts'
+          #   inputs:
+          #     ArtifactName: 'module'
+          #     PathtoPublish: 'powershell/modules/shell/Output'
+          # - task: 'NuGetCommand@2'
+          #   name: 'publishPackage'
+          #   displayName: 'Publish Package'
+          #   inputs:
+          #     command: 'push'
+          #     packagesToPush: 'powershell/modules/shell/Output/Packages/*.nupkg'
+          #     publishVstsFeed: "$(module_name)/$(module_name)"
