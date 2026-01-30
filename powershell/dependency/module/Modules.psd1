@@ -11,7 +11,7 @@
         @{ Name = 'Configuration' ; Version = '1.6.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://dbatools.io
-        @{ Name = 'dbatools' ; Version = '2.7.23' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
+        @{ Name = 'dbatools' ; Version = '2.7.22' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://learn.microsoft.com/en-us/powershell/module/iisadministration
         @{ Name = 'IISAdministration' ; Version = '1.1.0.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
@@ -20,7 +20,7 @@
         @{ Name = 'ImportExcel' ; Version = '7.8.10' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/nightroman/Invoke-Build
-        @{ Name = 'InvokeBuild' ; Version = '5.14.22' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
+        @{ Name = 'InvokeBuild' ; Version = '5.14.23' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/PoshCode/Metadata
         @{ Name = 'Metadata' ; Version = '1.5.7' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
