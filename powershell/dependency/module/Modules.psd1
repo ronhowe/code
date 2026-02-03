@@ -1,7 +1,7 @@
 @{
     Modules = @(
         # https://github.com/Azure/azure-powershell
-        @{ Name = 'Az' ; Version = '15.2.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
+        @{ Name = 'Az' ; Version = '15.3.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/torgro/cliMenu
         ## NOTE: This module is failing to download.
