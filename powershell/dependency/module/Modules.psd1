@@ -57,7 +57,7 @@
         @{ Name = 'PSDepend' ; Version = '0.3.8' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/adamdriscoll/pspolly
-        @{ Name = 'PSPolly' ; Version = '0.0.2' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
+        @{ Name = 'PSPolly' ; Version = '0.0.3' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/PowerShell/PSReadLine
         @{ Name = 'PSReadLine' ; Version = '2.3.6' ; Repository = 'PSGallery' }
