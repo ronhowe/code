@@ -21,6 +21,12 @@ process {
     Write-Verbose "Power-On Self-Test (4 of 5) => `$WarningPreference = $WarningPreference"
     Write-Verbose "Power-On Self-Test (5 of 5) => `$ErrorActionPreference = $ErrorActionPreference"
 
+    Write-Debug "Write-Debug Message"
+    Write-Verbose "Write-Verbose Message"
+    Write-Information "Write-Information Message"
+    # does not output in Azure Automation
+    Write-Host "Write-Host Message" -ForegroundColor Green
+
     Write-Verbose "Logging Who"
     @($env:USERNAME, $env:USER)
 
@@ -35,9 +41,6 @@ process {
 
     Write-Verbose "Logging Why"
     $Why
-
-    # does not output in Azure Automation
-    Write-Host "OK" -ForegroundColor Green
 }
 end {
     Write-Debug "End $($MyInvocation.MyCommand.Name)"
