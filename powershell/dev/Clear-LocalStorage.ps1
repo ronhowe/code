@@ -26,7 +26,7 @@ process {
     
     Write-Verbose "Removing Log Files"
     Get-ChildItem -Path $LogsPath -Recurse |
-    Remove-Item -Force -ErrorAction Continue
+    Remove-Item -Force -ErrorAction SilentlyContinue
 }
 end {
     Write-Debug "Ending $($MyInvocation.MyCommand.Name)"
