@@ -11,22 +11,29 @@ public sealed class MyDebugTests : TestBase
     [TestCategory("DebugTest")]
     public void MyDebugTest()
     {
-        Debug.WriteLine($"Debugging");
+        Debug.WriteLine("Debugging");
+
+        Debug.WriteLine($"Current Directory: {Environment.CurrentDirectory}");
+
+        //Environment.GetEnvironmentVariable("PATH")?.Split(';').ToList().ForEach(p => Debug.WriteLine(p));
+
+        var path = @"D:\repos\ronhowe\swccg-card-json\Dark.json";
+        Debug.WriteLine(path);
 
 #if DEBUG
-        Debug.WriteLine($"Defining DEBUG");
+        Debug.WriteLine("Defining DEBUG");
 #endif
 
-        Debug.WriteLine($"Creating Globally Unique Identifier");
+        Debug.WriteLine("Creating Globally Unique Identifier");
         Debug.WriteLine(Guid.CreateVersion7());
 
-        Debug.WriteLine($"Generating 4096-bit Random Key");
+        Debug.WriteLine("Generating 4096-bit Random Key");
         byte[] buffer = new byte[4096 / 8];
         RandomNumberGenerator.Fill(buffer);
         string key = Convert.ToBase64String(buffer);
         Debug.WriteLine(key);
 
-        Debug.WriteLine($"Running PowerShell Script");
+        Debug.WriteLine("Running PowerShell Script");
         using PowerShell ps = PowerShell.Create();
 
         ps.AddScript("$DebugPreference = 'Continue';");
