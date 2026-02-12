@@ -15,10 +15,10 @@ public sealed class MyDebugTests : TestBase
 
         Debug.WriteLine($"Current Directory: {Environment.CurrentDirectory}");
 
-        //Environment.GetEnvironmentVariable("PATH")?.Split(';').ToList().ForEach(p => Debug.WriteLine(p));
-
-        var path = @"D:\repos\ronhowe\swccg-card-json\Dark.json";
+        var path = @"C:\folder\file.ext";
         Debug.WriteLine(path);
+        Debug.WriteLine(Path.GetDirectoryName(path)); // C:\folder
+        Debug.WriteLine(Path.GetFileName(path)); // file.ext
 
 #if DEBUG
         Debug.WriteLine("Defining DEBUG");
@@ -84,5 +84,12 @@ public sealed class MyDebugTests : TestBase
         {
             Debug.WriteLine($"Debug: {debug}");
         }
+
+        Environment
+            .GetEnvironmentVariable("PATH")?
+            .Split(';')
+            .ToList()
+            .ForEach(p => Debug.WriteLine(p))
+        ;
     }
 }
