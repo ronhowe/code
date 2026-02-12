@@ -89,7 +89,7 @@ public sealed class MyDebugTests : TestBase
             .GetEnvironmentVariable("PATH")?
             .Split(';')
             .ToList()
-            .ForEach(p => Debug.WriteLine(p))
+            .ForEach(p => Debug.WriteLine($"PATH: {p}"))
         ;
     }
 }
