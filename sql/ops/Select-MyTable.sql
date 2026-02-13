@@ -1,3 +1,6 @@
+USE [MyDatabase];
+GO
+
 PRINT N'Selecting MyTable';
 SELECT
     [PartitionKey]

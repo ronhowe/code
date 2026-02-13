@@ -1,3 +1,6 @@
+USE [MyDatabase];
+GO
+
 :setvar COUNT 10
 :setvar MYINPUT 1
 
@@ -17,5 +20,4 @@ VALUES
     ,CAST(NEWID() AS CHAR(36)) -- [RowKey]
     ,$(MYINPUT) -- [MyInput]
 );
-
 GO $(COUNT)

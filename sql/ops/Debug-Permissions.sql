@@ -1,3 +1,6 @@
+USE [MyDatabase];
+GO
+
 -- NOTE: Requires Entra ID authentication.
 PRINT N'Creating User';
 CREATE USER [app-ronhowe-0] FROM EXTERNAL PROVIDER;

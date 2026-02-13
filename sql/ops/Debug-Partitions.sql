@@ -1,3 +1,6 @@
+USE [MyDatabase];
+GO
+
 --RAISERROR (N'INTENTIONAL SAFETY ERROR', 20, 1) WITH LOG;
 
 PRINT N'Selecting Partition Functions';

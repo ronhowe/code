@@ -1,4 +1,5 @@
 USE [master];
+GO
 
 IF (DB_ID(N'MyDatabase') IS NOT NULL)
 BEGIN
