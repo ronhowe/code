@@ -3,12 +3,12 @@ param(
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $Msi = "dotnet-hosting-10.0.0-win.exe",
+    $Msi = "dotnet-hosting-10.0.3-win.exe",
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $Source = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/10.0.0/dotnet-hosting-10.0.0-win.exe",
+    $Source = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/10.0.3/dotnet-hosting-10.0.3-win.exe",
 
     [switch]
     $Cleanup

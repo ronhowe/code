@@ -1,7 +1,8 @@
 Describe "Guest Dsc Tests" {
     Context "Network Tests" {
         It "Asserting Ping Connectivity To <Name>" -ForEach ` @(
-            Get-VM -Name "LAB*" |
+            Get-VM |
+            Where-Object { $_.Name -like "LAB*" } |
             ForEach-Object { [hashtable]@{ "Name" = $_.Name } }
         ) {
             (Test-NetConnection -ComputerName $Name -WarningAction SilentlyContinue).PingSucceeded |
@@ -10,7 +11,8 @@ Describe "Guest Dsc Tests" {
     }
     Context "RDP Tests" {
         It "Asserting RDP Connectivity On Poprt 3389 To <Name>" -ForEach ` @(
-            Get-VM -Name "LAB*" |
+            Get-VM |
+            Where-Object { $_.Name -like "LAB*" } |
             ForEach-Object { [hashtable]@{ "Name" = $_.Name } }
         ) {
             (Test-NetConnection -ComputerName $Name -Port 3389 -WarningAction SilentlyContinue).TcpTestSucceeded |
@@ -19,7 +21,8 @@ Describe "Guest Dsc Tests" {
     }
     Context "WinRM Tests" {
         It "Asserting WinRM Connectivity On Port 5985 To <Name>" -ForEach ` @(
-            Get-VM -Name "LAB*" |
+            Get-VM |
+            Where-Object { $_.Name -like "LAB*" } |
             ForEach-Object { [hashtable]@{ "Name" = $_.Name } }
         ) {
             (Test-NetConnection -ComputerName $Name -Port 5985 -WarningAction SilentlyContinue).TcpTestSucceeded |
@@ -36,7 +39,8 @@ Describe "Guest Dsc Tests" {
     }
     Context "SQL Tests" {
         It "Asserting SQL Connectivity On Port 1433 To <Name>" -ForEach ` @(
-            Get-VM -Name "LAB*SQL*" |
+            Get-VM |
+            Where-Object { ($_.Name -like "LAB*") -and ($_.Name -notlike "LAB*DC*") } |
             ForEach-Object { [hashtable]@{ "Name" = $_.Name } }
         ) {
             (Test-NetConnection -ComputerName $Name -Port 1433 -WarningAction SilentlyContinue).TcpTestSucceeded |
@@ -45,7 +49,8 @@ Describe "Guest Dsc Tests" {
     }
     Context "Web Tests" {
         It "Asserting HTTP Connectivity On Port 80 To <Name>" -ForEach ` @(
-            Get-VM -Name "LAB*WEB*" |
+            Get-VM |
+            Where-Object { ($_.Name -like "LAB*") -and ($_.Name -notlike "LAB*DC*") } |
             ForEach-Object { [hashtable]@{ "Name" = $_.Name } }
         ) {
             (Test-NetConnection -ComputerName $Name -Port 80 -WarningAction SilentlyContinue).TcpTestSucceeded |

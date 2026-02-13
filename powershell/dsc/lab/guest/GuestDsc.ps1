@@ -2,12 +2,12 @@ Configuration GuestDsc {
     param(
         [Parameter(Mandatory = $true)]
         [ValidateNotNullorEmpty()]
-        [pscredential]
+        [PSCredential]
         $Credential,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullorEmpty()]
-        [pscredential]
+        [PSCredential]
         $SqlCredential,
 
         [Parameter(Mandatory = $true)]
@@ -17,16 +17,19 @@ Configuration GuestDsc {
     )
 
     Import-DscResource -ModuleName "ActiveDirectoryCSDsc" -ModuleVersion "5.0.0"
-    Import-DscResource -ModuleName "ActiveDirectoryDsc" -ModuleVersion "6.7.0"
+    Import-DscResource -ModuleName "ActiveDirectoryDsc" -ModuleVersion "6.7.1"
     Import-DscResource -ModuleName "ComputerManagementDsc" -moduleVersion "10.0.0"
     Import-DscResource -ModuleName "NetworkingDsc" -ModuleVersion "9.1.0"
     Import-DscResource -ModuleName "PSDesiredStateConfiguration" -ModuleVersion "1.1"
     Import-DscResource -ModuleName "SecurityPolicyDsc" -ModuleVersion "2.10.0.0"
-    Import-DscResource -ModuleName "SqlServerDsc" -ModuleVersion "17.2.0"
+    Import-DscResource -ModuleName "SqlServerDsc" -ModuleVersion "17.5.1"
 
     $domainAdminCredential = New-Object System.Management.Automation.PSCredential ($("{0}\{1}" -f $Node.DomainName, $Credential.UserName), $Credential.Password)
 
+    ################################################################################
     #region AllNodes
+    ################################################################################
+
     Node $AllNodes.NodeName {
         LocalConfigurationManager {
             ActionAfterReboot  = $Node.ActionAfterReboot
@@ -133,13 +136,27 @@ Configuration GuestDsc {
         #     NetworkCategory = "Private"
         # }
     }
+
+    ################################################################################
     #endregion AllNodes
-    #region LAB-APP-00
-    Node "LAB-APP-00" {
+    ################################################################################
+
+    ################################################################################
+    #region APP
+    ################################################################################
+
+    Node @("LAB-APP-00", "LAB-SQL-00", "LAB-WEB-00") {
         ## NOTE: No configuration required.
     }
-    #endregion LAB-APP-00
-    #region LAB-DC-00
+
+    ################################################################################
+    #endregion APP
+    ################################################################################
+
+    ################################################################################
+    #region DC
+    ################################################################################
+
     Node "LAB-DC-00" {
         WindowsFeature "InstallActiveDirectoryServices" {
             Ensure = "Present"
@@ -196,9 +213,16 @@ Configuration GuestDsc {
             UserName               = $SqlCredential.UserName.Split('\')[1]
         }
     }
-    #endregion LAB-DC-00
-    #region LAB-SQL-00
-    Node "LAB-SQL-00" {
+
+    ################################################################################
+    #endregion DC
+    ################################################################################
+
+    ################################################################################
+    #region SQL
+    ################################################################################
+
+    Node @("LAB-APP-00", "LAB-SQL-00", "LAB-WEB-00") {
         ScheduledTask "MyScheduledTask" {
             ActionArguments     = "-Version >> C:\powershell.log"
             ActionExecutable    = "powershell.exe"
@@ -279,9 +303,16 @@ Configuration GuestDsc {
             PsDscRunAsCredential = $domainAdminCredential
         }
     }
-    #endregion LAB-SQL-00
-    #region LAB-WEB-00
-    Node "LAB-WEB-00" {
+
+    ################################################################################
+    #endregion SQL
+    ################################################################################
+
+    ################################################################################
+    #region WEB
+    ################################################################################
+
+    Node @("LAB-APP-00", "LAB-SQL-00", "LAB-WEB-00") {
         WindowsFeature "InstallWeb-Asp-Net45" {
             Name   = "Web-Asp-Net45"
             Ensure = "Present"
@@ -342,5 +373,8 @@ Configuration GuestDsc {
             DependsOn = "[WindowsFeature]InstallWeb-Server"
         }
     }
-    #endregion LAB-WEB-00
+
+    ################################################################################
+    #endregion WEB
+    ################################################################################
 }

@@ -3,7 +3,7 @@
         @{
             ActionAfterReboot    = 'ContinueConfiguration'
             PSDscAllowDomainUser = $true
-            CertificateFile      = '~\repos\ronhowe\powershell\dsc\lab\DscPublicKey.cer'
+            CertificateFile      = '~\repos\ronhowe\code\powershell\dsc\lab\DscPublicKey.cer'
             ConfigurationMode    = 'ApplyAndAutoCorrect'
             DnsIpAddress         = '192.168.1.1'
             DomainName           = 'LAB.LOCAL'
@@ -43,16 +43,22 @@ WMI-RPCSS-In-TCP
         },
         ## TODO: Determine if , or ; or both are the appropriate delimiters.
         @{
-            IpAddress = '192.168.0.20/24'
-            NodeName  = 'LAB-APP-00'
-            Sku       = 'Desktop'
+            NodeName            = 'LAB-APP-00'
+            IpAddress           = '192.168.0.20/24'
+            Sku                 = 'Desktop'
+            #
+            Features            = 'SQLENGINE'
+            InstanceName        = 'MSSQLSERVER'
+            SourcePath          = 'E:\'
+            SQLSysAdminAccounts = @('Administrators')
         };
         @{
-            DatabasePath                = 'C:\Windows\NTDS'
-            IpAddress                   = '192.168.0.10/24'
-            LogPath                     = 'C:\Windows\NTDS'
             NodeName                    = 'LAB-DC-00'
+            IpAddress                   = '192.168.0.10/24'
+            DatabasePath                = 'C:\Windows\NTDS'
             Sku                         = 'Desktop'
+            #
+            LogPath                     = 'C:\Windows\NTDS'
             SkipCcmClientSDK            = $true
             SkipComponentBasedServicing = $true
             SkipPendingFileRename       = $true
@@ -60,18 +66,24 @@ WMI-RPCSS-In-TCP
             SysvolPath                  = 'C:\Windows\SYSVOL'
         };
         @{
-            Features            = 'SQLENGINE'
-            IpAddress           = '192.168.0.30/24'
-            InstanceName        = 'MSSQLSERVER'
             NodeName            = 'LAB-SQL-00'
+            IpAddress           = '192.168.0.30/24'
             Sku                 = 'Desktop'
+            #
+            Features            = 'SQLENGINE'
+            InstanceName        = 'MSSQLSERVER'
             SourcePath          = 'E:\'
             SQLSysAdminAccounts = @('Administrators')
         };
         @{
-            IpAddress = '192.168.0.40/24'
-            NodeName  = 'LAB-WEB-00'
-            Sku       = 'Desktop'
+            NodeName            = 'LAB-WEB-00'
+            IpAddress           = '192.168.0.40/24'
+            Sku                 = 'Desktop'
+            #
+            Features            = 'SQLENGINE'
+            InstanceName        = 'MSSQLSERVER'
+            SourcePath          = 'E:\'
+            SQLSysAdminAccounts = @('Administrators')
         };
     );
 }
