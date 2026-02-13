@@ -64,16 +64,16 @@ Configuration HostDsc {
                     Path               = $Node.WindowsServerIsoPath
                     VMName             = $_
                 }
-                if ($_ -like "*SQL*") {
-                    xVMDvdDrive "xVMDvdDriveSqlServer$_" {
-                        ControllerLocation = 1
-                        ControllerNumber   = 1
-                        DependsOn          = "[xVMHyperV]xVMHyperV$_"
-                        Ensure             = $Ensure
-                        Path               = $Node.SqlServerIsoPath
-                        VMName             = $_
-                    }
+                # if ($_ -like "*SQL*") {
+                xVMDvdDrive "xVMDvdDriveSqlServer$_" {
+                    ControllerLocation = 1
+                    ControllerNumber   = 1
+                    DependsOn          = "[xVMHyperV]xVMHyperV$_"
+                    Ensure             = $Ensure
+                    Path               = $Node.SqlServerIsoPath
+                    VMName             = $_
                 }
+                # }
             }
         }
     }
