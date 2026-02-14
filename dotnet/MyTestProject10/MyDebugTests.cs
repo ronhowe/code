@@ -12,27 +12,54 @@ public sealed class MyDebugTests : TestBase
     public void MyDebugTest()
     {
         Debug.WriteLine("Debugging");
+    }
 
-        Debug.WriteLine($"Current Directory: {Environment.CurrentDirectory}");
-
-        var path = @"C:\folder\file.ext";
-        Debug.WriteLine(path);
-        Debug.WriteLine(Path.GetDirectoryName(path)); // C:\folder
-        Debug.WriteLine(Path.GetFileName(path)); // file.ext
-
+    [TestMethod]
+    [TestCategory("DebugTest")]
+    public void DebugDirective()
+    {
 #if DEBUG
         Debug.WriteLine("Defining DEBUG");
 #endif
+    }
 
+    [TestMethod]
+    [TestCategory("DebugTest")]
+    public void DebugEnvironment()
+    {
+        Debug.WriteLine($"Current Directory: {Environment.CurrentDirectory}");
+
+        Environment
+            .GetEnvironmentVariable("PATH")?
+            .Split(';')
+            .ToList()
+            .ForEach(p => Debug.WriteLine($"PATH: {p}"))
+        ;
+    }
+
+    [TestMethod]
+    [TestCategory("DebugTest")]
+    public void DebugGuid()
+    {
         Debug.WriteLine("Creating Globally Unique Identifier");
         Debug.WriteLine(Guid.CreateVersion7());
+    }
 
-        Debug.WriteLine("Generating 4096-bit Random Key");
-        byte[] buffer = new byte[4096 / 8];
-        RandomNumberGenerator.Fill(buffer);
-        string key = Convert.ToBase64String(buffer);
-        Debug.WriteLine(key);
+    [TestMethod]
+    [TestCategory("DebugTest")]
+    public void DebugFileSystem()
+    {
+        var path = @"C:\folder\file.ext";
 
+        Debug.WriteLine(path);
+        Debug.WriteLine(Path.GetDirectoryName(path)); // C:\folder
+        Debug.WriteLine(Path.GetFileName(path)); // file.ext
+    }
+
+    [TestMethod]
+    [TestCategory("DebugTest")]
+    public void DebugPowerShell()
+    {
         Debug.WriteLine("Running PowerShell Script");
         using PowerShell ps = PowerShell.Create();
 
@@ -84,12 +111,16 @@ public sealed class MyDebugTests : TestBase
         {
             Debug.WriteLine($"Debug: {debug}");
         }
+    }
 
-        Environment
-            .GetEnvironmentVariable("PATH")?
-            .Split(';')
-            .ToList()
-            .ForEach(p => Debug.WriteLine($"PATH: {p}"))
-        ;
+    [TestMethod]
+    [TestCategory("DebugTest")]
+    public void DebugRandomKey()
+    {
+        Debug.WriteLine("Generating 4096-bit Random Key");
+        byte[] buffer = new byte[4096 / 8];
+        RandomNumberGenerator.Fill(buffer);
+        string key = Convert.ToBase64String(buffer);
+        Debug.WriteLine(key);
     }
 }
