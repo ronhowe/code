@@ -69,6 +69,6 @@
     <Build Include="Tables\dbo.MyTable.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="localhost.MyDatabase.publish.publish.xml" />
+    <None Include="localhost.MyDatabase.publish.xml" />
   </ItemGroup>
 </Project>
