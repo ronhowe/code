@@ -1,0 +1,7 @@
+SET NOCOUNT ON;
+
+SELECT
+	GETDATE() AS [Now]
+	,UPPER(@@SERVERNAME) AS [ServerName]
+	,UPPER(@@VERSION) AS [Version]
+;
