@@ -9,9 +9,8 @@ public sealed class MyDebugTests : TestBase
 {
     [TestMethod]
     [TestCategory("DebugTest")]
-    public void MyDebugTest()
+    public void DebugBase()
     {
-        Debug.WriteLine("Debugging");
     }
 
     [TestMethod]
@@ -42,6 +41,7 @@ public sealed class MyDebugTests : TestBase
     public void DebugGuid()
     {
         Debug.WriteLine("Creating Globally Unique Identifier");
+
         Debug.WriteLine(Guid.CreateVersion7());
     }
 
@@ -49,6 +49,8 @@ public sealed class MyDebugTests : TestBase
     [TestCategory("DebugTest")]
     public void DebugFileSystem()
     {
+        Debug.WriteLine("Defining Path");
+
         var path = @"C:\folder\file.ext";
 
         Debug.WriteLine(path);
@@ -60,7 +62,8 @@ public sealed class MyDebugTests : TestBase
     [TestCategory("DebugTest")]
     public void DebugPowerShell()
     {
-        Debug.WriteLine("Running PowerShell Script");
+        Debug.WriteLine("Defining PowerShell Runspace");
+
         using PowerShell ps = PowerShell.Create();
 
         ps.AddScript("$DebugPreference = 'Continue';");
@@ -70,6 +73,8 @@ public sealed class MyDebugTests : TestBase
         ps.AddScript("$WarningPreference = 'Continue';");
         ps.AddScript("Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process;");
         ps.AddScript(@"D:\repos\ronhowe\code\powershell\script\Debug-AzureAutomationRunbook.ps1");
+
+        Debug.WriteLine("Running PowerShell Script");
 
         var results = ps.Invoke();
 
@@ -118,9 +123,11 @@ public sealed class MyDebugTests : TestBase
     public void DebugRandomKey()
     {
         Debug.WriteLine("Generating 4096-bit Random Key");
+
         byte[] buffer = new byte[4096 / 8];
         RandomNumberGenerator.Fill(buffer);
         string key = Convert.ToBase64String(buffer);
+
         Debug.WriteLine(key);
     }
 }
