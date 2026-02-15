@@ -113,17 +113,17 @@ Configuration GuestDsc {
                 State       = "Running"
             }
         }
-        $Node.FirewallRules |
-        ConvertFrom-Csv |
-        ForEach-Object {
-            Firewall "SetFirewallRule$($_.Name)" {
-                Action  = "Allow"
-                Enabled = $true
-                Ensure  = "Present"
-                Name    = $_.Name
-                Profile = @("Domain", "Private")
-            }
-        }
+        # $Node.FirewallRules |
+        # ConvertFrom-Csv |
+        # ForEach-Object {
+        #     Firewall "SetFirewallRule$($_.Name)" {
+        #         Action  = "Allow"
+        #         Enabled = $true
+        #         Ensure  = "Present"
+        #         Name    = $_.Name
+        #         Profile = @("Domain", "Private")
+        #     }
+        # }
         Registry "EnableRemoteDesktop" {
             Ensure    = "Present"
             Key       = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server"
@@ -371,6 +371,25 @@ Configuration GuestDsc {
             Name      = "Web-Security"
             Ensure    = "Present"
             DependsOn = "[WindowsFeature]InstallWeb-Server"
+        }
+        WindowsFeature "InstallWeb-Mgmt-Console" {
+            Name      = "Web-Mgmt-Console"
+            Ensure    = "Present"
+            DependsOn = "[WindowsFeature]InstallWeb-Server"
+        }
+        Registry "EnableIISRemoteManagement" {
+            Ensure    = "Present"
+            Key       = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WebManagement\Server"
+            ValueName = "EnableRemoteManagement"
+            ValueData = "1"
+            ValueType = "Dword"
+            DependsOn = "[WindowsFeature]InstallWeb-Mgmt-Service"
+        }
+        Service "StartWebManagementService" {
+            Name        = "WMSVC"
+            State       = "Running"
+            StartupType = "Automatic"
+            DependsOn   = "[Registry]EnableIISRemoteManagement"
         }
     }
 

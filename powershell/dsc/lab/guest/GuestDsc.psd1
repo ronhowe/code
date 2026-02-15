@@ -39,6 +39,7 @@ NETDIS-WSDEVNTS-In-TCP
 NETDIS-WSDEVNTS-Out-TCP
 RemoteDesktop-UserMode-In-TCP
 WMI-RPCSS-In-TCP
+WMSVC-In-TCP
 '@
         },
         ## TODO: Determine if , or ; or both are the appropriate delimiters.
