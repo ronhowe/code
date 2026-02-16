@@ -70,5 +70,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="localhost.MyDatabase.publish.xml" />
+    <None Include="LAB-SQL-00.MyDatabase.publish.xml" />
   </ItemGroup>
 </Project>
