@@ -89,8 +89,8 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
         }
 
         // TODO: Read retry settings from configuration.
-        const int _maxRetries = 2;
-        const int _retryMilliseconds = 1;
+        const int _maxRetries = 3;
+        const int _retryMilliseconds = 1000;
 
         if (logger.IsEnabled(LogLevel.Information))
         {

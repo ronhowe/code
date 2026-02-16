@@ -12,14 +12,14 @@ public sealed class MyLiveTests : TestBase
     [Ignore]
     [TestMethod]
     [TestCategory("LiveTest")]
-    [DataRow("https://localhost:443/healthcheck", "MyHeader (Production)", HttpStatusCode.OK)]
-    [DataRow("https://lab-web-00:443/healthcheck", "MyHeader (Production)", HttpStatusCode.OK)]
-    [DataRow("https://app-ronhowe-0.azurewebsites.net:443/healthcheck", "MyHeader (Production)", HttpStatusCode.OK)]
+    //[DataRow("https://localhost:443/healthcheck", "MyHeader (Production)", HttpStatusCode.OK)]
+    //[DataRow("https://lab-web-00:443/healthcheck", "MyHeader (Production)", HttpStatusCode.OK)]
+    //[DataRow("https://app-ronhowe-0.azurewebsites.net:443/healthcheck", "MyHeader (Production)", HttpStatusCode.OK)]
     public void LiveSiteTests(string uriString, string headerValue, HttpStatusCode httpStatusCode)
     {
         // TODO: Read retry settings from configuration.
-        const int _maxRetries = 1;
-        const int _retryMilliseconds = 1;
+        const int _maxRetries = 3;
+        const int _retryMilliseconds = 1000;
 
         Debug.WriteLine("Creating Retry Policy");
         AsyncRetryPolicy retryPolicy = Policy
