@@ -4,8 +4,7 @@
         @{ Name = 'Az' ; Version = '15.4.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/torgro/cliMenu
-        ## NOTE: This module is failing to download.
-        # @{ Name = 'CliMenu' ; Version = '1.0.52.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
+        @{ Name = 'CliMenu' ; Version = '1.0.66' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/PoshCode/Configuration
         @{ Name = 'Configuration' ; Version = '1.6.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
