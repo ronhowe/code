@@ -62,7 +62,7 @@
         @{ Name = 'PSReadLine' ; Version = '2.3.6' ; Repository = 'PSGallery' }
 
         # https://github.com/PowerShell/PSScriptAnalyzer
-        @{ Name = 'PSScriptAnalyzer' ; Version = '1.24.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
+        @{ Name = 'PSScriptAnalyzer' ; Version = '1.25.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/mgajda83/PSWindowsUpdate
         ## NOTE: This module is interesting, but doesn't work well remotely.
