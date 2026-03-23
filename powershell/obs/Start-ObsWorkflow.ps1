@@ -13,7 +13,7 @@ param (
     [Parameter(Mandatory = $false)]
     [ValidateNotNullorEmpty()]
     [ValidateScript({ Test-Path -Path $_ })]
-    $HandbrakeCliPath = "$HOME\Downloads\HandBrakeCLI-1.11.0-win-x86_64\HandBrakeCLI.exe"
+    $HandbrakeCliPath = "$HOME\Downloads\HandBrakeCLI-1.11.1-win-x86_64\HandBrakeCLI.exe"
 )
 begin {
     Write-Debug "Begin $($MyInvocation.MyCommand.Name)"
