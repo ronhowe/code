@@ -10,7 +10,7 @@
         @{ Name = 'Configuration' ; Version = '1.6.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://dbatools.io
-        @{ Name = 'dbatools' ; Version = '2.8.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
+        @{ Name = 'dbatools' ; Version = '2.8.1' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://learn.microsoft.com/en-us/powershell/module/iisadministration
         @{ Name = 'IISAdministration' ; Version = '1.1.0.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
