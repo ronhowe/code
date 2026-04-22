@@ -204,7 +204,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.7" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.7" />
-    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.6.0" />
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.6.1" />
     <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="MSTest" Version="4.2.1" />
     <PackageReference Include="Shouldly" Version="4.3.0" />
