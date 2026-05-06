@@ -1,7 +1,7 @@
 @{
     Modules = @(
         # https://github.com/Azure/azure-powershell
-        @{ Name = 'Az' ; Version = '15.6.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
+        @{ Name = 'Az' ; Version = '15.6.1' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/torgro/cliMenu
         @{ Name = 'CliMenu' ; Version = '1.0.66' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
