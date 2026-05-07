@@ -1,39 +1,52 @@
-$nodes = @("LAB-APP-00", "LAB-SQL-00", "LAB-WEB-00")
+param(
+    [PSCredential]
+    $Administrator,
 
-$identity = "LAB\sql-service"
+    [string[]]
+    $Nodes = @("LAB-APP-00", "LAB-SQL-00", "LAB-WEB-00"),
 
-$password = Read-Host -Prompt "Enter Password" -MaskInput
+    [string[]]
+    $ServiceName,
 
-$serviceName = "MSSQLSERVER"
-# $serviceName = @("MSSQLSERVER", "SQLAgent")
+    [pscredential]
+    $Credential
+)
 
-foreach ($node in $nodes) {
-    Invoke-Command -ComputerName $node -ScriptBlock {
-        param(
-            [string]
-            $ServiceName,
+Invoke-Command -ComputerName $Nodes -Credential $Administrator -ScriptBlock {
+    param(
+        [string[]]
+        $ServiceName,
 
-            [string]
-            $Identity,
+        [string]
+        $UserName,
 
-            # Intentionally not a secure string to avoid the complexity
-            # of converting to and from a secure string locally and remotely.
-            # Risk is mitigated by the call being made by WinRM + HTTPS.
-            [string]
-            $Password
-        )
+        # intentionally not a secure string due to cross server encryption boundaries
+        [string]
+        $Password
+    )
 
-        $service = Get-WmiObject -Class Win32_Service -Filter "Name='$ServiceName'"
-        $result = $service.Change(
-            $null, $null, $null, $null, $null, $null,
-            $Identity,
-            $Password
-        )
+    foreach ($service in $ServiceName) {
+        Write-Host "[$env:COMPUTERNAME] Updating Service $service ; Identity $UserName"
 
-        if ($result -eq 0) {
-            Write-Host "[$env:COMPUTERNAME] Service $($service.Name) ; Identity $Identity ; Password Updated"
-        } else {
-            Write-Host "[$env:COMPUTERNAME] Service $($service.Name) ; Identity $Identity ; Update Failed Because $result"
+        $s = Get-WmiObject -Class Win32_Service -Filter "Name='$service'"
+
+        if ($null -eq $s) {
+            Write-Warning "[$env:COMPUTERNAME] Service $service Not Found" -WarningAction Continue
+            continue
         }
-    } -ArgumentList $serviceName, $identity, $password
-}
+
+        try {
+            $s.Change(
+                $null, $null, $null, $null, $null, $null,
+                $UserName,
+                $Password
+            ) |
+            Out-Null
+
+            Write-Host "[$env:COMPUTERNAME] Service $service ; Identity $UserName ; Password Updated"
+        }
+        catch {
+            Write-Error "[$env:COMPUTERNAME] Service $service ; Identity $UserName ; Update Failed Because $_"
+        }
+    }
+} -ArgumentList @($ServiceName, $Credential.UserName, $Credential.GetNetworkCredential().Password)
