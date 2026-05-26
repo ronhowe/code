@@ -16,7 +16,7 @@ process {
     Out-Null
 
     Write-Verbose "Setting Profile"
-    "# auto-generated`n$(Resolve-Path -Path "$PSScriptRoot\profile.ps1")" |
+    "# auto-generated`n$(Resolve-Path -Path "$PSScriptRoot\profile.ps1" -ErrorAction SilentlyContinue)" |
     Set-Content -Path $profile -Force
 
     Write-Verbose "Loading Profile"
