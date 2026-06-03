@@ -60,3 +60,12 @@
 !token-mod --set statusmarkers|-yellow
 !token-mod --set tint_color|transparent
 !token-mod --set tooltip| --off show_tooltip
+!token-mod --set bar1_value|
+!token-mod --set bar2_value|
+!token-mod --set bar3_value|
+!token-mod --set bar1_max|
+!token-mod --set bar2_max|
+!token-mod --set bar3_max|
+!token-mod --set bar1_link|
+!token-mod --set bar2_link|
+!token-mod --set bar3_link|
