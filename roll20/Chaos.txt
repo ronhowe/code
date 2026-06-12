@@ -1,0 +1,1 @@
+/w gm &{template:default} {{name=Chaos}} {{Result=[[1t[Chaos]]]}}
