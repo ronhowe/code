@@ -37,7 +37,7 @@
         @{ Name = 'Microsoft.PowerShell.SecretStore' ; Version = '1.0.6' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core') },
 
         # https://github.com/PoshCode/ModuleBuilder
-        @{ Name = 'ModuleBuilder' ; Version = '3.2.16' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
+        @{ Name = 'ModuleBuilder' ; Version = '3.2.18' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://oneget.org/
         @{ Name = 'PackageManagement' ; Version = '1.4.8.1' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
@@ -53,7 +53,7 @@
         # @{ Name = 'PowerConfig' ; Version = '0.1.6' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/RamblingCookieMonster/PSDepend
-        @{ Name = 'PSDepend' ; Version = '0.3.8' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
+        @{ Name = 'PSDepend' ; Version = '0.4.1' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/adamdriscoll/pspolly
         @{ Name = 'PSPolly' ; Version = '0.0.3' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
