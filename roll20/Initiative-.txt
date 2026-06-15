@@ -1,2 +1,6 @@
+Peace
+!group-init --clear
+
+DEPRECATED
 !group-init --clear
 !tm reset
