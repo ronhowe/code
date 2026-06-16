@@ -1,1 +1,1 @@
-!token-mod --set bar3_value|?{Temp HP|10}
+!token-mod --set bar2_value|?{Temp HP|13}
