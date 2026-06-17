@@ -19,13 +19,13 @@
 !token-mod --set playersedit_bar2|off
 !token-mod --set playersedit_bar3|off
 !token-mod --set playersedit_name|off
-!token-mod --set showname|on
+!token-mod --set showname|off
 !token-mod --set showplayers_aura1|off
 !token-mod --set showplayers_aura2|off
 !token-mod --set showplayers_bar1|off
 !token-mod --set showplayers_bar2|off
 !token-mod --set showplayers_bar3|off
-!token-mod --set showplayers_name|on
+!token-mod --set showplayers_name|off
 !token-mod --set statusmarkers|-angel-outfit
 !token-mod --set statusmarkers|-archery-target
 !token-mod --set statusmarkers|-aura
