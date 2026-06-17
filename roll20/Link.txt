@@ -1,0 +1,3 @@
+!token-mod --set bar1_link|hp
+!token-mod --set bar2_link|hp_temp
+!token-mod --set bar3_link|hp_max
