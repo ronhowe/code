@@ -19,20 +19,20 @@ process {
 
     . "$PSScriptRoot\Write-Header.ps1"
 
+    Write-Header -Header "Tools"
+    & "$Path\powershell\dev\Get-DevOpsTools.ps1" -Verbose
+
+    Write-Header -Header "Packages"
+    dotnet list "$Path\dotnet\MySolutionNoDb.sln" package --outdated
+
     Write-Header -Header "Modules"
     & "$Path\powershell\dependency\module\Test-Modules.ps1"
 
     # Write-Host "Pausing 3 Second(s) For Review ; Please Wait"
     # Start-Sleep -Seconds 3
 
-    Write-Header -Header "Packages"
-    dotnet list "$Path\dotnet\MySolutionNoDb.sln" package --outdated
-
     # Write-Header -Header "Resources"
     # & "$Path\powershell\dependency\resource\Test-Resources.ps1"
-
-    Write-Header -Header "Tools"
-    & "$Path\powershell\dev\Get-DevOpsTools.ps1" -Verbose
 
     Write-Header -Header "WinGet"
     winget upgrade
