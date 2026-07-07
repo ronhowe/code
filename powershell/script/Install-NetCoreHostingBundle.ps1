@@ -8,7 +8,7 @@ param(
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $Source = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/10.0.3/dotnet-hosting-10.0.3-win.exe",
+    $Source = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/10.0.9/dotnet-hosting-10.0.9-win.exe",
 
     [switch]
     $Cleanup

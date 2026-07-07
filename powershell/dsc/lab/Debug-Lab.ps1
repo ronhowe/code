@@ -5,6 +5,8 @@ $ProgressPreference = "SilentlyContinue"
 Import-Module -Name "Hyper-V"
 Import-Module -Name "Pester"
 
+$credential = Get-Credential -Message "Enter Administrator Credential" -UserName "Administrator"
+
 # all at once
 $nodes = @("LAB-APP-00", "LAB-DC-00", "LAB-SQL-00", "LAB-WEB-00")
 # or one at a time
@@ -36,8 +38,6 @@ $nodes | Checkpoint-VM -SnapshotName "POST-OOBE" -Verbose
 
 $nodes | Start-VM -Verbose
 $nodes | Get-VM
-
-$credential = Get-Credential -Message "Enter Administrator Credential" -UserName "Administrator"
 
 ## NOTE: Rename-Guest is idempotent.
 & "$HOME\repos\ronhowe\code\powershell\dsc\lab\guest\Rename-Guest.ps1" -Nodes $nodes -Credential $credential
@@ -72,6 +72,7 @@ $nodes | Checkpoint-VM -SnapshotName "POST-DSC-PRE-REQUISITES" -Verbose
 $nodes | Start-VM -Verbose
 $nodes | Get-VM
 
+$credential = Get-Credential -Message "Enter Administrator Credential" -UserName "Administrator"
 $sqlCredential = Get-Credential -Message "Enter SQL Server Credential" -UserName "LAB\svcSqlServer"
 $thumbprint = & "$HOME\repos\ronhowe\code\powershell\dsc\lab\Get-DscEncryptionCertificate.ps1"
 
