@@ -1,7 +1,7 @@
 @{
     Modules = @(
         # https://github.com/Azure/azure-powershell
-        @{ Name = 'Az' ; Version = '16.0.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
+        @{ Name = 'Az' ; Version = '16.1.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/torgro/cliMenu
         @{ Name = 'CliMenu' ; Version = '1.0.66' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
@@ -43,7 +43,7 @@
         @{ Name = 'PackageManagement' ; Version = '1.4.8.1' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/pester/Pester
-        @{ Name = 'Pester' ; Version = '5.8.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
+        @{ Name = 'Pester' ; Version = '6.0.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/dahlbyk/posh-git
         @{ Name = 'posh-git' ; Version = '1.1.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
