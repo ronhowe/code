@@ -14,7 +14,8 @@ using System.Text;
 
 const string _myClaimPolicy = "MyClaimPolicy";
 const string _myHeaderKey = "MyHeader";
-const string _outputTemplate = "[{UtcTimestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
+//const string _outputTemplate = "[{UtcTimestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
+const string _outputTemplate = "[{UtcTimestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u3}] [{SourceContext}] {Message}{NewLine}{Exception}";
 const string _sourceContext = nameof(Program);
 
 Log.Logger = new LoggerConfiguration()
@@ -28,12 +29,12 @@ Log.Logger = new LoggerConfiguration()
 
 Serilog.ILogger _logger = Log.ForContext("SourceContext", _sourceContext);
 
-_logger.Verbose("POST (1 of 6) => Verbose Logging ON");
-_logger.Debug("POST (2 of 6) => Debug Logging ON");
-_logger.Information("POST (3 of 6) => Information Logging ON");
-_logger.Warning("POST (4 of 6) => Warning Logging ON");
-_logger.Error("POST (5 of 6) => Error Logging ON");
-_logger.Fatal("POST (6 of 6) => Fatal Logging ON");
+_logger.Verbose("POST (1 / 6) => Verbose Logging ON");
+_logger.Debug("POST (2 / 6) => Debug Logging ON");
+_logger.Information("POST (3 / 6) => Information Logging ON");
+_logger.Warning("POST (4 / 6) => Warning Logging ON");
+_logger.Error("POST (5 / 6) => Error Logging ON");
+_logger.Fatal("POST (6 / 6) => Fatal Logging ON");
 _logger.Information("{now} (LOCAL)", DateTime.Now);
 _logger.Information("{utcNow} (UTC)", DateTime.UtcNow);
 
@@ -113,12 +114,12 @@ try
     _logger.Information("Building Web Application");
     WebApplication _app = _builder.Build();
 
-    _app.Logger.LogTrace("POST (1 of 6) => Trace Logging ON");
-    _app.Logger.LogDebug("POST (2 of 6) => Debug Logging ON");
-    _app.Logger.LogInformation("POST (3 of 6) => Information Logging ON");
-    _app.Logger.LogWarning("POST (4 of 6) => Warning Logging ON");
-    _app.Logger.LogError("POST (5 of 6) => Error Logging ON");
-    _app.Logger.LogCritical("POST (6 of 6) => Critical Logging ON");
+    _app.Logger.LogTrace("POST (1 / 6) => Trace Logging ON");
+    _app.Logger.LogDebug("POST (2 / 6) => Debug Logging ON");
+    _app.Logger.LogInformation("POST (3 / 6) => Information Logging ON");
+    _app.Logger.LogWarning("POST (4 / 6) => Warning Logging ON");
+    _app.Logger.LogError("POST (5 / 6) => Error Logging ON");
+    _app.Logger.LogCritical("POST (6 / 6) => Critical Logging ON");
     if (_app.Logger.IsEnabled(LogLevel.Information))
     {
         _app.Logger.LogInformation("{now} (LOCAL)", DateTime.Now);
@@ -189,16 +190,12 @@ try
     // TODO: Use better {tokens} for better discoverability.
 
     const int _version1 = 1;
-    if (_app.Logger.IsEnabled(LogLevel.Information))
-    {
-        _app.Logger.LogInformation("Mapping Version {version} GET Requests To {name}", _version1, nameof(MyService));
-    }
     _app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context) =>
     {
         var apiVersion = context.GetRequestedApiVersion();
         if (_app.Logger.IsEnabled(LogLevel.Information))
         {
-            _app.Logger.LogInformation("Calling Version {apiVersion} Of {name} With {input}", apiVersion, nameof(MyService), input);
+            _app.Logger.LogInformation("Calling API {name} Version {apiVersion} With Input = {input}", nameof(MyService), apiVersion, input);
         }
         return myService.MyMethodAsync(input);
     })
@@ -207,17 +204,13 @@ try
         .RequireAuthorization(_myClaimPolicy);
 
     const int _version2 = 2;
-    if (_app.Logger.IsEnabled(LogLevel.Information))
-    {
-        _app.Logger.LogInformation("Mapping Version {version} GET Requests To {name}", _version2, nameof(MyService));
-    }
     _app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context) =>
     {
-        ApiVersion? _apiVersion = context.GetRequestedApiVersion();
+        var apiVersion = context.GetRequestedApiVersion();
 
         if (_app.Logger.IsEnabled(LogLevel.Information))
         {
-            _app.Logger.LogInformation("Calling Version {_apiVersion} Of {name} With {input}", _apiVersion, nameof(MyService), input);
+            _app.Logger.LogInformation("Calling API {name} Version {apiVersion} With Input = {input}", nameof(MyService), apiVersion, input);
         }
         return myService.MyMethodAsync(input);
     })
