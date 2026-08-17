@@ -53,7 +53,7 @@
         # @{ Name = 'PowerConfig' ; Version = '0.1.6' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/RamblingCookieMonster/PSDepend
-        @{ Name = 'PSDepend' ; Version = '0.4.1' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
+        @{ Name = 'PSDepend' ; Version = '0.5.0' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
 
         # https://github.com/adamdriscoll/pspolly
         @{ Name = 'PSPolly' ; Version = '0.0.3' ; Repository = 'PSGallery' ; CompatiblePSEditions = @('Core', 'Desktop') },
