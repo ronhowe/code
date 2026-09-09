@@ -79,8 +79,8 @@ try
         options.ApiVersionReader = new UrlSegmentApiVersionReader();
     });
 
-    _logger.Information("Adding Open API ServicesServices");
-    _builder.Services.AddOpenApi();
+    //_logger.Information("Adding Open API ServicesServices");
+    //_builder.Services.AddOpenApi();
 
     _logger.Information("Adding {name} Services", nameof(MyRepository));
     // TODO: Learn the difference between AddSingleton and AddTransient.
@@ -137,8 +137,8 @@ try
         _app.UseExceptionHandler("/error");
     }
 
-    _app.Logger.LogInformation("Mapping Open API");
-    _app.MapOpenApi();
+    //_app.Logger.LogInformation("Mapping Open API");
+    //_app.MapOpenApi();
 
     _app.Logger.LogInformation("Using HTTPS Redirection Middleware");
     _app.UseHttpsRedirection();
