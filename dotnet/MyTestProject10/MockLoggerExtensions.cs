@@ -9,7 +9,7 @@ internal static class MockLoggerExtensions
     {
         ArgumentNullException.ThrowIfNull(expectedMessage);
 
-        Func<object, Type, bool> state = (v, t) => v?.ToString()?.CompareTo(expectedMessage) == 0;
+        Func<object?, Type, bool> state = (v, t) => v?.ToString()?.CompareTo(expectedMessage) == 0;
 
 #pragma warning disable CA1873 // Avoid potentially expensive logging
         logger.Verify(
