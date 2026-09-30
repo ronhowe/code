@@ -223,23 +223,23 @@ Configuration GuestDsc {
     ################################################################################
 
     Node @("LAB-APP-00", "LAB-SQL-00", "LAB-WEB-00") {
-        ScheduledTask "MyScheduledTask" {
-            ActionArguments     = "-Version >> C:\powershell.log"
-            ActionExecutable    = "powershell.exe"
-            Compatibility = "Win8"
-            Description         = "MyTaskDescription"
-            Enable              = $true
-            ExecuteAsCredential = $SqlCredential
-            ExecutionTimeLimit  = "02:00:00"
-            LogonType           = "ServiceAccount"
-            MultipleInstances   = "IgnoreNew"
-            Priority            = 9
-            RunLevel            = "Highest"
-            RunOnlyIfIdle       = $false
-            ScheduleType        = "Daily"
-            StartTime           = "2025-05-27 17:38:00"
-            TaskName            = "MyTaskName"
-        }
+        # ScheduledTask "MyScheduledTask" {
+        #     ActionArguments     = "-Version >> C:\powershell.log"
+        #     ActionExecutable    = "powershell.exe"
+        #     Compatibility       = "Win8"
+        #     Description         = "MyTaskDescription"
+        #     Enable              = $true
+        #     ExecuteAsCredential = $SqlCredential
+        #     ExecutionTimeLimit  = "02:00:00"
+        #     LogonType           = "ServiceAccount"
+        #     MultipleInstances   = "IgnoreNew"
+        #     Priority            = 9
+        #     RunLevel            = "Highest"
+        #     RunOnlyIfIdle       = $false
+        #     ScheduleType        = "Daily"
+        #     StartTime           = "2025-05-27 17:38:00"
+        #     TaskName            = "MyTaskName"
+        # }
         SqlSetup "InstallSqlServer" {
             DependsOn            = "[Computer]JoinDomain"
             Features             = $Node.Features
