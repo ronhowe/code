@@ -1,6 +1,7 @@
 throw
 
 $ProgressPreference = "SilentlyContinue"
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
 
 Import-Module -Name "Hyper-V"
 Import-Module -Name "Pester"
@@ -27,7 +28,7 @@ $nodes | Checkpoint-VM -SnapshotName "NEW" -Verbose
 $nodes | Start-VM -Verbose
 $nodes | Get-VM
 
-Invoke-Pester -Script "$HOME\repos\ronhowe\code\powershell\dsc\lab\host\HostDsc.Tests.ps1" -Output Detailed
+Invoke-Pester -Path "$HOME\repos\ronhowe\code\powershell\dsc\lab\host\HostDsc.Tests.ps1" -Output Detailed
 
 ## NOTE: Launching this many vmconnect processes is taxing.
 $nodes | ForEach-Object { Start-Process -FilePath "vmconnect.exe" -ArgumentList @("localhost", $_) ; Start-Sleep -Seconds 3 }

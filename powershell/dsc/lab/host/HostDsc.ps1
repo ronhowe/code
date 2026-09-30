@@ -23,7 +23,7 @@ Configuration HostDsc {
         # xVMSwitch "InternalSwitch" {
         #     DependsOn = "[WindowsFeature]HyperV"
         #     Ensure    = "Present"
-        #     Name      = "Internal Switch"
+        #     Name      = "LAB Internal Switch"
         #     Type      = "Internal"
         # }
         # IPAddress "NewIPv4Address"
@@ -52,7 +52,7 @@ Configuration HostDsc {
                 Name                        = $_
                 ProcessorCount              = $Node.ProcessorCount
                 RestartIfNeeded             = $true
-                SwitchName                  = "Internal Switch"
+                SwitchName                  = "LAB Internal Switch"
                 VhdPath                     = Join-Path -Path $Node.VirtualHardDisksPath -ChildPath "$_.vhdx"
             }
             if ($Ensure -eq "Present") {

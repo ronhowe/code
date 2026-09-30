@@ -1,13 +1,13 @@
 throw
 
+# Run As Administrator
+
 Import-Module -Name "Hyper-V"
 
 ## LINK: https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/user-guide/setup-nat-network#create-a-nat-virtual-network
 
-$switchName = "Internal Switch"
-
-$natName = "Internal NAT"
-
+$switchName = "LAB Internal Switch"
+$natName = "LAB Internal NAT"
 $natGatewayIpAddress = "192.168.0.1"
 
 New-VMSwitch -SwitchName $switchName -SwitchType Internal
