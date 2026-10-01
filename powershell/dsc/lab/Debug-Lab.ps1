@@ -132,41 +132,77 @@ $nodes | Checkpoint-VM -SnapshotName "READY" -Verbose
 $nodes | Start-VM -Verbose
 $nodes | Get-VM
 
-New-CimSession -ComputerName $nodes -Credential $credential -OutVariable "sessions"
-Get-CimSession | Remove-CimSession -Verbose
+Clear-Host
+New-CimSession -ComputerName $nodes -Credential $credential -OutVariable "sessions" -Verbose
 
+Clear-Host
+Get-CimSession |
+Remove-CimSession -Verbose
+
+Clear-Host
+Get-Command -Module "PSDesiredStateConfiguration"
+
+Clear-Host
 Test-DscConfiguration -CimSession $sessions
+
+Clear-Host
 Test-DscConfiguration -CimSession $sessions -Verbose
 
+Clear-Host
 Start-Transcript -Path "$HOME\repos\ronhowe\code\powershell\dsc\lab\Debug-Lab.log" -Force
 Test-DscConfiguration -CimSession $sessions -Verbose
 Stop-Transcript
 
-Select-String -Path "$HOME\repos\ronhowe\code\powershell\dsc\lab\Debug-Lab.log" -SimpleMatch "Completed processing test operation." -Context 0,2
+Clear-Host
+Get-Content -Path "$HOME\repos\ronhowe\code\powershell\dsc\lab\Debug-Lab.log"
 
-Remove-Item -Path "$HOME\repos\ronhowe\code\powershell\dsc\lab\Debug-Lab.log" -Force
+Clear-Host
+Select-String -Path "$HOME\repos\ronhowe\code\powershell\dsc\lab\Debug-Lab.log" -SimpleMatch "Completed processing test operation." -Context 0,1
 
+Clear-Host
+Remove-Item -Path "$HOME\repos\ronhowe\code\powershell\dsc\lab\Debug-Lab.log" -Force -Verbose
+
+Clear-Host
 Get-DscConfiguration -CimSession $sessions |
-Sort-Object -Property @("PSComputerName") |
+Export-Csv -Path "$HOME\repos\ronhowe\code\powershell\dsc\lab\Debug-Lab.csv" -NoTypeInformation -Force
+
+Clear-Host
+Get-Content -Path "$HOME\repos\ronhowe\code\powershell\dsc\lab\Debug-Lab.csv"
+
+Clear-Host
+Import-Csv -Path "$HOME\repos\ronhowe\code\powershell\dsc\lab\Debug-Lab.csv" |
+Sort-Object -Property @("PSComputerName", "ModuleName", "ResourceId") |
+Select-Object -Property @("PSComputerName", "ModuleName", "ModuleVersion", "ResourceId", "Message") |
 Format-Table -AutoSize
 
+Clear-Host
+Remove-Item -Path "$HOME\repos\ronhowe\code\powershell\dsc\lab\Debug-Lab.csv" -Force -Verbose
+
+Clear-Host
 Start-DscConfiguration -CimSession $sessions -UseExisting -Wait -Verbose
 
+Clear-Host
 Get-Job
-Get-Job | Remove-Job
 
+Clear-Host
+Get-Job |
+Remove-Job
+
+Clear-Host
 Start-DscConfiguration -CimSession $sessions -UseExisting -Verbose -OutVariable "jobs"
-$jobs | Wait-Job
+$jobs |
+Wait-Job
 
-Get-Command -Module "PSDesiredStateConfiguration"
-
+Clear-Host
 Receive-Job -Job $jobs -Verbose
 
+Clear-Host
 # without wait
 & "$HOME\repos\ronhowe\code\powershell\dsc\lab\guest\Invoke-GuestDscLite.ps1" -Nodes $nodes -Credential $credential
 
+Clear-Host
 # with wait
 & "$HOME\repos\ronhowe\code\powershell\dsc\lab\guest\Invoke-GuestDscLite.ps1" -Nodes $nodes -Credential $credential
 
+Clear-Host
 Restore-DscConfiguration -CimSession $sessions -Verbose
-Start-DscConfiguration -CimSession $sessions -UseExisting -Wait -Verbose
