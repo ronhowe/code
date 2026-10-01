@@ -22,8 +22,10 @@ $nodes = @("LAB-WEB-00")
 $nodes = @("LAB-APP-00", "LAB-SQL-00", "LAB-WEB-00")
 
 Clear-Host
-$nodes | Start-VM -Verbose
 $nodes | Get-VM
+
+Clear-Host
+$nodes | Start-VM -Verbose
 
 Clear-Host
 $nodes | Stop-VM -Force -Verbose
@@ -32,6 +34,9 @@ $nodes | Checkpoint-VM -SnapshotName "READY" -Verbose
 Clear-Host
 $nodes | Stop-VM -Force -Verbose
 $nodes | Get-VMCheckpoint -Name "READY" | Restore-VMCheckpoint -Confirm:$false -Verbose
+
+Clear-Host
+$nodes | Get-VMCheckpoint -Name "READY" | Remove-VMCheckpoint -Confirm:$false -Verbose
 
 Clear-Host
 & "$HOME\repos\ronhowe\code\powershell\dsc\lab\host\Invoke-HostDsc.ps1" -Nodes $nodes -Ensure "Absent" -Wait
