@@ -197,12 +197,10 @@ Clear-Host
 Receive-Job -Job $jobs -Verbose
 
 Clear-Host
-# without wait
-& "$HOME\repos\ronhowe\code\powershell\dsc\lab\guest\Invoke-GuestDscLite.ps1" -Nodes $nodes -Credential $credential
-
-Clear-Host
-# with wait
-& "$HOME\repos\ronhowe\code\powershell\dsc\lab\guest\Invoke-GuestDscLite.ps1" -Nodes $nodes -Credential $credential
+& "$HOME\repos\ronhowe\code\powershell\dsc\lab\guest\Invoke-GuestDscLite.ps1" -Nodes $nodes -Credential $credential -Wait
 
 Clear-Host
 Restore-DscConfiguration -CimSession $sessions -Verbose
+
+Clear-Host
+& "$HOME\repos\ronhowe\code\powershell\dsc\lab\guest\Invoke-GuestDscLite.ps1" -Nodes $nodes -Credential $credential -PublishOnly -Wait

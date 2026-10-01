@@ -14,6 +14,9 @@ param(
     $Credential,
 
     [switch]
+    $PublishOnly,
+
+    [switch]
     $Wait
 )
 begin {
@@ -40,9 +43,16 @@ process {
 
     Write-Verbose "Invoking Guest Dsc Lite On $node"
     foreach ($node in $Nodes) {
-        Write-Verbose "Starting Guest Dsc Lite On $node"
-        Start-DscConfiguration -ComputerName $node -Credential $Credential -Path "$PSScriptRoot\bin\GuestDscLite" -Force -Wait:$Wait -Verbose |
-        Out-Null
+        if ($PublishOnly) {
+            Write-Verbose "Publishing Guest Dsc Lite On $node"
+            Publish-DscConfiguration -ComputerName $node -Credential $Credential -Path "$PSScriptRoot\bin\GuestDscLite" -Force -Verbose |
+            Out-Null
+        }
+        else {
+            Write-Verbose "Starting Guest Dsc Lite On $node"
+            Start-DscConfiguration -ComputerName $node -Credential $Credential -Path "$PSScriptRoot\bin\GuestDscLite" -Force -Wait:$Wait -Verbose |
+            Out-Null
+        }
     }
 }
 end {
