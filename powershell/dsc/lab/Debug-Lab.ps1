@@ -131,3 +131,42 @@ $nodes | Checkpoint-VM -SnapshotName "READY" -Verbose
 
 $nodes | Start-VM -Verbose
 $nodes | Get-VM
+
+New-CimSession -ComputerName $nodes -Credential $credential -OutVariable "sessions"
+Get-CimSession | Remove-CimSession -Verbose
+
+Test-DscConfiguration -CimSession $sessions
+Test-DscConfiguration -CimSession $sessions -Verbose
+
+Start-Transcript -Path "$HOME\repos\ronhowe\code\powershell\dsc\lab\Debug-Lab.log" -Force
+Test-DscConfiguration -CimSession $sessions -Verbose
+Stop-Transcript
+
+Select-String -Path "$HOME\repos\ronhowe\code\powershell\dsc\lab\Debug-Lab.log" -SimpleMatch "Completed processing test operation." -Context 0,2
+
+Remove-Item -Path "$HOME\repos\ronhowe\code\powershell\dsc\lab\Debug-Lab.log" -Force
+
+Get-DscConfiguration -CimSession $sessions |
+Sort-Object -Property @("PSComputerName") |
+Format-Table -AutoSize
+
+Start-DscConfiguration -CimSession $sessions -UseExisting -Wait -Verbose
+
+Get-Job
+Get-Job | Remove-Job
+
+Start-DscConfiguration -CimSession $sessions -UseExisting -Verbose -OutVariable "jobs"
+$jobs | Wait-Job
+
+Get-Command -Module "PSDesiredStateConfiguration"
+
+Receive-Job -Job $jobs -Verbose
+
+# without wait
+& "$HOME\repos\ronhowe\code\powershell\dsc\lab\guest\Invoke-GuestDscLite.ps1" -Nodes $nodes -Credential $credential
+
+# with wait
+& "$HOME\repos\ronhowe\code\powershell\dsc\lab\guest\Invoke-GuestDscLite.ps1" -Nodes $nodes -Credential $credential
+
+Restore-DscConfiguration -CimSession $sessions -Verbose
+Start-DscConfiguration -CimSession $sessions -UseExisting -Wait -Verbose
