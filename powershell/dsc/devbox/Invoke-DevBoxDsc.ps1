@@ -20,7 +20,7 @@ process {
     }
 
     Write-Verbose "Importing DevBox Dsc"
-    . "$PSScriptRoot\DevBoxDsc.ps1"
+    Import-Module -Name "$PSScriptRoot\DevBoxDsc.psm1" -Force -Verbose
 
     Write-Verbose "Compiling DevBox Dsc"
     DevBoxDsc -ConfigurationData "$PSScriptRoot\DevBoxDsc.psd1" -OutputPath "$PSScriptRoot\bin\DevBoxDsc"

@@ -28,7 +28,7 @@ process {
     }
 
     Write-Verbose "Importing Host Dsc"
-    . "$PSScriptRoot\HostDsc.ps1"
+    Import-Module -Name "$PSScriptRoot\HostDsc.psm1" -Force -Verbose
 
     Write-Verbose "Compiling Host Dsc"
     HostDsc -ConfigurationData "$PSScriptRoot\HostDsc.psd1" -Nodes $Nodes -Ensure $Ensure -OutputPath "$PSScriptRoot\bin\HostDsc"

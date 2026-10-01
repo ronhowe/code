@@ -28,7 +28,7 @@ process {
     }
 
     Write-Verbose "Importing Guest Dsc Lite"
-    . "$PSScriptRoot\GuestDscLite.ps1"
+    Import-Module -Name "$PSScriptRoot\GuestDscLite.psm1" -Force -Verbose
 
     Write-Verbose "Compiling Guest Dsc Lite"
     $parameters = @{
