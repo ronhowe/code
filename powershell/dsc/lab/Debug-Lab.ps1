@@ -127,7 +127,7 @@ Invoke-Command -ComputerName $nodes -Credential $credential -ScriptBlock {
 }
 
 Clear-Host
-New-CimSession -ComputerName $nodes -Credential $credential -OutVariable "sessions" -Verbose
+New-CimSession -ComputerName $nodes -Credential $credential -OutVariable "sessions"
 
 Clear-Host
 Get-CimSession |

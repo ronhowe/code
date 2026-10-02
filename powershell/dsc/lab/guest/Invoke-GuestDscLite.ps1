@@ -37,7 +37,6 @@ process {
     $parameters = @{
         ConfigurationData = "$PSScriptRoot\GuestDscLite.psd1"
         OutputPath        = "$PSScriptRoot\bin\GuestDscLite"
-        Credential        = $Credential
     }
     GuestDscLite @parameters
 
