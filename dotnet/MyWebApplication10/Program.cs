@@ -74,8 +74,8 @@ try
     _builder.Services.AddApiVersioning(options =>
     {
         // TODO: Assert versionless route works.
-        options.DefaultApiVersion = new ApiVersion(1);
-        options.AssumeDefaultVersionWhenUnspecified = true;
+        //options.DefaultApiVersion = new ApiVersion(1);
+        //options.AssumeDefaultVersionWhenUnspecified = true;
         options.ApiVersionReader = new UrlSegmentApiVersionReader();
     });
 
@@ -192,7 +192,7 @@ try
     const int _version1 = 1;
     _app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context) =>
     {
-        var apiVersion = context.GetRequestedApiVersion();
+        var apiVersion = context.RequestedApiVersion;
         if (_app.Logger.IsEnabled(LogLevel.Information))
         {
             _app.Logger.LogInformation("Calling API {name} Version {apiVersion} With Input = {input}", nameof(MyService), apiVersion, input);
@@ -206,7 +206,7 @@ try
     const int _version2 = 2;
     _app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context) =>
     {
-        var apiVersion = context.GetRequestedApiVersion();
+        var apiVersion = context.RequestedApiVersion;
 
         if (_app.Logger.IsEnabled(LogLevel.Information))
         {
