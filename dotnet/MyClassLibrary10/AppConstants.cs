@@ -48,6 +48,11 @@ public static class AppConstants
     public static class Database
     {
         /// <summary>
+        /// Standard date format for partition keys (yyyy-MM-dd).
+        /// </summary>
+        public const string PartitionKeyDateFormat = "yyyy-MM-dd";
+
+        /// <summary>
         /// Table name for storing data.
         /// </summary>
         public const string TableName = "MyTable";

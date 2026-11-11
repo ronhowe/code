@@ -67,8 +67,9 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
                     using SqlConnection _sqlConnection = new(_dbConnectionString);
                     await _sqlConnection.OpenAsync(ct);
 
+                    string _formattedPartitionKey = DateTime.UtcNow.ToString(AppConstants.Database.PartitionKeyDateFormat);
                     using SqlCommand _sqlCommand = new(AppConstants.Database.InsertStatement, _sqlConnection);
-                    _sqlCommand.Parameters.AddWithValue($"@{AppConstants.Database.PartitionKeyColumn}", DateTime.UtcNow);
+                    _sqlCommand.Parameters.AddWithValue($"@{AppConstants.Database.PartitionKeyColumn}", _formattedPartitionKey);
                     _sqlCommand.Parameters.AddWithValue($"@{AppConstants.Database.RowKeyColumn}", _rowKey);
                     _sqlCommand.Parameters.AddWithValue($"@{AppConstants.Database.DataColumn}", request.IsEnabled);
 
@@ -93,7 +94,8 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
 
                     await _tableClient.CreateIfNotExistsAsync(ct);
 
-                    TableEntity _tableEntity = new(DateTime.UtcNow.ToString("yyyy-MM-dd"), _rowKey)
+                    string _formattedPartitionKeyForAzure = DateTime.UtcNow.ToString(AppConstants.Database.PartitionKeyDateFormat);
+                    TableEntity _tableEntity = new(_formattedPartitionKeyForAzure, _rowKey)
                     {
                         { AppConstants.Database.DataColumn, request.IsEnabled }
                     };
