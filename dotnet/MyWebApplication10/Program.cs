@@ -58,11 +58,14 @@ try
     var _aiConnectionString = _builder.Configuration["ConnectionStrings:ApplicationInsights"];
     _logger.Debug("_aiConnectionString = {_aiConnectionString}", _aiConnectionString);
 
-    _logger.Information("Adding Application Insights Telemetry");
-    _builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions
+    if (!string.IsNullOrWhiteSpace(_aiConnectionString))
     {
-        ConnectionString = _aiConnectionString
-    });
+        _logger.Information("Adding Application Insights Telemetry");
+        _builder.Services.AddApplicationInsightsTelemetry(options =>
+        {
+            options.ConnectionString = _aiConnectionString;
+        });
+    }
 
     _logger.Information("Adding Feature Management Services");
     _builder.Services.AddFeatureManagement();
