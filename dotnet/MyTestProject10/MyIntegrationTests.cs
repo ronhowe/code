@@ -10,7 +10,6 @@ using Microsoft.IdentityModel.Tokens;
 using MyClassLibrary10;
 using Serilog;
 using Shouldly;
-using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http.Headers;
