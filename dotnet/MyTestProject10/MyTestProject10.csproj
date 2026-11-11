@@ -205,7 +205,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="11.0.0" />
     <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.7.0" />
     <PackageReference Include="Moq" Version="4.21.0" />
-    <PackageReference Include="MSTest" Version="4.5.2" />
+    <PackageReference Include="MSTest" Version="4.5.3" />
     <PackageReference Include="Shouldly" Version="4.3.0" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="11.0.0" />
   </ItemGroup>
