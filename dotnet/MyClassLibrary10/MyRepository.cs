@@ -17,35 +17,16 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
             logger.LogInformation("Entering {name}", nameof(MyRepository));
         }
 
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("myInput = {myInput}", myInput);
-        }
-
         const string _dbConnection = "MyDatabase";
         string _dbConnectionString;
 
         try
         {
-            if (logger.IsEnabled(LogLevel.Information))
-            {
-                logger.LogInformation("Configuring Database Connection String");
-            }
-
             _dbConnectionString = configuration[$"ConnectionStrings:{_dbConnection}"] ?? throw new InvalidOperationException("Database Connection String Not Configured");
-
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("_dbConnectionString = {_dbConnectionString}", _dbConnectionString);
-            }
         }
         catch (Exception ex)
         {
-            if (logger.IsEnabled(LogLevel.Error))
-            {
-                logger.LogError("Error Configuring Database Connection String Because {message}", ex.Message);
-            }
-
+            logger.LogError(ex, "Error Reading Database Connection String");
             throw;
         }
 
@@ -54,61 +35,28 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
 
         try
         {
-            if (logger.IsEnabled(LogLevel.Information))
-            {
-                logger.LogInformation("Configuring Azure Storage Connection String");
-            }
-
             _azConnectionString = configuration[$"ConnectionStrings:{_azConnection}"] ?? throw new InvalidOperationException("Azure Storage Connection String Not Configured");
-
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("_azConnectionString = {_azConnectionString}", _azConnectionString);
-            }
         }
         catch (Exception ex)
         {
-            if (logger.IsEnabled(LogLevel.Error))
-            {
-                logger.LogError("Error Configuring Azure Storage Connection String Because {message}", ex.Message);
-            }
-
+            logger.LogError(ex, "Error Reading Azure Storage Connection String");
             throw;
         }
 
-        if (logger.IsEnabled(LogLevel.Information))
-        {
-            logger.LogInformation("Generating Row Key");
-        }
-
         string _rowKey = Guid.CreateVersion7().ToString();
-
-        if (logger.IsEnabled(LogLevel.Information))
-        {
-            logger.LogInformation("Saving {_rowKey}", _rowKey);
-        }
 
         // TODO: Read retry settings from configuration.
         const int _maxRetries = 3;
         const int _retryMilliseconds = 1000;
 
-        if (logger.IsEnabled(LogLevel.Information))
-        {
-            logger.LogInformation("Creating Retry Policy");
-        }
         var _retryPolicy = Policy
             .Handle<SqlException>()
             .WaitAndRetryAsync(_maxRetries, retryAttempt => TimeSpan.FromMilliseconds(_retryMilliseconds),
                 (ex, timeSpan, retryAttempt, context) =>
                 {
-                    if (logger.IsEnabled(LogLevel.Error))
-                    {
-                        logger.LogError("Save Failed Because {message}", ex.Message);
-                    }
-
                     if (logger.IsEnabled(LogLevel.Warning))
                     {
-                        logger.LogWarning("Retry Attempt # {retryAttempt} Of {maxRetries}", retryAttempt, _maxRetries);
+                        logger.LogWarning("Retry Attempt {retryAttempt} Of {maxRetries} After {exception}", retryAttempt, _maxRetries, ex.Message);
                     }
                 });
 
@@ -117,33 +65,12 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
 
         try
         {
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Executing With Retry Policy");
-            }
-
             await _retryPolicy.ExecuteAsync(async () =>
             {
                 if (!_dbSaved)
                 {
-                    if (logger.IsEnabled(LogLevel.Information))
-                    {
-                        logger.LogInformation("Saving To Database");
-                    }
-
-                    if (logger.IsEnabled(LogLevel.Information))
-                    {
-                        logger.LogInformation("Opening Connection");
-                    }
-
                     using SqlConnection _sqlConnection = new(_dbConnectionString);
-
                     await _sqlConnection.OpenAsync();
-
-                    if (logger.IsEnabled(LogLevel.Information))
-                    {
-                        logger.LogInformation("Executing Command");
-                    }
 
                     using SqlCommand _sqlCommand = new("INSERT [dbo].[MyTable] ([PartitionKey], [RowKey], [MyInput]) VALUES (@PartitionKey, @RowKey, @MyInput);", _sqlConnection);
                     _sqlCommand.Parameters.AddWithValue("@PartitionKey", DateTime.UtcNow);
@@ -151,26 +78,12 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
                     _sqlCommand.Parameters.AddWithValue("@MyInput", myInput);
 
                     await _sqlCommand.ExecuteNonQueryAsync();
-                }
-
-                _dbSaved = true;
-                if (logger.IsEnabled(LogLevel.Information))
-                {
-                    logger.LogInformation("Save To Database Succeeded");
+                    _dbSaved = true;
+                    logger.LogInformation("Saved To Database Successfully");
                 }
 
                 if (!_azSaved)
                 {
-                    if (logger.IsEnabled(LogLevel.Information))
-                    {
-                        logger.LogInformation("Saving To Azure Storage");
-                    }
-
-                    if (logger.IsEnabled(LogLevel.Information))
-                    {
-                        logger.LogInformation("Creating Table");
-                    }
-
                     TableClient _tableClient;
 
                     if (environment.IsDevelopment())
@@ -185,38 +98,20 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
 
                     await _tableClient.CreateIfNotExistsAsync();
 
-                    if (logger.IsEnabled(LogLevel.Information))
-                    {
-                        logger.LogInformation("Adding Entity");
-                    }
                     TableEntity _tableEntity = new(DateTime.UtcNow.ToString("yyyy-MM-dd"), _rowKey)
                     {
                         { "MyInput", myInput }
                     };
 
                     await _tableClient.AddEntityAsync(_tableEntity);
-                }
-
-                _azSaved = true;
-
-                if (logger.IsEnabled(LogLevel.Information))
-                {
-                    logger.LogInformation("Save To Azure Storage Succeeded");
+                    _azSaved = true;
+                    logger.LogInformation("Saved To Azure Storage Successfully");
                 }
             });
         }
         catch (Exception ex)
         {
-            if (logger.IsEnabled(LogLevel.Error))
-            {
-                logger.LogError("Save Failed Because {message}", ex.Message);
-            }
-
-            if (logger.IsEnabled(LogLevel.Critical))
-            {
-                logger.LogCritical("CRITICAL ERROR");
-            }
-
+            logger.LogError(ex, "Error Saving Data");
             throw;
         }
 
