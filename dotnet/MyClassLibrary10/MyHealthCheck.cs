@@ -18,10 +18,10 @@ public class MyHealthCheck(ILogger<MyService> logger, IMyService myService) : IH
         {
             if (logger.IsEnabled(LogLevel.Information))
             {
-                logger.LogInformation("Calling MyService.MyMethod(false)");
+                logger.LogInformation("Calling MyService.ProcessAsync");
             }
 
-            await myService.MyMethodAsync(false);
+            await myService.ProcessAsync(SaveRequest.CreateDisabled(), cancellationToken);
 
             _result = HealthCheckResult.Healthy("HEALTHY");
         }
@@ -29,15 +29,10 @@ public class MyHealthCheck(ILogger<MyService> logger, IMyService myService) : IH
         {
             if (logger.IsEnabled(LogLevel.Error))
             {
-                logger.LogError("Error Calling MyService.MyMethod(false) Because {message}", ex.Message);
+                logger.LogError(ex, "Error calling MyService.ProcessAsync");
             }
 
             _result = new HealthCheckResult(context.Registration.FailureStatus, "UNHEALTHY");
-        }
-
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("_result = {_result}", _result);
         }
 
         if (logger.IsEnabled(LogLevel.Information))
@@ -45,6 +40,6 @@ public class MyHealthCheck(ILogger<MyService> logger, IMyService myService) : IH
             logger.LogInformation("Exiting {name}", nameof(MyHealthCheck));
         }
 
-        return await Task.FromResult(_result);
+        return _result;
     }
 }

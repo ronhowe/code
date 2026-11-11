@@ -11,7 +11,7 @@ namespace MyClassLibrary10;
 
 public class MyRepository(ILogger<MyRepository> logger, IConfiguration configuration, IHostEnvironment environment, IOptions<RetrySettings> retryOptions) : IMyRepository
 {
-    public async Task SaveAsync(bool myInput, CancellationToken cancellationToken = default)
+    public async Task SaveAsync(SaveRequest request, CancellationToken cancellationToken = default)
     {
         if (logger.IsEnabled(LogLevel.Information))
         {
@@ -72,7 +72,7 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
                     using SqlCommand _sqlCommand = new("INSERT [dbo].[MyTable] ([PartitionKey], [RowKey], [MyInput]) VALUES (@PartitionKey, @RowKey, @MyInput);", _sqlConnection);
                     _sqlCommand.Parameters.AddWithValue("@PartitionKey", DateTime.UtcNow);
                     _sqlCommand.Parameters.AddWithValue("@RowKey", _rowKey);
-                    _sqlCommand.Parameters.AddWithValue("@MyInput", myInput);
+                    _sqlCommand.Parameters.AddWithValue("@MyInput", request.IsEnabled);
 
                     await _sqlCommand.ExecuteNonQueryAsync(ct);
                     _dbSaved = true;
@@ -97,7 +97,7 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
 
                     TableEntity _tableEntity = new(DateTime.UtcNow.ToString("yyyy-MM-dd"), _rowKey)
                     {
-                        { "MyInput", myInput }
+                        { "MyInput", request.IsEnabled }
                     };
 
                     await _tableClient.AddEntityAsync(_tableEntity, ct);

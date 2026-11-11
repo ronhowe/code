@@ -43,7 +43,7 @@ public sealed class MyUnitTests : TestBase
         );
 
         Debug.WriteLine($"Calling {nameof(MyService)} With {value}");
-        bool result = await myService.MyMethodAsync(value);
+        bool result = await myService.ProcessAsync(SaveRequest.Create(value));
 
         Debug.WriteLine($"Asserting Result Is {value}");
         result.ShouldBe(value);

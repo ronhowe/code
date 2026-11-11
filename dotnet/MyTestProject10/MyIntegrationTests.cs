@@ -84,7 +84,7 @@ public sealed class MyIntegrationTests : TestBase
         if (_myService is not null)
         {
             Debug.WriteLine($"Calling {nameof(MyService)} With {value}");
-            bool _result = await _myService.MyMethodAsync(value);
+            bool _result = await _myService.ProcessAsync(SaveRequest.Create(value));
 
             Debug.WriteLine($"Asserting Result Is {value}");
             _result.ShouldBe(value);

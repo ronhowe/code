@@ -193,21 +193,21 @@ try
     // TODO: Use better {tokens} for better discoverability.
 
     const int _version1 = 1;
-    _app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context) =>
+    _app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context, CancellationToken cancellationToken) =>
     {
         var apiVersion = context.RequestedApiVersion;
         if (_app.Logger.IsEnabled(LogLevel.Information))
         {
             _app.Logger.LogInformation("Calling API {name} Version {apiVersion} With Input = {input}", nameof(MyService), apiVersion, input);
         }
-        return myService.MyMethodAsync(input);
+        return myService.ProcessAsync(SaveRequest.Create(input), cancellationToken);
     })
         .WithApiVersionSet(_versionSet)
         .MapToApiVersion(_version1)
         .RequireAuthorization(_myClaimPolicy);
 
     const int _version2 = 2;
-    _app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context) =>
+    _app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context, CancellationToken cancellationToken) =>
     {
         var apiVersion = context.RequestedApiVersion;
 
@@ -215,7 +215,7 @@ try
         {
             _app.Logger.LogInformation("Calling API {name} Version {apiVersion} With Input = {input}", nameof(MyService), apiVersion, input);
         }
-        return myService.MyMethodAsync(input);
+        return myService.ProcessAsync(SaveRequest.Create(input), cancellationToken);
     })
         .WithApiVersionSet(_versionSet)
         .MapToApiVersion(_version2)
