@@ -127,6 +127,6 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
             logger.LogInformation("Exiting {name}", nameof(MyService));
         }
 
-        return await Task.FromResult(myInput);
+        return myInput;
     }
 }
