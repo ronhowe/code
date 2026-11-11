@@ -2,5 +2,5 @@
 
 public interface IMyService
 {
-    public Task<bool> MyMethodAsync(bool myInput);
+    public Task<bool> MyMethodAsync(bool myInput, CancellationToken cancellationToken = default);
 }

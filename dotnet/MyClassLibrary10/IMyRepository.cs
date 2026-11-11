@@ -2,5 +2,5 @@
 
 public interface IMyRepository
 {
-    public Task SaveAsync(bool myInput);
+    public Task SaveAsync(bool myInput, CancellationToken cancellationToken = default);
 }

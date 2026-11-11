@@ -6,7 +6,7 @@ namespace MyClassLibrary10;
 
 public class MyService(ILogger<MyService> logger, IConfiguration configuration, IFeatureManager featureManager, IMyRepository repository) : IMyService
 {
-    public async Task<bool> MyMethodAsync(bool myInput)
+    public async Task<bool> MyMethodAsync(bool myInput, CancellationToken cancellationToken = default)
     {
         if (logger.IsEnabled(LogLevel.Information))
         {
@@ -51,7 +51,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         if ((bool)_myFeature)
         {
             logger.LogInformation("Saving Enabled, Persisting To Repository");
-            await repository.SaveAsync(myInput);
+            await repository.SaveAsync(myInput, cancellationToken);
         }
         else
         {

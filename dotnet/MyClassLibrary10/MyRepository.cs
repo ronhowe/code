@@ -11,7 +11,7 @@ namespace MyClassLibrary10;
 
 public class MyRepository(ILogger<MyRepository> logger, IConfiguration configuration, IHostEnvironment environment, IOptions<RetrySettings> retryOptions) : IMyRepository
 {
-    public async Task SaveAsync(bool myInput)
+    public async Task SaveAsync(bool myInput, CancellationToken cancellationToken = default)
     {
         if (logger.IsEnabled(LogLevel.Information))
         {
@@ -62,19 +62,19 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
 
         try
         {
-            await _retryPolicy.ExecuteAsync(async () =>
+            await _retryPolicy.ExecuteAsync(async (ct) =>
             {
                 if (!_dbSaved)
                 {
                     using SqlConnection _sqlConnection = new(_dbConnectionString);
-                    await _sqlConnection.OpenAsync();
+                    await _sqlConnection.OpenAsync(ct);
 
                     using SqlCommand _sqlCommand = new("INSERT [dbo].[MyTable] ([PartitionKey], [RowKey], [MyInput]) VALUES (@PartitionKey, @RowKey, @MyInput);", _sqlConnection);
                     _sqlCommand.Parameters.AddWithValue("@PartitionKey", DateTime.UtcNow);
                     _sqlCommand.Parameters.AddWithValue("@RowKey", _rowKey);
                     _sqlCommand.Parameters.AddWithValue("@MyInput", myInput);
 
-                    await _sqlCommand.ExecuteNonQueryAsync();
+                    await _sqlCommand.ExecuteNonQueryAsync(ct);
                     _dbSaved = true;
                     logger.LogInformation("Saved To Database Successfully");
                 }
@@ -93,18 +93,18 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
                         _tableClient = new TableClient(new Uri(_azConnectionString), "MyCloudTable", _credential);
                     }
 
-                    await _tableClient.CreateIfNotExistsAsync();
+                    await _tableClient.CreateIfNotExistsAsync(ct);
 
                     TableEntity _tableEntity = new(DateTime.UtcNow.ToString("yyyy-MM-dd"), _rowKey)
                     {
                         { "MyInput", myInput }
                     };
 
-                    await _tableClient.AddEntityAsync(_tableEntity);
+                    await _tableClient.AddEntityAsync(_tableEntity, ct);
                     _azSaved = true;
                     logger.LogInformation("Saved To Azure Storage Successfully");
                 }
-            });
+            }, cancellationToken);
         }
         catch (Exception ex)
         {
