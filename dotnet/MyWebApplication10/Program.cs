@@ -1,6 +1,5 @@
 using Asp.Versioning;
 using Asp.Versioning.Builder;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
@@ -28,15 +27,6 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 Serilog.ILogger _logger = Log.ForContext("SourceContext", _sourceContext);
-
-_logger.Verbose("POST (1 / 6) => Verbose Logging ON");
-_logger.Debug("POST (2 / 6) => Debug Logging ON");
-_logger.Information("POST (3 / 6) => Information Logging ON");
-_logger.Warning("POST (4 / 6) => Warning Logging ON");
-_logger.Error("POST (5 / 6) => Error Logging ON");
-_logger.Fatal("POST (6 / 6) => Fatal Logging ON");
-_logger.Information("{now} (LOCAL)", DateTime.Now);
-_logger.Information("{utcNow} (UTC)", DateTime.UtcNow);
 
 try
 {
@@ -77,16 +67,14 @@ try
     _builder.Services.AddApiVersioning(options =>
     {
         // TODO: Assert versionless route works.
-        //options.DefaultApiVersion = new ApiVersion(1);
-        //options.AssumeDefaultVersionWhenUnspecified = true;
         options.ApiVersionReader = new UrlSegmentApiVersionReader();
     });
 
     //_logger.Information("Adding Open API ServicesServices");
     //_builder.Services.AddOpenApi();
 
-    _logger.Information("Adding {name} Services", nameof(MyRepository));
     // TODO: Learn the difference between AddSingleton and AddTransient.
+    _logger.Information("Adding {name} Services", nameof(MyRepository));
     _builder.Services.AddSingleton<IMyRepository, MyRepository>();
 
     _logger.Information("Adding {name} Services", nameof(MyService));
@@ -117,18 +105,6 @@ try
     _logger.Information("Building Web Application");
     WebApplication _app = _builder.Build();
 
-    _app.Logger.LogTrace("POST (1 / 6) => Trace Logging ON");
-    _app.Logger.LogDebug("POST (2 / 6) => Debug Logging ON");
-    _app.Logger.LogInformation("POST (3 / 6) => Information Logging ON");
-    _app.Logger.LogWarning("POST (4 / 6) => Warning Logging ON");
-    _app.Logger.LogError("POST (5 / 6) => Error Logging ON");
-    _app.Logger.LogCritical("POST (6 / 6) => Critical Logging ON");
-    if (_app.Logger.IsEnabled(LogLevel.Information))
-    {
-        _app.Logger.LogInformation("{now} (LOCAL)", DateTime.Now);
-        _app.Logger.LogInformation("{utcNow} (UTC)", DateTime.UtcNow);
-    }
-
     // NOTE: Order matters. (e.g. Swagger before Authentication)
 
     _app.Logger.LogInformation("Using Request Logging Middleware");
@@ -152,15 +128,8 @@ try
     _app.Logger.LogInformation("Using Header Middleware");
     _app.Use(async (context, next) =>
     {
-        _app.Logger.LogInformation("Configuring Header");
         string? _myHeaderValue = _app.Configuration.GetSection(_myHeaderKey).Value;
-        if (_app.Logger.IsEnabled(LogLevel.Debug))
-        {
-            _app.Logger.LogDebug("_myHeaderValue = {_myHeaderValue}", _myHeaderValue);
-        }
-        _app.Logger.LogInformation("Appending Header");
         context.Response.Headers.Append(_myHeaderKey, _myHeaderValue);
-
         await next();
     });
 
@@ -173,11 +142,6 @@ try
     _app.Logger.LogInformation("Using Claims Logger Middleware");
     _app.Use(async (context, next) =>
     {
-        _app.Logger.LogInformation("Selecting Claims From Context");
-        if (_app.Logger.IsEnabled(LogLevel.Debug))
-        {
-            _app.Logger.LogDebug("_claims = {@_claims}", context.User.Claims.Select(c => new { c.Type, c.Value }).ToList());
-        }
         await next.Invoke();
     });
 
@@ -225,8 +189,7 @@ try
 }
 catch (Exception ex)
 {
-    _logger.Error("Program Failed Because {message}", ex.Message);
-    _logger.Fatal(ex, "FATAL ERROR");
+    _logger.Fatal(ex, "Program Failed");
 }
 finally
 {
