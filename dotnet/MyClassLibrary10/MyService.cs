@@ -16,7 +16,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         string? _myConfiguration;
         try
         {
-            _myConfiguration = configuration["MyConfiguration"];
+            _myConfiguration = configuration[AppConstants.Configuration.MyConfigurationKey];
         }
         catch (Exception ex)
         {
@@ -28,7 +28,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
 
         try
         {
-            _mySecret = configuration["MySecret"];
+            _mySecret = configuration[AppConstants.Configuration.MySecretKey];
         }
         catch (Exception ex)
         {
@@ -40,7 +40,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
 
         try
         {
-            _myFeature = await featureManager.IsEnabledAsync("MyFeature");
+            _myFeature = await featureManager.IsEnabledAsync(AppConstants.Features.MySaveFeature);
         }
         catch (Exception ex)
         {

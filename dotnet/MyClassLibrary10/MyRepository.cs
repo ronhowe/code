@@ -18,12 +18,11 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
             logger.LogInformation("Entering {name}", nameof(MyRepository));
         }
 
-        const string _dbConnection = "MyDatabase";
         string _dbConnectionString;
 
         try
         {
-            _dbConnectionString = configuration[$"ConnectionStrings:{_dbConnection}"] ?? throw new InvalidOperationException("Database Connection String Not Configured");
+            _dbConnectionString = configuration[AppConstants.Configuration.DbConnectionKey] ?? throw new InvalidOperationException("Database Connection String Not Configured");
         }
         catch (Exception ex)
         {
@@ -31,12 +30,11 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
             throw;
         }
 
-        const string _azConnection = "MyAzureStorage";
         string _azConnectionString;
 
         try
         {
-            _azConnectionString = configuration[$"ConnectionStrings:{_azConnection}"] ?? throw new InvalidOperationException("Azure Storage Connection String Not Configured");
+            _azConnectionString = configuration[AppConstants.Configuration.AzureConnectionKey] ?? throw new InvalidOperationException("Azure Storage Connection String Not Configured");
         }
         catch (Exception ex)
         {
@@ -69,10 +67,10 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
                     using SqlConnection _sqlConnection = new(_dbConnectionString);
                     await _sqlConnection.OpenAsync(ct);
 
-                    using SqlCommand _sqlCommand = new("INSERT [dbo].[MyTable] ([PartitionKey], [RowKey], [MyInput]) VALUES (@PartitionKey, @RowKey, @MyInput);", _sqlConnection);
-                    _sqlCommand.Parameters.AddWithValue("@PartitionKey", DateTime.UtcNow);
-                    _sqlCommand.Parameters.AddWithValue("@RowKey", _rowKey);
-                    _sqlCommand.Parameters.AddWithValue("@MyInput", request.IsEnabled);
+                    using SqlCommand _sqlCommand = new(AppConstants.Database.InsertStatement, _sqlConnection);
+                    _sqlCommand.Parameters.AddWithValue($"@{AppConstants.Database.PartitionKeyColumn}", DateTime.UtcNow);
+                    _sqlCommand.Parameters.AddWithValue($"@{AppConstants.Database.RowKeyColumn}", _rowKey);
+                    _sqlCommand.Parameters.AddWithValue($"@{AppConstants.Database.DataColumn}", request.IsEnabled);
 
                     await _sqlCommand.ExecuteNonQueryAsync(ct);
                     _dbSaved = true;
@@ -85,19 +83,19 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
 
                     if (environment.IsDevelopment())
                     {
-                        _tableClient = new(_azConnectionString, "MyCloudTable");
+                        _tableClient = new(_azConnectionString, AppConstants.AzureTable.TableName);
                     }
                     else
                     {
                         var _credential = new DefaultAzureCredential();
-                        _tableClient = new TableClient(new Uri(_azConnectionString), "MyCloudTable", _credential);
+                        _tableClient = new TableClient(new Uri(_azConnectionString), AppConstants.AzureTable.TableName, _credential);
                     }
 
                     await _tableClient.CreateIfNotExistsAsync(ct);
 
                     TableEntity _tableEntity = new(DateTime.UtcNow.ToString("yyyy-MM-dd"), _rowKey)
                     {
-                        { "MyInput", request.IsEnabled }
+                        { AppConstants.Database.DataColumn, request.IsEnabled }
                     };
 
                     await _tableClient.AddEntityAsync(_tableEntity, ct);
