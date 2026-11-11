@@ -4,15 +4,24 @@ using System.Security.Cryptography;
 
 namespace MyTestProject10;
 
+/// <summary>
+/// Debug tests for environment and system inspection.
+/// </summary>
 [TestClass]
 public sealed class MyDebugTests : TestBase
 {
+    /// <summary>
+    /// Base debug test method (no-op).
+    /// </summary>
     [TestMethod]
     [TestCategory("DebugTest")]
     public void DebugBase()
     {
     }
 
+    /// <summary>
+    /// Tests DEBUG preprocessor directive.
+    /// </summary>
     [TestMethod]
     [TestCategory("DebugTest")]
     public void DebugDirective()
@@ -22,6 +31,9 @@ public sealed class MyDebugTests : TestBase
 #endif
     }
 
+    /// <summary>
+    /// Inspects current environment and PATH variables.
+    /// </summary>
     [TestMethod]
     [TestCategory("DebugTest")]
     public void DebugEnvironment()
@@ -36,34 +48,38 @@ public sealed class MyDebugTests : TestBase
         ;
     }
 
+    /// <summary>
+    /// Generates a new GUID v7.
+    /// </summary>
     [TestMethod]
     [TestCategory("DebugTest")]
     public void DebugGuid()
     {
-        Debug.WriteLine("Creating Globally Unique Identifier");
-
         Debug.WriteLine(Guid.CreateVersion7());
     }
 
+    /// <summary>
+    /// Tests path parsing and manipulation.
+    /// </summary>
     [TestMethod]
     [TestCategory("DebugTest")]
     public void DebugFileSystem()
     {
-        Debug.WriteLine("Defining Path");
-
         var path = @"C:\folder\file.ext";
 
         Debug.WriteLine(path);
-        Debug.WriteLine(Path.GetDirectoryName(path)); // C:\folder
-        Debug.WriteLine(Path.GetFileName(path)); // file.ext
+        Debug.WriteLine(Path.GetDirectoryName(path));
+        Debug.WriteLine(Path.GetFileName(path));
     }
 
+    /// <summary>
+    /// Tests PowerShell scripting capabilities (currently broken with Application Insights 3.2.0).
+    /// </summary>
     [TestMethod]
     [TestCategory("DebugTest")]
     [Ignore("Broken During Application Insights 3.2.0")]
     public void DebugPowerShell()
     {
-        Debug.WriteLine("Defining PowerShell Runspace");
 
         using PowerShell ps = PowerShell.Create();
 
@@ -119,12 +135,13 @@ public sealed class MyDebugTests : TestBase
         }
     }
 
+    /// <summary>
+    /// Generates a cryptographically secure 4096-bit random key.
+    /// </summary>
     [TestMethod]
     [TestCategory("DebugTest")]
     public void DebugRandomKey()
     {
-        Debug.WriteLine("Generating 4096-bit Random Key");
-
         byte[] buffer = new byte[4096 / 8];
         RandomNumberGenerator.Fill(buffer);
         string key = Convert.ToBase64String(buffer);
