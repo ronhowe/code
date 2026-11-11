@@ -4,11 +4,12 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Polly;
 
 namespace MyClassLibrary10;
 
-public class MyRepository(ILogger<MyRepository> logger, IConfiguration configuration, IHostEnvironment environment) : IMyRepository
+public class MyRepository(ILogger<MyRepository> logger, IConfiguration configuration, IHostEnvironment environment, IOptions<RetrySettings> retryOptions) : IMyRepository
 {
     public async Task SaveAsync(bool myInput)
     {
@@ -45,18 +46,14 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
 
         string _rowKey = Guid.CreateVersion7().ToString();
 
-        // TODO: Read retry settings from configuration.
-        const int _maxRetries = 3;
-        const int _retryMilliseconds = 1000;
-
         var _retryPolicy = Policy
             .Handle<SqlException>()
-            .WaitAndRetryAsync(_maxRetries, retryAttempt => TimeSpan.FromMilliseconds(_retryMilliseconds),
+            .WaitAndRetryAsync(retryOptions.Value.MaxRetries, retryAttempt => TimeSpan.FromMilliseconds(retryOptions.Value.RetryMilliseconds),
                 (ex, timeSpan, retryAttempt, context) =>
                 {
                     if (logger.IsEnabled(LogLevel.Warning))
                     {
-                        logger.LogWarning("Retry Attempt {retryAttempt} Of {maxRetries} After {exception}", retryAttempt, _maxRetries, ex.Message);
+                        logger.LogWarning("Retry Attempt {retryAttempt} Of {maxRetries} After {exception}", retryAttempt, retryOptions.Value.MaxRetries, ex.Message);
                     }
                 });
 
