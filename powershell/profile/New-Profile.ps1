@@ -12,15 +12,20 @@ process {
     Write-Debug "Processing $($MyInvocation.MyCommand.Name)"
 
     Write-Verbose "Creating Profile"
-    New-Item -Path $profile -ItemType File -Force |
+    New-Item -Path $PROFILE -ItemType File -Force |
     Out-Null
 
     Write-Verbose "Setting Profile"
-    "# auto-generated`n$(Resolve-Path -Path "$PSScriptRoot\profile.ps1" -ErrorAction SilentlyContinue)" |
-    Set-Content -Path $profile -Force
+@'
+# auto-generated
+if (Test-Path -Path "$HOME\repos\ronhowe\code\powershell\profile\profile.ps1") {
+    . $HOME\repos\ronhowe\code\powershell\profile\profile.ps1 -ErrorAction SilentlyContinue
+}
+'@ |
+    Set-Content -Path $PROFILE -Force
 
     Write-Verbose "Loading Profile"
-    . $profile
+    . $PROFILE
 }
 end {
     Write-Debug "Ending $($MyInvocation.MyCommand.Name)"
