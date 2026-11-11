@@ -20,7 +20,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error Reading MyConfiguration");
+            logger.LogError(ex, "Failed To Read Configuration Key 'MyConfiguration'. Ensure The Configuration Provider Is Properly Configured And The Key Exists");
             throw;
         }
 
@@ -32,7 +32,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error Reading MySecret");
+            logger.LogError(ex, "Failed To Read Configuration Key 'MySecret'. Ensure The Secret Management Provider Is Properly Configured And The Secret Exists");
             throw;
         }
 
@@ -44,7 +44,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error Reading MyFeature");
+            logger.LogError(ex, "Failed To Evaluate Feature Flag 'MyFeature'. Ensure FeatureManagement Is Properly Configured And The Feature Flag Exists");
             throw;
         }
 
