@@ -9,8 +9,22 @@ using Polly;
 
 namespace MyClassLibrary10;
 
+/// <summary>
+/// Repository for persisting save requests to both SQL Server database and Azure Table Storage.
+/// </summary>
 public class MyRepository(ILogger<MyRepository> logger, IConfiguration configuration, IHostEnvironment environment, IOptions<RetrySettings> retryOptions) : IMyRepository
 {
+    /// <summary>
+    /// Asynchronously saves the provided request to both the database and Azure Table Storage with retry logic.
+    /// </summary>
+    /// <param name="request">The save request containing data to be persisted.</param>
+    /// <param name="cancellationToken">Cancellation token for the operation.</param>
+    /// <returns>A task representing the asynchronous save operation.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when connection strings cannot be read from configuration.</exception>
+    /// <remarks>
+    /// This method uses Polly retry policies to handle transient SQL Server failures.
+    /// Data is saved with a standardized partition key format (yyyy-MM-dd) for consistency across both stores.
+    /// </remarks>
     public async Task SaveAsync(SaveRequest request, CancellationToken cancellationToken = default)
     {
         if (logger.IsEnabled(LogLevel.Information))

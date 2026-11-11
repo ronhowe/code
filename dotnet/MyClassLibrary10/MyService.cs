@@ -4,8 +4,18 @@ using Microsoft.FeatureManagement;
 
 namespace MyClassLibrary10;
 
+/// <summary>
+/// Service for processing data requests with feature management and conditional persistence.
+/// </summary>
 public class MyService(ILogger<MyService> logger, IConfiguration configuration, IFeatureManager featureManager, IMyRepository repository) : IMyService
 {
+    /// <summary>
+    /// Processes the provided save request, conditionally persisting data to the repository based on feature toggle.
+    /// </summary>
+    /// <param name="request">The save request containing data to be processed.</param>
+    /// <param name="cancellationToken">Cancellation token for the operation.</param>
+    /// <returns>True if the save request was enabled and processed; otherwise false.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when configuration keys cannot be read.</exception>
     public async Task<bool> ProcessAsync(SaveRequest request, CancellationToken cancellationToken = default)
     {
         if (logger.IsEnabled(LogLevel.Information))
