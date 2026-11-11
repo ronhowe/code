@@ -78,7 +78,7 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
                 logger.LogInformation("Configuring MyFeature");
             }
 
-            _myFeature = featureManager.IsEnabledAsync("MyFeature").Result;
+            _myFeature = await featureManager.IsEnabledAsync("MyFeature");
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
