@@ -45,6 +45,7 @@ internal static class TestConstants
         public const string ClaimValue = "MyClaimValue";
         public const string Issuer = "myIssuer";
         public const string Audience = "myAudience";
+        public const string SigningKey = "thisisaverylongsecretkeythatneedstobeatlesat32byteslong1234567890";
         public const int TokenExpirationMinutes = 30;
     }
 }

@@ -119,7 +119,7 @@ public sealed class MyIntegrationTests : TestBase
         using CancellationTokenSource cts = new(TimeSpan.FromSeconds(TestConstants.WebHost.CancellationTimeoutSeconds));
 
         JwtSecurityTokenHandler tokenHandler = new();
-        byte[] key = Encoding.UTF8.GetBytes($"/{new string('*', 4096 / 8)}");
+        byte[] key = Encoding.UTF8.GetBytes(TestConstants.JWT.SigningKey);
         SecurityTokenDescriptor tokenDescriptor = new()
         {
             Subject = new ClaimsIdentity([new Claim(TestConstants.JWT.ClaimType, TestConstants.JWT.ClaimValue)]),

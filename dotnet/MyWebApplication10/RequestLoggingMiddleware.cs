@@ -12,8 +12,14 @@ public class RequestLoggingMiddleware(RequestDelegate next, ILogger<RequestLoggi
     /// <returns>A task representing the asynchronous operation.</returns>
     public async Task Invoke(HttpContext context)
     {
-        logger.LogInformation("Incoming HTTP Request");
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("Incoming HTTP Request");
+        }
         await next(context);
-        logger.LogInformation("Outgoing HTTP Response");
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("Outgoing HTTP Response");
+        }
     }
 }

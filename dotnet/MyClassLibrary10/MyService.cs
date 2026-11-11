@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 
@@ -30,7 +30,10 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed To Read Configuration Key 'MyConfiguration'. Ensure The Configuration Provider Is Properly Configured And The Key Exists");
+            if (logger.IsEnabled(LogLevel.Error))
+            {
+                logger.LogError(ex, "Failed To Read Configuration Key 'MyConfiguration'. Ensure The Configuration Provider Is Properly Configured And The Key Exists");
+            }
             throw;
         }
 
@@ -42,7 +45,10 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed To Read Configuration Key 'MySecret'. Ensure The Secret Management Provider Is Properly Configured And The Secret Exists");
+            if (logger.IsEnabled(LogLevel.Error))
+            {
+                logger.LogError(ex, "Failed To Read Configuration Key 'MySecret'. Ensure The Secret Management Provider Is Properly Configured And The Secret Exists");
+            }
             throw;
         }
 
@@ -54,18 +60,27 @@ public class MyService(ILogger<MyService> logger, IConfiguration configuration, 
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed To Evaluate Feature Flag 'MyFeature'. Ensure FeatureManagement Is Properly Configured And The Feature Flag Exists");
+            if (logger.IsEnabled(LogLevel.Error))
+            {
+                logger.LogError(ex, "Failed To Evaluate Feature Flag 'MyFeature'. Ensure FeatureManagement Is Properly Configured And The Feature Flag Exists");
+            }
             throw;
         }
 
         if ((bool)_myFeature)
         {
-            logger.LogInformation("Saving Enabled, Persisting To Repository");
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                logger.LogInformation("Saving Enabled, Persisting To Repository");
+            }
             await repository.SaveAsync(request, cancellationToken);
         }
         else
         {
-            logger.LogInformation("Saving Disabled");
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                logger.LogInformation("Saving Disabled");
+            }
         }
 
         if (logger.IsEnabled(LogLevel.Information))

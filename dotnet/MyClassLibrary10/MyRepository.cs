@@ -40,7 +40,10 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed To Read Database Connection String 'ConnectionStrings:MyDatabase'. Ensure The Configuration Provider Includes Valid Connection Strings");
+            if (logger.IsEnabled(LogLevel.Error))
+            {
+                logger.LogError(ex, "Failed To Read Database Connection String 'ConnectionStrings:MyDatabase'. Ensure The Configuration Provider Includes Valid Connection Strings");
+            }
             throw;
         }
 
@@ -52,7 +55,10 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed To Read Azure Storage Connection String 'ConnectionStrings:MyAzureStorage'. Ensure The Configuration Provider Includes Valid Connection Strings For Azure");
+            if (logger.IsEnabled(LogLevel.Error))
+            {
+                logger.LogError(ex, "Failed To Read Azure Storage Connection String 'ConnectionStrings:MyAzureStorage'. Ensure The Configuration Provider Includes Valid Connection Strings For Azure");
+            }
             throw;
         }
 
@@ -89,7 +95,10 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
 
                     await _sqlCommand.ExecuteNonQueryAsync(ct);
                     _dbSaved = true;
-                    logger.LogInformation("Saved To Database Successfully");
+                    if (logger.IsEnabled(LogLevel.Information))
+                    {
+                        logger.LogInformation("Saved To Database Successfully");
+                    }
                 }
 
                 if (!_azSaved)
@@ -116,13 +125,19 @@ public class MyRepository(ILogger<MyRepository> logger, IConfiguration configura
 
                     await _tableClient.AddEntityAsync(_tableEntity, ct);
                     _azSaved = true;
-                    logger.LogInformation("Saved To Azure Storage Successfully");
+                    if (logger.IsEnabled(LogLevel.Information))
+                    {
+                        logger.LogInformation("Saved To Azure Storage Successfully");
+                    }
                 }
             }, cancellationToken);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed To Persist Data To Database And/Or Azure Storage. Check Database Connectivity, Azure Credentials, And Table/Entity Configurations. RowKey={rowKey}, RequestValue={requestValue}", _rowKey, request.IsEnabled);
+            if (logger.IsEnabled(LogLevel.Error))
+            {
+                logger.LogError(ex, "Failed To Persist Data To Database And/Or Azure Storage. Check Database Connectivity, Azure Credentials, And Table/Entity Configurations. RowKey={rowKey}, RequestValue={requestValue}", _rowKey, request.IsEnabled);
+            }
             throw;
         }
 

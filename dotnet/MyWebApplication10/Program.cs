@@ -11,187 +11,188 @@ using Serilog.Events;
 using SerilogEnricherCollection.Enricher;
 using System.Text;
 
-const string _myClaimPolicy = "MyClaimPolicy";
-const string _myHeaderKey = "MyHeader";
-//const string _outputTemplate = "[{UtcTimestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u3}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}";
-const string _outputTemplate = "[{UtcTimestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u3}] [{SourceContext}] {Message}{NewLine}{Exception}";
-const string _sourceContext = nameof(Program);
-
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
     .Enrich.FromLogContext()
     .Enrich.WithMachineName()
     .Enrich.WithUtcTimestamp()
-    .WriteTo.Console(outputTemplate: _outputTemplate)
+    .WriteTo.Console(outputTemplate: WebConstants.Logging.OutputTemplate)
     .CreateLogger();
 
-Serilog.ILogger _logger = Log.ForContext("SourceContext", _sourceContext);
+Serilog.ILogger logger = Log.ForContext("SourceContext", WebConstants.Logging.SourceContext);
 
-try
+logger.Information("Creating Web Application Builder");
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+logger.Information("Logging Environment Name");
+string environmentName = builder.Environment.EnvironmentName;
+logger.Debug("environmentName = {environmentName}", environmentName);
+
+logger.Information("Using Serilog");
+builder.Host.UseSerilog((hostContext, loggerConfiguration) =>
 {
-    _logger.Information("Creating Web Application Builder");
-    WebApplicationBuilder _builder = WebApplication.CreateBuilder(args);
+    loggerConfiguration.ReadFrom.Configuration(hostContext.Configuration);
+    loggerConfiguration.Enrich.WithUtcTimestamp();
+});
 
-    _logger.Information("Logging Environment Name");
-    string _environmentName = _builder.Environment.EnvironmentName;
-    _logger.Debug("_environmentName = {_environmentName}", _environmentName);
+logger.Information("Configuring Application Insights Connection String");
+var aiConnectionString = builder.Configuration["ConnectionStrings:ApplicationInsights"];
+logger.Debug("aiConnectionString = {aiConnectionString}", aiConnectionString);
 
-    _logger.Information("Using Serilog");
-    _builder.Host.UseSerilog((hostContext, loggerConfiguration) =>
+if (!string.IsNullOrWhiteSpace(aiConnectionString))
+{
+    logger.Information("Adding Application Insights Telemetry");
+    builder.Services.AddApplicationInsightsTelemetry(options =>
     {
-        loggerConfiguration.ReadFrom.Configuration(hostContext.Configuration);
-        loggerConfiguration.Enrich.WithUtcTimestamp();
+        options.ConnectionString = aiConnectionString;
+    });
+}
+
+logger.Information("Adding Feature Management Services");
+builder.Services.AddFeatureManagement();
+
+logger.Information("Adding Health Check Services");
+builder.Services.AddHealthChecks().AddCheck<MyHealthCheck>("MyHealthCheck");
+
+logger.Information("Adding API Versioning Services");
+builder.Services.AddApiVersioning(options =>
+{
+    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+});
+
+logger.Information("Adding Retry Configuration Services");
+var retryConfigSection = builder.Configuration.GetSection("RetrySettings");
+if (retryConfigSection.Exists())
+{
+    builder.Services.Configure<RetrySettings>(retryConfigSection);
+}
+else
+{
+    builder.Services.Configure<RetrySettings>(options =>
+    {
+        options.MaxRetries = 3;
+        options.RetryMilliseconds = 1000;
+    });
+}
+
+logger.Information("Adding {name} Services", nameof(MyRepository));
+builder.Services.AddSingleton<IMyRepository, MyRepository>();
+
+logger.Information("Adding {name} Services", nameof(MyService));
+builder.Services.AddSingleton<IMyService, MyService>();
+
+logger.Information("Adding Authentication Services");
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        string jwtKey = builder.Configuration["Jwt:Key"] ?? $"/{new string('*', 4096 / 8)}";
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? WebConstants.JWT.DefaultIssuer,
+            ValidAudience = builder.Configuration["Jwt:Audience"] ?? WebConstants.JWT.DefaultAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
     });
 
-    _logger.Information("Configuring Application Insights Connection String");
-    var _aiConnectionString = _builder.Configuration["ConnectionStrings:ApplicationInsights"];
-    _logger.Debug("_aiConnectionString = {_aiConnectionString}", _aiConnectionString);
+logger.Information("Adding Authorization Services");
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy(WebConstants.Policies.MyClaimPolicy, policy =>
+        policy.RequireClaim(WebConstants.Claims.MyClaimType, WebConstants.Claims.MyClaimValue));
 
-    if (!string.IsNullOrWhiteSpace(_aiConnectionString))
+logger.Information("Building Web Application");
+WebApplication app = builder.Build();
+
+if (app.Logger.IsEnabled(LogLevel.Information))
+{
+    app.Logger.LogInformation("Using Request Logging Middleware");
+}
+app.UseMiddleware<RequestLoggingMiddleware>();
+
+if (!app.Environment.IsDevelopment())
+{
+    if (app.Logger.IsEnabled(LogLevel.Information))
     {
-        _logger.Information("Adding Application Insights Telemetry");
-        _builder.Services.AddApplicationInsightsTelemetry(options =>
-        {
-            options.ConnectionString = _aiConnectionString;
-        });
+        app.Logger.LogInformation("Using Exception Handling Middleware");
     }
+    app.UseExceptionHandler(WebConstants.Routes.Error);
+}
 
-    _logger.Information("Adding Feature Management Services");
-    _builder.Services.AddFeatureManagement();
+if (app.Logger.IsEnabled(LogLevel.Information))
+{
+    app.Logger.LogInformation("Using HTTPS Redirection Middleware");
+}
+app.UseHttpsRedirection();
 
-    _logger.Information("Adding Health Check Services");
-    _builder.Services.AddHealthChecks().AddCheck<MyHealthCheck>("MyHealthCheck");
+if (app.Logger.IsEnabled(LogLevel.Information))
+{
+    app.Logger.LogInformation("Using Serilog Request Logging Middleware");
+}
+app.UseSerilogRequestLogging();
 
-    _logger.Information("Adding API Versioning Services");
-    _builder.Services.AddApiVersioning(options =>
+if (app.Logger.IsEnabled(LogLevel.Information))
+{
+    app.Logger.LogInformation("Using Header Middleware");
+}
+app.Use(async (context, next) =>
+{
+    string headerValue = app.Configuration.GetSection(WebConstants.Headers.MyHeader).Value ?? $"{WebConstants.Headers.MyHeader} (Unknown)";
+    context.Response.Headers.Append(WebConstants.Headers.MyHeader, headerValue);
+    await next();
+});
+
+if (app.Logger.IsEnabled(LogLevel.Information))
+{
+    app.Logger.LogInformation("Using Health Check Middleware");
+}
+app.UseHealthChecks(WebConstants.Routes.HealthCheck);
+
+if (app.Logger.IsEnabled(LogLevel.Information))
+{
+    app.Logger.LogInformation("Using Authentication Middleware");
+}
+app.UseAuthentication();
+
+if (app.Logger.IsEnabled(LogLevel.Information))
+{
+    app.Logger.LogInformation("Using Authorization Middleware");
+}
+app.UseAuthorization();
+
+ApiVersionSet versionSet = app.NewApiVersionSet()
+    .HasApiVersion(new ApiVersion(1))
+    .HasApiVersion(new ApiVersion(2))
+    .ReportApiVersions()
+    .Build();
+
+app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context, CancellationToken cancellationToken) =>
+{
+    var apiVersion = context.RequestedApiVersion;
+    if (app.Logger.IsEnabled(LogLevel.Information))
     {
-        // TODO: Assert versionless route works.
-        options.ApiVersionReader = new UrlSegmentApiVersionReader();
-    });
-
-    //_logger.Information("Adding Open API ServicesServices");
-    //_builder.Services.AddOpenApi();
-
-    // TODO: Learn the difference between AddSingleton and AddTransient.
-    _logger.Information("Adding {name} Services", nameof(MyRepository));
-    _builder.Services.AddSingleton<IMyRepository, MyRepository>();
-
-    _logger.Information("Adding {name} Services", nameof(MyService));
-    _builder.Services.AddSingleton<IMyService, MyService>();
-
-    _logger.Information("Adding Authentication Services");
-    _builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
-        {
-            string _key = $"/{new string('*', 4096 / 8)}";
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = "myIssuer",
-                ValidAudience = "myAudience",
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key))
-            };
-        });
-
-    _logger.Information("Adding Authorization Services");
-    _builder.Services.AddAuthorizationBuilder()
-        .AddPolicy(_myClaimPolicy, policy =>
-            policy.RequireClaim("MyClaimType", "MyClaimValue"));
-
-    _logger.Information("Building Web Application");
-    WebApplication _app = _builder.Build();
-
-    // NOTE: Order matters. (e.g. Swagger before Authentication)
-
-    _app.Logger.LogInformation("Using Request Logging Middleware");
-    _app.UseMiddleware<RequestLoggingMiddleware>();
-
-    if (!_app.Environment.IsDevelopment())
-    {
-        _app.Logger.LogInformation("Using Exception Handling Middleware");
-        _app.UseExceptionHandler("/error");
+        app.Logger.LogInformation("Calling API {name} Version {apiVersion} With Input = {input}", nameof(MyService), apiVersion, input);
     }
+    return myService.ProcessAsync(SaveRequest.Create(input), cancellationToken);
+})
+    .WithApiVersionSet(versionSet)
+    .MapToApiVersion(new ApiVersion(1))
+    .RequireAuthorization(WebConstants.Policies.MyClaimPolicy);
 
-    //_app.Logger.LogInformation("Mapping Open API");
-    //_app.MapOpenApi();
-
-    _app.Logger.LogInformation("Using HTTPS Redirection Middleware");
-    _app.UseHttpsRedirection();
-
-    _app.Logger.LogInformation("Using Serilog Request Logging Middleware");
-    _app.UseSerilogRequestLogging();
-
-    _app.Logger.LogInformation("Using Header Middleware");
-    _app.Use(async (context, next) =>
-    {
-        string? _myHeaderValue = _app.Configuration.GetSection(_myHeaderKey).Value;
-        context.Response.Headers.Append(_myHeaderKey, _myHeaderValue);
-        await next();
-    });
-
-    _app.Logger.LogInformation("Using Health Check Middleware");
-    _app.UseHealthChecks("/healthcheck");
-
-    _app.Logger.LogInformation("Using Authentication Middleware");
-    _app.UseAuthentication();
-
-    _app.Logger.LogInformation("Using Claims Logger Middleware");
-    _app.Use(async (context, next) =>
-    {
-        await next.Invoke();
-    });
-
-    _app.Logger.LogInformation("Using Authorization Middleware");
-    _app.UseAuthorization();
-
-    ApiVersionSet _versionSet = _app.NewApiVersionSet()
-        .HasApiVersion(new ApiVersion(1))
-        .HasApiVersion(new ApiVersion(2))
-        .ReportApiVersions()
-        .Build();
-
-    // TODO: Use better {tokens} for better discoverability.
-
-    const int _version1 = 1;
-    _app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context, CancellationToken cancellationToken) =>
-    {
-        var apiVersion = context.RequestedApiVersion;
-        if (_app.Logger.IsEnabled(LogLevel.Information))
-        {
-            _app.Logger.LogInformation("Calling API {name} Version {apiVersion} With Input = {input}", nameof(MyService), apiVersion, input);
-        }
-        return myService.ProcessAsync(SaveRequest.Create(input), cancellationToken);
-    })
-        .WithApiVersionSet(_versionSet)
-        .MapToApiVersion(_version1)
-        .RequireAuthorization(_myClaimPolicy);
-
-    const int _version2 = 2;
-    _app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context, CancellationToken cancellationToken) =>
-    {
-        var apiVersion = context.RequestedApiVersion;
-
-        if (_app.Logger.IsEnabled(LogLevel.Information))
-        {
-            _app.Logger.LogInformation("Calling API {name} Version {apiVersion} With Input = {input}", nameof(MyService), apiVersion, input);
-        }
-        return myService.ProcessAsync(SaveRequest.Create(input), cancellationToken);
-    })
-        .WithApiVersionSet(_versionSet)
-        .MapToApiVersion(_version2)
-        .RequireAuthorization(_myClaimPolicy);
-
-    await _app.RunAsync();
-}
-catch (Exception ex)
+app.MapGet($"/v{{version:apiVersion}}/{{nameof(MyService)}}", (bool input, [FromServices] IMyService myService, HttpContext context, CancellationToken cancellationToken) =>
 {
-    _logger.Fatal(ex, "Program Failed");
-}
-finally
-{
-    Log.CloseAndFlush();
-}
+    var apiVersion = context.RequestedApiVersion;
+    if (app.Logger.IsEnabled(LogLevel.Information))
+    {
+        app.Logger.LogInformation("Calling API {name} Version {apiVersion} With Input = {input}", nameof(MyService), apiVersion, input);
+    }
+    return myService.ProcessAsync(SaveRequest.Create(input), cancellationToken);
+})
+    .WithApiVersionSet(versionSet)
+    .MapToApiVersion(new ApiVersion(2))
+    .RequireAuthorization(WebConstants.Policies.MyClaimPolicy);
+
+await app.RunAsync();
