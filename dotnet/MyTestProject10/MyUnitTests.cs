@@ -44,10 +44,12 @@ public sealed class MyUnitTests : TestBase
             mockRepository.Object
         );
 
-        bool result = await myService.ProcessAsync(SaveRequest.Create(value));
+        bool result = await myService.ProcessAsync(SaveRequest.Create(value), TestContext.CancellationToken);
 
         result.ShouldBe(value);
         mockLogger.VerifyLogMessage($"Entering {nameof(MyService)}", LogLevel.Information);
         mockLogger.VerifyLogMessage($"Exiting {nameof(MyService)}", LogLevel.Information);
     }
+
+    public TestContext TestContext { get; set; }
 }
