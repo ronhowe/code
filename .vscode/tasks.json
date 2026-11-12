@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/dotnet/MySolution.sln"
+                "${workspaceFolder}/dotnet/MySolutionNoDb.sln"
             ],
             "problemMatcher": "$msCompile"
         }
